@@ -9,6 +9,7 @@ The official Vipps .NET SDK.
 - Retries
 - Idempotency
 - Support for API not-yet implemented in SDK
+- Caching of Access Token
 - Other ideas?
 
 ## Installation
