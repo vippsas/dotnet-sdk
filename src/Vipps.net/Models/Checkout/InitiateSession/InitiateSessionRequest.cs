@@ -1,4 +1,4 @@
-﻿using System.Text.Json.Serialization { get; init; }
+﻿using System.Text.Json.Serialization;
 
 namespace Vipps.Models.Checkout.InitiateSession
 {
@@ -8,7 +8,7 @@ namespace Vipps.Models.Checkout.InitiateSession
     /// <param name="MerchantInfo"></param>
     /// <param name="Transaction"></param>
     /// <param name="Logistics"></param>
-    /// <param name="PrefillCustomer">If customer information is known { get; init; } it can be prefilled.</param>
+    /// <param name="PrefillCustomer">If customer information is known, it can be prefilled.</param>
     /// <param name="Configuration"></param>
     public class InitiateSessionRequest
     {
@@ -22,10 +22,10 @@ namespace Vipps.Models.Checkout.InitiateSession
     /// <summary>
     ///
     /// </summary>
-    /// <param name="CustomerInteraction">If customer is physically present: "customer_present" { get; init; } otherwise: "customer_not_present".</param>
+    /// <param name="CustomerInteraction">If customer is physically present: "customer_present", otherwise: "customer_not_present".</param>
     /// <param name="Elements">Adjust the fields and values present in the Checkout.</param>
     /// <param name="Countries">Countries to allow during session</param>
-    /// <param name="UserFlow">One of the following: "WEB_REDIRECT" { get; init; } "NATIVE_REDIRECT". To ensure having a return URL based on an app URL { get; init; } use "NATIVE_REDIRECT".</param>
+    /// <param name="UserFlow">One of the following: "WEB_REDIRECT", "NATIVE_REDIRECT". To ensure having a return URL based on an app URL, use "NATIVE_REDIRECT".</param>
     /// <param name="RequireUserInfo">Requires the customer to consent to share their email and openid sub with the merchant to be able to make a wallet payment {default: false).</param>
     public class CheckoutConfig
     {
@@ -51,7 +51,7 @@ namespace Vipps.Models.Checkout.InitiateSession
     /// <summary>
     ///
     /// </summary>
-    /// <param name="Supported">List of allowed countries in ISO-3166 Alpha 2. If specified { get; init; } the customer will only be able to select these countries. Example ["NO" { get; init; } "SE" { get; init; } "DK"]</param>
+    /// <param name="Supported">List of allowed countries in ISO-3166 Alpha 2. If specified, the customer will only be able to select these countries. Example ["NO", "SE", "DK"]</param>
     public class Countries
     {
         public List<string> Supported { get; init; }
@@ -79,7 +79,7 @@ namespace Vipps.Models.Checkout.InitiateSession
     /// <param name="Amount"></param>
     /// <param name="Reference">The merchant's unique reference for the transaction. Also known as OrderId. Example: "acme-shop-123-order123abc". See https://vippsas.github.io/vipps-developer-docs/docs/vipps-developers/common-topics/orderid</param>
     /// <param name="PaymentDescription">Description visible to the customer during payment. Example: "One pair of Vipps socks".</param>
-    /// <param name="OrderSummary">Contain descriptions of each item present in the order { get; init; } and an order bottom line for information regarding the order as a whole.</param>
+    /// <param name="OrderSummary">Contain descriptions of each item present in the order, and an order bottom line for information regarding the order as a whole.</param>
     public class PaymentTransaction
     {
         public Amount Amount { get; init; }
@@ -89,7 +89,7 @@ namespace Vipps.Models.Checkout.InitiateSession
     }
 
     /// <summary>
-    /// Amounts are specified in minor units. For Norwegian kroner {NOK) that means 1 kr = 100 øre. Example: 499 kr = 49900 øre.
+    /// Amounts are specified in minor units. For Norwegian kroner (NOK) that means 1 kr = 100 øre. Example: 499 kr = 49900 øre.
     /// </summary>
     /// <param name="Currency">The currency identifier according to ISO 4217. Example: "NOK"</param>
     /// <param name="Value">Must be in Minor Units. The smallest unit of a currency. Example 100 NOK = 10000.</param>
@@ -109,7 +109,7 @@ namespace Vipps.Models.Checkout.InitiateSession
 
     /// <param name="Name">The name of the product in the order line.</param>
     /// <param name="Id">The product ID.</param>
-    /// <param name="TotalAmount">Total amount of the order line { get; init; } including tax and discount. Must be in Minor Units. The smallest unit of a currency. Example 100 NOK = 10000.</param>
+    /// <param name="TotalAmount">Total amount of the order line, including tax and discount. Must be in Minor Units. The smallest unit of a currency. Example 100 NOK = 10000.</param>
     /// <param name="TotalAmountExcludingTax">Total amount of order line with discount excluding tax. Must be in Minor Units. The smallest unit of a currency. Example 100 NOK = 10000.</param>
     /// <param name="TotalTaxAmount">Total tax amount paid for the order line. Must be in Minor Units. The smallest unit of a currency. Example 100 NOK = 10000.</param>
     /// <param name="TaxPercentage">Tax percentage for the order line.</param>
@@ -145,7 +145,7 @@ namespace Vipps.Models.Checkout.InitiateSession
         public string? TerminalId { get; init; }
     }
 
-    /// <param name="UnitPrice">Total price per unit { get; init; } including tax and excluding discount. Must be in Minor Units. The smallest unit of a currency. Example 100 NOK = 10000.</param>
+    /// <param name="UnitPrice">Total price per unit, including tax and excluding discount. Must be in Minor Units. The smallest unit of a currency. Example 100 NOK = 10000.</param>
     /// <param name="Quantity">Quantity given as a public integer or fraction {only for cosmetics).</param>
     /// <param name="QuantityUnit">Available units for quantity. Will default to PCS if not set.</param>
     public class OrderUnitInfo
@@ -165,11 +165,11 @@ namespace Vipps.Models.Checkout.InitiateSession
     }
 
     /// <summary>
-    /// If both dynamic and fixed options are specified { get; init; } dynamic options is provided to the user.
-    /// If no DynamicOptionsCallback is provided { get; init; } only fixed logistics options will be used.
+    /// If both dynamic and fixed options are specified, dynamic options is provided to the user.
+    /// If no DynamicOptionsCallback is provided, only fixed logistics options will be used.
     /// When using dynamic shipping we recommend that you define logistics.fixedOptions as a backup.
-    /// If the callback does not resolve successfully within 8 seconds { get; init; } returns null or an empty list the system will fall back to static options.
-    /// If no fallback options are provided { get; init; } the user will be presented with an error and will not be able to continue with the checkout.
+    /// If the callback does not resolve successfully within 8 seconds, returns null or an empty list the system will fall back to static options.
+    /// If no fallback options are provided, the user will be presented with an error and will not be able to continue with the checkout.
     /// </summary>
     /// <param name="DynamicOptionsCallback">Merchant's Callback URL for providing dynamic logistics options based on customer address. Example: "https://example.com/vipps/dynamiclogisticsoption". Can not be used with AddressFields set to false.</param>
     /// <param name="FixedOptions">Fixed list of logistics options.</param>
@@ -184,13 +184,13 @@ namespace Vipps.Models.Checkout.InitiateSession
     /// <summary>
     /// Information about the customer to be prefilled
     ///
-    /// If any of the customer information is invalid such as the phone number { get; init; }
+    /// If any of the customer information is invalid such as the phone number,
     /// the customer will be prompted to input new user information.
     /// </summary>
     /// <param name="FirstName">Example: "Ada"</param>
     /// <param name="LastName">Example: "Lovelace"</param>
     /// <param name="Email">Example: "user@example.com"</param>
-    /// <param name="PhoneNumber">Format must be MSISDN {including country code). Example: "4791234567"</param>
+    /// <param name="PhoneNumber">Format must be MSISDN (including country code). Example: "4791234567"</param>
     /// <param name="StreetAddress">Example: "Robert Levins gate 5"</param>
     /// <param name="PostalCode">Example: "0154"</param>
     /// <param name="City">Example: "Oslo"</param>
@@ -232,7 +232,7 @@ namespace Vipps.Models.Checkout.InitiateSession
     /// </summary>
     /// <param name="Name">The name of your store</param>
     /// <param name="Email">Your email address where Porterbuddy booking confirmation will be sent</param>
-    /// <param name="PhoneNumber">Your phone number where Porterbuddy may send you important messages. Format must be MSISDN {including country code). Example: "4791234567"</param>
+    /// <param name="PhoneNumber">Your phone number where Porterbuddy may send you important messages. Format must be MSISDN (including country code). Example: "4791234567"</param>
     /// <param name="Address">Your address where Porterbuddy will pick up the parcels</param>
     public class PorterbuddyOrigin
     {
