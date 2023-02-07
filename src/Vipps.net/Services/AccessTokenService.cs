@@ -1,6 +1,7 @@
 ﻿using System.Net.Http.Json;
 using Vipps.Models;
 using Vipps.Models.Epayment.AccessToken;
+using Vipps.net.Services;
 
 namespace Vipps.Services
 {
@@ -21,6 +22,14 @@ namespace Vipps.Services
 
         public async Task<AccessToken> GetAccessToken()
         {
+            var key = $"{_vippsConfiguration.ClientId}{_vippsConfiguration.ClientSecret}";
+            var cachedToken = AccessTokenCacheService.Get(key);
+            if (cachedToken is not null)
+            {
+                return cachedToken;
+            }
+
+
             var request = new HttpRequestMessage
             {
                 RequestUri = new Uri(_vippsConfiguration.BaseUrl + "/accesstoken/get"),
@@ -32,7 +41,10 @@ namespace Vipps.Services
             {
                 throw new Exception($"Request failed with status code {response.StatusCode}");
             }
-            return await response.Content.ReadFromJsonAsync<AccessToken>() ?? throw new Exception("Failed deserializing access token");
+
+            var accessToken = await response.Content.ReadFromJsonAsync<AccessToken>() ?? throw new Exception("Failed deserializing access token");
+            AccessTokenCacheService.Add(key, accessToken);
+            return accessToken;
         }
     }
 }
