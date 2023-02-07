@@ -28,7 +28,7 @@ namespace Vipps.net.Tests
             Assert.IsNull(res);
         }
 
-        private AccessToken GetToken(DateTime? notBefore, DateTime? expiresAt)
+        private static AccessToken GetToken(DateTime? notBefore, DateTime? expiresAt)
         {
             var jwt = new JwtSecurityToken(new JwtHeader(), new JwtPayload("TestIssuer", "TestAudience", new List<Claim>(), notBefore, expiresAt, notBefore));
             var jwtString = new JwtSecurityTokenHandler().WriteToken(jwt);

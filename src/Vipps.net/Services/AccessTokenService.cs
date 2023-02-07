@@ -6,8 +6,8 @@ namespace Vipps.Services
 {
     public class AccessTokenService
     {
-        private VippsConfiguration _vippsConfiguration;
-        private HttpClient _httpClient;
+        private readonly VippsConfiguration _vippsConfiguration;
+        private readonly HttpClient _httpClient;
 
         public AccessTokenService(VippsConfiguration vippsConfiguration, HttpClient httpClient)
         {
