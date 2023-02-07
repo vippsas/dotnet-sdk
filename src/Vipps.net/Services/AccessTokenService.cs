@@ -1,7 +1,6 @@
 ﻿using System.Net.Http.Json;
 using Vipps.Models;
 using Vipps.Models.Epayment.AccessToken;
-using Vipps.net.Services;
 
 namespace Vipps.Services
 {

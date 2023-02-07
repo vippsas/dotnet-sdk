@@ -3,13 +3,13 @@ using System.Security.Cryptography;
 using System.Text;
 using Vipps.Models.Epayment.AccessToken;
 
-namespace Vipps.net.Services
+namespace Vipps.Services
 {
     internal static class AccessTokenCacheService
     {
         private static readonly AccessTokenLifetimeService _lifetimeService = new();
-        private static MemoryCache _memoryCache = new(nameof(AccessTokenCacheService));
-        private static readonly TimeSpan _backoffTimespan;
+        private static readonly MemoryCache _memoryCache = new(nameof(AccessTokenCacheService));
+        private static readonly TimeSpan _backoffTimespan = TimeSpan.FromMinutes(2);
         private const string KeyPrefix = "access-token-";
 
         public static void Add(string key, AccessToken token)
