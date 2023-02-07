@@ -2,12 +2,14 @@
 
 namespace Vipps.Models.Epayment.ForceApprove
 {
-    public record ForceApproveRequest(
-        [property: JsonPropertyName("customer")] Customer Customer,
-        [property: JsonPropertyName("token")] string Token
-    );
+    public class ForceApproveRequest
+    {
+        [property: JsonPropertyName("customer")] public Customer Customer { get; init; }
+        [property: JsonPropertyName("token")] public string Token { get; init; }
+    }
 
-    public record Customer(
-        [property: JsonPropertyName("phoneNumber")] long PhoneNumber
-    );
+    public class Customer
+    {
+        [property: JsonPropertyName("phoneNumber")] public long PhoneNumber { get; init; }
+    }
 }

@@ -2,20 +2,22 @@
 
 namespace Vipps.Models.Epayment.GetPaymentEventLog
 {
-    public record Amount(
-    [property: JsonPropertyName("currency")] string Currency,
-    [property: JsonPropertyName("value")] int Value
-);
+    public class Amount
+    {
+        [property: JsonPropertyName("currency")] public string Currency { get; init; }
+        [property: JsonPropertyName("value")] public int Value { get; init; }
+    }
 
-    public record GetPaymentEventLog(
-        [property: JsonPropertyName("reference")] string Reference,
-        [property: JsonPropertyName("pspReference")] string PspReference,
-        [property: JsonPropertyName("name")] string Name,
-        [property: JsonPropertyName("paymentAction")] string PaymentAction,
-        [property: JsonPropertyName("amount")] Amount Amount,
-        [property: JsonPropertyName("timestamp")] DateTime Timestamp,
-        [property: JsonPropertyName("processedAt")] DateTime ProcessedAt,
-        [property: JsonPropertyName("idempotencyKey")] string IdempotencyKey,
-        [property: JsonPropertyName("success")] bool Success
-    );
+    public class GetPaymentEventLog
+    {
+        [property: JsonPropertyName("reference")] public string Reference { get; init; }
+        [property: JsonPropertyName("pspReference")] public string PspReference { get; init; }
+        [property: JsonPropertyName("name")] public string Name { get; init; }
+        [property: JsonPropertyName("paymentAction")] public string PaymentAction { get; init; }
+        [property: JsonPropertyName("amount")] public Amount Amount { get; init; }
+        [property: JsonPropertyName("timestamp")] public DateTime Timestamp { get; init; }
+        [property: JsonPropertyName("processedAt")] public DateTime ProcessedAt { get; init; }
+        [property: JsonPropertyName("idempotencyKey")] public string IdempotencyKey { get; init; }
+        [property: JsonPropertyName("success")] public bool Success { get; init; }
+    }
 }

@@ -3,16 +3,17 @@ using Vipps.Models.Checkout.InitiateSession;
 
 namespace Vipps.Models.Checkout.GetSession
 {
-    public record BillingDetails(
-        [property: JsonPropertyName("firstName")] string FirstName,
-        [property: JsonPropertyName("lastName")] string LastName,
-        [property: JsonPropertyName("email")] string Email,
-        [property: JsonPropertyName("phoneNumber")] string PhoneNumber,
-        [property: JsonPropertyName("streetAddress")] string StreetAddress,
-        [property: JsonPropertyName("postalCode")] string PostalCode,
-        [property: JsonPropertyName("region")] string Region,
-        [property: JsonPropertyName("country")] string Country
-    );
+    public class BillingDetails
+    {
+        [property: JsonPropertyName("firstName")] public string FirstName { get; init; }
+        [property: JsonPropertyName("lastName")] public string LastName { get; init; }
+        [property: JsonPropertyName("email")] public string Email { get; init; }
+        [property: JsonPropertyName("phoneNumber")] public string PhoneNumber { get; init; }
+        [property: JsonPropertyName("streetAddress")] public string StreetAddress { get; init; }
+        [property: JsonPropertyName("postalCode")] public string PostalCode { get; init; }
+        [property: JsonPropertyName("region")] public string Region { get; init; }
+        [property: JsonPropertyName("country")] public string Country { get; init; }
+    }
 
     public enum PaymentState
     {
@@ -21,27 +22,28 @@ namespace Vipps.Models.Checkout.GetSession
         TERMINATED
     }
 
-    public record PickupPoint(
-        [property: JsonPropertyName("id")] string Id,
-        [property: JsonPropertyName("name")] string Name,
-        [property: JsonPropertyName("address")] string Address,
-        [property: JsonPropertyName("postalCode")] string PostalCode,
-        [property: JsonPropertyName("city")] string City,
-        [property: JsonPropertyName("country")] string Country
-    );
+    public class PickupPoint
+    {
+        [property: JsonPropertyName("id")] public string Id { get; init; }
+        [property: JsonPropertyName("name")] public string Name { get; init; }
+        [property: JsonPropertyName("postalCode")] public string PostalCode { get; init; }
+        [property: JsonPropertyName("city")] public string City { get; init; }
+        [property: JsonPropertyName("country")] public string Country { get; init; }
+    }
 
-    public record ShippingDetails(
-        [property: JsonPropertyName("firstName")] string FirstName,
-        [property: JsonPropertyName("lastName")] string LastName,
-        [property: JsonPropertyName("email")] string Email,
-        [property: JsonPropertyName("phoneNumber")] string PhoneNumber,
-        [property: JsonPropertyName("streetAddress")] string StreetAddress,
-        [property: JsonPropertyName("postalCode")] string PostalCode,
-        [property: JsonPropertyName("region")] string Region,
-        [property: JsonPropertyName("country")] string Country,
-        [property: JsonPropertyName("shippingMethodId")] string ShippingMethodId,
-        [property: JsonPropertyName("pickupPoint")] PickupPoint PickupPoint
-    );
+    public class ShippingDetails
+    {
+        [property: JsonPropertyName("firstName")] public string FirstName { get; init; }
+        [property: JsonPropertyName("lastName")] public string LastName { get; init; }
+        [property: JsonPropertyName("email")] public string Email { get; init; }
+        [property: JsonPropertyName("phoneNumber")] public string PhoneNumber { get; init; }
+        [property: JsonPropertyName("streetAddress")] public string StreetAddress { get; init; }
+        [property: JsonPropertyName("postalCode")] public string PostalCode { get; init; }
+        [property: JsonPropertyName("region")] public string Region { get; init; }
+        [property: JsonPropertyName("country")] public string Country { get; init; }
+        [property: JsonPropertyName("shippingMethodId")] public string ShippingMethodId { get; init; }
+        [property: JsonPropertyName("pickupPoint")] public PickupPoint PickupPoint { get; init; }
+    }
 
     /// <summary>
     /// Session information
@@ -55,17 +57,18 @@ namespace Vipps.Models.Checkout.GetSession
     /// <param name="UserInfo"></param>
     /// <param name="ShippingDetails"></param>
     /// <param name="BillingDetails"></param>
-    public record GetSessionInfoResponse(
-        string SessionId,
-        string? MerchantSerialNumber,
-        string Reference,
-        ExternalSessionState SessionState,
-        PaymentMethod? PaymentMethod,
-        ResponsePaymentDetails? PaymentDetails,
-        UserInfo? UserInfo,
-        ShippingDetails? ShippingDetails,
-        BillingDetails? BillingDetails
-    );
+    public class GetSessionInfoResponse
+    {
+        public string SessionId { get; init; }
+        public string? MerchantSerialNumber { get; init; }
+        public string Reference { get; init; }
+        public ExternalSessionState SessionState { get; init; }
+        public PaymentMethod? PaymentMethod { get; init; }
+        public ResponsePaymentDetails? PaymentDetails { get; init; }
+        public UserInfo? UserInfo { get; init; }
+        public ShippingDetails? ShippingDetails { get; init; }
+        public BillingDetails? BillingDetails { get; init; }
+    }
     public enum ExternalSessionState
     {
         SessionCreated,
@@ -86,7 +89,11 @@ namespace Vipps.Models.Checkout.GetSession
     /// </summary>
     /// <param name="Sub">The openid sub that uniquely identifies a Vipps user.</param>
     /// <param name="Email">Example: "user@example.com"</param>
-    public record UserInfo(string Sub, string? Email);
+    public class UserInfo
+    {
+        public string Sub { get; init; }
+        public string? Email { get; init; }
+    }
 
     /// <summary>
     /// Defines the details of the payment.
@@ -94,11 +101,12 @@ namespace Vipps.Models.Checkout.GetSession
     /// <param name="Amount"></param>
     /// <param name="State"></param>
     /// <param name="Aggregate"></param>
-    public record ResponsePaymentDetails(
-        Amount Amount,
-        PaymentState State,
-        TransactionAggregate? Aggregate
-    );
+    public class ResponsePaymentDetails
+    {
+        public Amount Amount { get; init; }
+        public PaymentState State { get; init; }
+        public TransactionAggregate? Aggregate { get; init; }
+    }
 
     /// <summary>
     /// Defines the details of the transaction
@@ -107,11 +115,12 @@ namespace Vipps.Models.Checkout.GetSession
     /// <param name="CapturedAmount"></param>
     /// <param name="RefundedAmount"></param>
     /// <param name="AuthorizedAmount"></param>
-    public record TransactionAggregate(
-        Amount? CancelledAmount,
-        Amount? CapturedAmount,
-        Amount? RefundedAmount,
-        Amount? AuthorizedAmount
-    );
+    public class TransactionAggregate
+    {
+        public Amount? CancelledAmount { get; init; }
+        public Amount? CapturedAmount { get; init; }
+        public Amount? RefundedAmount { get; init; }
+        public Amount? AuthorizedAmount { get; init; }
+    }
 
 }
