@@ -32,7 +32,7 @@ namespace Vipps.Services
             var request = new HttpRequestMessage
             {
                 RequestUri = new Uri(_vippsConfiguration.BaseUrl + "/accesstoken/get"),
-                Method = HttpMethod.Get
+                Method = HttpMethod.Post
             };
 
             var response = await _httpClient.SendAsync(request);

@@ -5,7 +5,7 @@ using Vipps.Models.Epayment.AccessToken;
 
 namespace Vipps.Services
 {
-    internal static class AccessTokenCacheService
+    public static class AccessTokenCacheService
     {
         private static readonly AccessTokenLifetimeService _lifetimeService = new();
         private static readonly MemoryCache _memoryCache = new(nameof(AccessTokenCacheService));
