@@ -2,14 +2,14 @@
 
 namespace Vipps.Models.Epayment.AccessToken
 {
-    public record AccessToken(
-        [property: JsonPropertyName("token_type")] string TokenType,
-        [property: JsonPropertyName("expires_in")] string ExpiresIn,
-        [property: JsonPropertyName("ext_expires_in")] string ExtExpiresIn,
-        [property: JsonPropertyName("expires_on")] string ExpiresOn,
-        [property: JsonPropertyName("not_before")] string NotBefore,
-        [property: JsonPropertyName("resource")] string Resource,
-        [property: JsonPropertyName("access_token")] string Token
-    );
-
+    public class AccessToken
+    {
+        [property: JsonPropertyName("token_type")] public string TokenType { get; init; }
+        [property: JsonPropertyName("expires_in")] public string ExpiresIn { get; init; }
+        [property: JsonPropertyName("ext_expires_in")] public string ExtExpiresIn { get; init; }
+        [property: JsonPropertyName("expires_on")] public string ExpiresOn { get; init; }
+        [property: JsonPropertyName("not_before")] public string NotBefore { get; init; }
+        [property: JsonPropertyName("resource")] public string Resource { get; init; }
+        [property: JsonPropertyName("access_token")] public string Token { get; init; }
+    }
 }

@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Text.Json.Serialization;
-using System.Threading.Tasks;
-using System.Xml.Linq;
+﻿using System.Text.Json.Serialization;
 
 namespace Vipps.Models.Checkout.InitiateSession
 {
@@ -16,7 +10,7 @@ namespace Vipps.Models.Checkout.InitiateSession
         INSTABOX,
         HELTHJEM,
         OTHER
-    };
+    }
 
     public enum PostenLogisticsType
     {
@@ -48,13 +42,18 @@ namespace Vipps.Models.Checkout.InitiateSession
         HOME_DELIVERY
     }
 
-    public record LogisticsOptionBase(Amount amount, string id)
+    public class LogisticsOptionBase
     {
+        public LogisticsOptionBase(Amount amount, string id)
+        {
+            Id = id;
+            Amount = amount;
+        }
         [JsonRequired]
-        public Amount Amount = amount;
+        public Amount Amount;
 
         [JsonRequired]
-        public string Id = id;
+        public string Id;
 
         public int Priority { get; init; }
 
@@ -63,44 +62,45 @@ namespace Vipps.Models.Checkout.InitiateSession
         public string? Description { get; init; }
     }
 
-    public record PostenLogisticsOption(Amount amount, string id) : LogisticsOptionBase(amount, id)
+    public class PostenLogisticsOption : LogisticsOptionBase
     {
+        public PostenLogisticsOption(Amount amount, string id) : base(amount, id) { }
         public PostenLogisticsType? Type { get; init; }
         public string? CustomType { get; init; }
     }
 
-    public record PostnordLogisticsOption(Amount amount, string id)
-        : LogisticsOptionBase(amount, id)
+    public class PostnordLogisticsOption : LogisticsOptionBase
     {
+        public PostnordLogisticsOption(Amount amount, string id) : base(amount, id) { }
         public PostnordLogisticsType? Type { get; init; }
         public string? CustomType { get; init; }
     }
 
-    public record PorterbuddyLogisticsOption(Amount amount, string id)
-        : LogisticsOptionBase(amount, id)
+    public class PorterbuddyLogisticsOption : LogisticsOptionBase
     {
+        public PorterbuddyLogisticsOption(Amount amount, string id) : base(amount, id) { }
         public PorterbuddyLogisticsType? Type { get; init; }
         public string? CustomType { get; init; }
     }
 
-    public record InstaboxLogisticsOption(Amount amount, string id)
-        : LogisticsOptionBase(amount, id)
+    public class InstaboxLogisticsOption : LogisticsOptionBase
     {
+        public InstaboxLogisticsOption(Amount amount, string id) : base(amount, id) { }
         public InstaboxLogisticsType? Type { get; init; }
         public string? CustomType { get; init; }
     }
 
-    public record HelthjemLogisticsOption(Amount amount, string id)
-        : LogisticsOptionBase(amount, id)
+    public class HelthjemLogisticsOption : LogisticsOptionBase
     {
+        public HelthjemLogisticsOption(Amount amount, string id) : base(amount, id) { }
         public HelthjemLogisticsType? Type { get; init; }
         public string? CustomType { get; init; }
     }
 
-    public record OtherLogisticsOption(string title, Amount amount, string id)
-        : LogisticsOptionBase(amount, id)
+    public class OtherLogisticsOption : LogisticsOptionBase
     {
+        public OtherLogisticsOption(Amount amount, string id) : base(amount, id) { }
         [JsonRequired]
-        public string Title = title;
+        public string Title { get; init; }
     }
 }
