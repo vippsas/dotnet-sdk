@@ -2,8 +2,9 @@
 
 namespace Vipps.Models.Epayment.CreatePayment
 {
-    public record CreatePaymentResponse(
-        [property: JsonPropertyName("redirectUrl")] string RedirectUrl,
-        [property: JsonPropertyName("reference")] string Reference
-    );
+    public class CreatePaymentResponse
+    {
+        [property: JsonPropertyName("redirectUrl")] public string RedirectUrl { get; init; }
+        [property: JsonPropertyName("reference")] public string Reference { get; init; }
+    }
 }

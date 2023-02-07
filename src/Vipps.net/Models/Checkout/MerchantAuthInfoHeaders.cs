@@ -15,10 +15,11 @@ namespace Vipps.Models.Checkout
     /// <param name="ClientSecret">Client Secret for the merchant (the "password"). Found in the Vipps portal. Example: "Y8Kteew6GE3ZmeycEt6egg==".</param>
     /// <param name="OcpApimSubscriptionKey">Vipps Subscription key for the API product. Found in the Vipps portal. Example: "0f14ebcab0eb4b29ae0cb90d91b4a84a".</param>
     /// <param name="MerchantSerialNumber">Vipps assigned unique number for a merchant. Found in the Vipps portal. Example: "123456".</param>
-    public record MerchantAuthInfoHeaders(
-        [property: JsonPropertyName("client_id")] string ClientId,
-        [property: JsonPropertyName("client_secret")] string ClientSecret,
-        [property: JsonPropertyName("Ocp-Apim-Subscription-Key")] string OcpApimSubscriptionKey,
-        [property: JsonPropertyName("Merchant-Serial-Number")] string MerchantSerialNumber
-    );
+    public class MerchantAuthInfoHeaders
+    {
+        [property: JsonPropertyName("client_id")] public string ClientId { get; init; }
+        [property: JsonPropertyName("client_secret")] public string ClientSecret { get; init; }
+        [property: JsonPropertyName("Ocp-Apim-Subscription-Key")] public string OcpApimSubscriptionKey { get; init; }
+        [property: JsonPropertyName("Merchant-Serial-Number")] public string MerchantSerialNumber { get; init; }
+    }
 }
