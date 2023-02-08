@@ -1,4 +1,17 @@
-﻿namespace Vipps.Services
+﻿using Microsoft.Extensions.Logging;
+using System.Net.Http.Json;
+using Vipps.Helpers;
+using Vipps.Models;
+using Vipps.Models.Epayment.CancelPayment;
+using Vipps.Models.Epayment.CapturePayment;
+using Vipps.Models.Epayment.CreatePayment;
+using Vipps.Models.Epayment.CreatePaymentRequest;
+using Vipps.Models.Epayment.ForceApprove;
+using Vipps.Models.Epayment.GetPaymentEventLog;
+using Vipps.Models.Epayment.GetPaymentResponse;
+using Vipps.Models.Epayment.RefundPayment;
+
+namespace Vipps.Services
 {
     public class EpaymentService
     {
@@ -39,6 +52,7 @@
         {
             return await ExecuteEpaymentRequest<VoidType, CancelPaymentResponse>(HttpMethod.Post, "cancel", reference, null);
         }
+
         public async Task<CapturePaymentResponse> CapturePayment(CapturePaymentRequest capturePaymentRequest)
         {
             return await ExecuteEpaymentRequest<CapturePaymentRequest, CapturePaymentResponse>(HttpMethod.Post, "capture", null, capturePaymentRequest);
@@ -56,8 +70,8 @@
 
         private async Task<TResponse> ExecuteEpaymentRequest<TRequest, TResponse>(
             HttpMethod httpMethod,
-            string? path,
             string? reference,
+            string? path,
             TRequest? data
             )
         {
