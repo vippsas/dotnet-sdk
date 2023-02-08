@@ -6,8 +6,8 @@ namespace Vipps.Services
 {
     public class AccessTokenService
     {
-        private VippsConfiguration _vippsConfiguration;
-        private HttpClient _httpClient;
+        private readonly VippsConfiguration _vippsConfiguration;
+        private readonly HttpClient _httpClient;
 
         public AccessTokenService(VippsConfiguration vippsConfiguration, HttpClient httpClient)
         {
@@ -21,10 +21,18 @@ namespace Vipps.Services
 
         public async Task<AccessToken> GetAccessToken()
         {
+            var key = $"{_vippsConfiguration.ClientId}{_vippsConfiguration.ClientSecret}";
+            var cachedToken = AccessTokenCacheService.Get(key);
+            if (cachedToken is not null)
+            {
+                return cachedToken;
+            }
+
+
             var request = new HttpRequestMessage
             {
                 RequestUri = new Uri(_vippsConfiguration.BaseUrl + "/accesstoken/get"),
-                Method = HttpMethod.Get
+                Method = HttpMethod.Post
             };
 
             var response = await _httpClient.SendAsync(request);
@@ -32,7 +40,10 @@ namespace Vipps.Services
             {
                 throw new Exception($"Request failed with status code {response.StatusCode}");
             }
-            return await response.Content.ReadFromJsonAsync<AccessToken>() ?? throw new Exception("Failed deserializing access token");
+
+            var accessToken = await response.Content.ReadFromJsonAsync<AccessToken>() ?? throw new Exception("Failed deserializing access token");
+            AccessTokenCacheService.Add(key, accessToken);
+            return accessToken;
         }
     }
 }
