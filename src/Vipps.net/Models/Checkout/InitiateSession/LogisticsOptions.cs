@@ -1,119 +1,118 @@
 ﻿using System.Text.Json.Serialization;
 
-namespace Vipps.Models.Checkout.InitiateSession
+namespace Vipps.Models.Checkout.InitiateSession;
+
+public enum LogisticsBrand
 {
-    public enum LogisticsBrand
+    POSTEN,
+    POSTNORD,
+    PORTERBUDDY,
+    INSTABOX,
+    HELTHJEM,
+    OTHER
+}
+
+public enum PostenLogisticsType
+{
+    MAILBOX,
+    PICKUP_POINT,
+    HOME_DELIVERY
+}
+
+public enum PostnordLogisticsType
+{
+    PICKUP_POINT,
+    HOME_DELIVERY
+}
+
+public enum HelthjemLogisticsType
+{
+    HOME_DELIVERY,
+    PICKUP_POINT
+};
+
+public enum InstaboxLogisticsType
+{
+    HOME_DELIVERY,
+    PICKUP_POINT
+}
+
+public enum PorterbuddyLogisticsType
+{
+    HOME_DELIVERY
+}
+
+public class LogisticsOptionBase
+{
+    public LogisticsOptionBase(Amount amount, string id)
     {
-        POSTEN,
-        POSTNORD,
-        PORTERBUDDY,
-        INSTABOX,
-        HELTHJEM,
-        OTHER
+        Id = id;
+        Amount = amount;
     }
 
-    public enum PostenLogisticsType
-    {
-        MAILBOX,
-        PICKUP_POINT,
-        HOME_DELIVERY
-    }
+    [JsonRequired]
+    public Amount Amount;
 
-    public enum PostnordLogisticsType
-    {
-        PICKUP_POINT,
-        HOME_DELIVERY
-    }
+    [JsonRequired]
+    public string Id;
 
-    public enum HelthjemLogisticsType
-    {
-        HOME_DELIVERY,
-        PICKUP_POINT
-    };
+    public int Priority { get; init; }
 
-    public enum InstaboxLogisticsType
-    {
-        HOME_DELIVERY,
-        PICKUP_POINT
-    }
+    public bool IsDefault { get; init; }
 
-    public enum PorterbuddyLogisticsType
-    {
-        HOME_DELIVERY
-    }
+    public string? Description { get; init; }
+}
 
-    public class LogisticsOptionBase
-    {
-        public LogisticsOptionBase(Amount amount, string id)
-        {
-            Id = id;
-            Amount = amount;
-        }
+public class PostenLogisticsOption : LogisticsOptionBase
+{
+    public PostenLogisticsOption(Amount amount, string id)
+        : base(amount, id) { }
 
-        [JsonRequired]
-        public Amount Amount;
+    public PostenLogisticsType? Type { get; init; }
+    public string? CustomType { get; init; }
+}
 
-        [JsonRequired]
-        public string Id;
+public class PostnordLogisticsOption : LogisticsOptionBase
+{
+    public PostnordLogisticsOption(Amount amount, string id)
+        : base(amount, id) { }
 
-        public int Priority { get; init; }
+    public PostnordLogisticsType? Type { get; init; }
+    public string? CustomType { get; init; }
+}
 
-        public bool IsDefault { get; init; }
+public class PorterbuddyLogisticsOption : LogisticsOptionBase
+{
+    public PorterbuddyLogisticsOption(Amount amount, string id)
+        : base(amount, id) { }
 
-        public string? Description { get; init; }
-    }
+    public PorterbuddyLogisticsType? Type { get; init; }
+    public string? CustomType { get; init; }
+}
 
-    public class PostenLogisticsOption : LogisticsOptionBase
-    {
-        public PostenLogisticsOption(Amount amount, string id)
-            : base(amount, id) { }
+public class InstaboxLogisticsOption : LogisticsOptionBase
+{
+    public InstaboxLogisticsOption(Amount amount, string id)
+        : base(amount, id) { }
 
-        public PostenLogisticsType? Type { get; init; }
-        public string? CustomType { get; init; }
-    }
+    public InstaboxLogisticsType? Type { get; init; }
+    public string? CustomType { get; init; }
+}
 
-    public class PostnordLogisticsOption : LogisticsOptionBase
-    {
-        public PostnordLogisticsOption(Amount amount, string id)
-            : base(amount, id) { }
+public class HelthjemLogisticsOption : LogisticsOptionBase
+{
+    public HelthjemLogisticsOption(Amount amount, string id)
+        : base(amount, id) { }
 
-        public PostnordLogisticsType? Type { get; init; }
-        public string? CustomType { get; init; }
-    }
+    public HelthjemLogisticsType? Type { get; init; }
+    public string? CustomType { get; init; }
+}
 
-    public class PorterbuddyLogisticsOption : LogisticsOptionBase
-    {
-        public PorterbuddyLogisticsOption(Amount amount, string id)
-            : base(amount, id) { }
+public class OtherLogisticsOption : LogisticsOptionBase
+{
+    public OtherLogisticsOption(Amount amount, string id)
+        : base(amount, id) { }
 
-        public PorterbuddyLogisticsType? Type { get; init; }
-        public string? CustomType { get; init; }
-    }
-
-    public class InstaboxLogisticsOption : LogisticsOptionBase
-    {
-        public InstaboxLogisticsOption(Amount amount, string id)
-            : base(amount, id) { }
-
-        public InstaboxLogisticsType? Type { get; init; }
-        public string? CustomType { get; init; }
-    }
-
-    public class HelthjemLogisticsOption : LogisticsOptionBase
-    {
-        public HelthjemLogisticsOption(Amount amount, string id)
-            : base(amount, id) { }
-
-        public HelthjemLogisticsType? Type { get; init; }
-        public string? CustomType { get; init; }
-    }
-
-    public class OtherLogisticsOption : LogisticsOptionBase
-    {
-        public OtherLogisticsOption(Amount amount, string id)
-            : base(amount, id) { }
-
-        [JsonRequired]
-        public string Title { get; init; }
-    }
+    [JsonRequired]
+    public string Title { get; init; }
 }
