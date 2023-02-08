@@ -9,7 +9,6 @@ using Vipps.Models.Epayment.RefundPayment;
 using Vipps.net.Helpers;
 using Vipps.net.Infrastructure;
 using Vipps.net.Models.Base;
-
 namespace Vipps.Services
 {
     public static class EpaymentService

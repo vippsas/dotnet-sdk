@@ -3,7 +3,7 @@
     public class VippsHttpClient : IVippsHttpClient
     {
         private HttpClient? _httpClient;
-        private TimeSpan DefaultTimeOut = TimeSpan.FromSeconds(100);
+        private readonly TimeSpan DefaultTimeOut = TimeSpan.FromSeconds(100);
 
         public VippsHttpClient()
         {
@@ -19,11 +19,7 @@
         {
             get
             {
-                if (_httpClient is null)
-                {
-                    _httpClient = CreateDefaultHttpClient();
-                }
-
+                _httpClient ??= CreateDefaultHttpClient();
                 return _httpClient;
             }
         }
@@ -46,7 +42,7 @@
             return httpClient;
         }
 
-        private void SetupHttpClientHeaders(HttpClient httpClient)
+        private static void SetupHttpClientHeaders(HttpClient httpClient)
         {
             AddOrUpdateHeader(httpClient, "Ocp-Apim-Subscription-Key", VippsConfigurationHolder.VippsConfiguration.SubscriptionKey);
             AddOrUpdateHeader(httpClient, "Merchant-Serial-Number", VippsConfigurationHolder.VippsConfiguration.MerchantSerialNumber);
@@ -57,7 +53,7 @@
             AddOrUpdateHeader(httpClient, "ContentType", "application/json");
         }
 
-        private void AddOrUpdateHeader(HttpClient httpClient, string key, string value)
+        private static void AddOrUpdateHeader(HttpClient httpClient, string key, string value)
         {
             if (httpClient.DefaultRequestHeaders.Contains(key))
             {

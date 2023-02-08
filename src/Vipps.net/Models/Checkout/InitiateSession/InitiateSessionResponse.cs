@@ -1,13 +1,15 @@
 ﻿using System.Text.Json.Serialization;
 
-namespace Vipps.Models.Checkout.InitiateSession
+namespace Vipps.Models.Checkout.InitiateSession;
+
+public class InitiateSessionResponse
 {
-    public class InitiateSessionResponse
-    {
-        [property: JsonPropertyName("token")] public string Token { get; init; }
-        [property: JsonPropertyName("checkoutFrontendUrl")] public string CheckoutFrontendUrl { get; init; }
-        [property: JsonPropertyName("pollingUrl")] public string PollingUrl { get; init; }
-    }
+    [property: JsonPropertyName("token")]
+    public string Token { get; init; }
 
+    [property: JsonPropertyName("checkoutFrontendUrl")]
+    public string CheckoutFrontendUrl { get; init; }
 
+    [property: JsonPropertyName("pollingUrl")]
+    public string PollingUrl { get; init; }
 }
