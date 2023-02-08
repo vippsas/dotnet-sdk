@@ -30,9 +30,28 @@ namespace Vipps.net.Tests
 
         private static AccessToken GetToken(DateTime? notBefore, DateTime? expiresAt)
         {
-            var jwt = new JwtSecurityToken(new JwtHeader(), new JwtPayload("TestIssuer", "TestAudience", new List<Claim>(), notBefore, expiresAt, notBefore));
+            var jwt = new JwtSecurityToken(
+                new JwtHeader(),
+                new JwtPayload(
+                    "TestIssuer",
+                    "TestAudience",
+                    new List<Claim>(),
+                    notBefore,
+                    expiresAt,
+                    notBefore
+                )
+            );
             var jwtString = new JwtSecurityTokenHandler().WriteToken(jwt);
-            var accessToken = new AccessToken() { ExpiresIn = "3600", ExtExpiresIn = "3600", ExpiresOn = "99675777281", NotBefore = "0", Resource = Guid.Empty.ToString(), TokenType = "Bearer", Token = jwtString };
+            var accessToken = new AccessToken()
+            {
+                ExpiresIn = "3600",
+                ExtExpiresIn = "3600",
+                ExpiresOn = "99675777281",
+                NotBefore = "0",
+                Resource = Guid.Empty.ToString(),
+                TokenType = "Bearer",
+                Token = jwtString
+            };
             return accessToken;
         }
     }

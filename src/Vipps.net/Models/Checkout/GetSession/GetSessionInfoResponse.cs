@@ -5,14 +5,29 @@ namespace Vipps.Models.Checkout.GetSession
 {
     public class BillingDetails
     {
-        [property: JsonPropertyName("firstName")] public string FirstName { get; init; }
-        [property: JsonPropertyName("lastName")] public string LastName { get; init; }
-        [property: JsonPropertyName("email")] public string Email { get; init; }
-        [property: JsonPropertyName("phoneNumber")] public string PhoneNumber { get; init; }
-        [property: JsonPropertyName("streetAddress")] public string StreetAddress { get; init; }
-        [property: JsonPropertyName("postalCode")] public string PostalCode { get; init; }
-        [property: JsonPropertyName("region")] public string Region { get; init; }
-        [property: JsonPropertyName("country")] public string Country { get; init; }
+        [property: JsonPropertyName("firstName")]
+        public string FirstName { get; init; }
+
+        [property: JsonPropertyName("lastName")]
+        public string LastName { get; init; }
+
+        [property: JsonPropertyName("email")]
+        public string Email { get; init; }
+
+        [property: JsonPropertyName("phoneNumber")]
+        public string PhoneNumber { get; init; }
+
+        [property: JsonPropertyName("streetAddress")]
+        public string StreetAddress { get; init; }
+
+        [property: JsonPropertyName("postalCode")]
+        public string PostalCode { get; init; }
+
+        [property: JsonPropertyName("region")]
+        public string Region { get; init; }
+
+        [property: JsonPropertyName("country")]
+        public string Country { get; init; }
     }
 
     public enum PaymentState
@@ -24,25 +39,53 @@ namespace Vipps.Models.Checkout.GetSession
 
     public class PickupPoint
     {
-        [property: JsonPropertyName("id")] public string Id { get; init; }
-        [property: JsonPropertyName("name")] public string Name { get; init; }
-        [property: JsonPropertyName("postalCode")] public string PostalCode { get; init; }
-        [property: JsonPropertyName("city")] public string City { get; init; }
-        [property: JsonPropertyName("country")] public string Country { get; init; }
+        [property: JsonPropertyName("id")]
+        public string Id { get; init; }
+
+        [property: JsonPropertyName("name")]
+        public string Name { get; init; }
+
+        [property: JsonPropertyName("postalCode")]
+        public string PostalCode { get; init; }
+
+        [property: JsonPropertyName("city")]
+        public string City { get; init; }
+
+        [property: JsonPropertyName("country")]
+        public string Country { get; init; }
     }
 
     public class ShippingDetails
     {
-        [property: JsonPropertyName("firstName")] public string FirstName { get; init; }
-        [property: JsonPropertyName("lastName")] public string LastName { get; init; }
-        [property: JsonPropertyName("email")] public string Email { get; init; }
-        [property: JsonPropertyName("phoneNumber")] public string PhoneNumber { get; init; }
-        [property: JsonPropertyName("streetAddress")] public string StreetAddress { get; init; }
-        [property: JsonPropertyName("postalCode")] public string PostalCode { get; init; }
-        [property: JsonPropertyName("region")] public string Region { get; init; }
-        [property: JsonPropertyName("country")] public string Country { get; init; }
-        [property: JsonPropertyName("shippingMethodId")] public string ShippingMethodId { get; init; }
-        [property: JsonPropertyName("pickupPoint")] public PickupPoint PickupPoint { get; init; }
+        [property: JsonPropertyName("firstName")]
+        public string FirstName { get; init; }
+
+        [property: JsonPropertyName("lastName")]
+        public string LastName { get; init; }
+
+        [property: JsonPropertyName("email")]
+        public string Email { get; init; }
+
+        [property: JsonPropertyName("phoneNumber")]
+        public string PhoneNumber { get; init; }
+
+        [property: JsonPropertyName("streetAddress")]
+        public string StreetAddress { get; init; }
+
+        [property: JsonPropertyName("postalCode")]
+        public string PostalCode { get; init; }
+
+        [property: JsonPropertyName("region")]
+        public string Region { get; init; }
+
+        [property: JsonPropertyName("country")]
+        public string Country { get; init; }
+
+        [property: JsonPropertyName("shippingMethodId")]
+        public string ShippingMethodId { get; init; }
+
+        [property: JsonPropertyName("pickupPoint")]
+        public PickupPoint PickupPoint { get; init; }
     }
 
     /// <summary>
@@ -69,6 +112,7 @@ namespace Vipps.Models.Checkout.GetSession
         public ShippingDetails? ShippingDetails { get; init; }
         public BillingDetails? BillingDetails { get; init; }
     }
+
     public enum ExternalSessionState
     {
         SessionCreated,
@@ -77,6 +121,7 @@ namespace Vipps.Models.Checkout.GetSession
         PaymentSuccessful,
         PaymentTerminated
     }
+
     public enum PaymentMethod
     {
         Wallet,
@@ -122,5 +167,4 @@ namespace Vipps.Models.Checkout.GetSession
         public Amount? RefundedAmount { get; init; }
         public Amount? AuthorizedAmount { get; init; }
     }
-
 }
