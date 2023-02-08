@@ -16,7 +16,10 @@ namespace Vipps.Services
 
             _httpClient.DefaultRequestHeaders.Add("client_id", vippsConfiguration.ClientId);
             _httpClient.DefaultRequestHeaders.Add("client_secret", vippsConfiguration.ClientSecret);
-            _httpClient.DefaultRequestHeaders.Add("Ocp-Apim-Subscription-Key", vippsConfiguration.SubscriptionKey);
+            _httpClient.DefaultRequestHeaders.Add(
+                "Ocp-Apim-Subscription-Key",
+                vippsConfiguration.SubscriptionKey
+            );
         }
 
         public async Task<AccessToken> GetAccessToken()
@@ -27,7 +30,6 @@ namespace Vipps.Services
             {
                 return cachedToken;
             }
-
 
             var request = new HttpRequestMessage
             {
@@ -41,7 +43,9 @@ namespace Vipps.Services
                 throw new Exception($"Request failed with status code {response.StatusCode}");
             }
 
-            var accessToken = await response.Content.ReadFromJsonAsync<AccessToken>() ?? throw new Exception("Failed deserializing access token");
+            var accessToken =
+                await response.Content.ReadFromJsonAsync<AccessToken>()
+                ?? throw new Exception("Failed deserializing access token");
             AccessTokenCacheService.Add(key, accessToken);
             return accessToken;
         }

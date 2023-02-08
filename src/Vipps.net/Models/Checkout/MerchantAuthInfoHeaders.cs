@@ -17,9 +17,16 @@ namespace Vipps.Models.Checkout
     /// <param name="MerchantSerialNumber">Vipps assigned unique number for a merchant. Found in the Vipps portal. Example: "123456".</param>
     public class MerchantAuthInfoHeaders
     {
-        [property: JsonPropertyName("client_id")] public string ClientId { get; init; }
-        [property: JsonPropertyName("client_secret")] public string ClientSecret { get; init; }
-        [property: JsonPropertyName("Ocp-Apim-Subscription-Key")] public string OcpApimSubscriptionKey { get; init; }
-        [property: JsonPropertyName("Merchant-Serial-Number")] public string MerchantSerialNumber { get; init; }
+        [property: JsonPropertyName("client_id")]
+        public string ClientId { get; init; }
+
+        [property: JsonPropertyName("client_secret")]
+        public string ClientSecret { get; init; }
+
+        [property: JsonPropertyName("Ocp-Apim-Subscription-Key")]
+        public string OcpApimSubscriptionKey { get; init; }
+
+        [property: JsonPropertyName("Merchant-Serial-Number")]
+        public string MerchantSerialNumber { get; init; }
     }
 }
