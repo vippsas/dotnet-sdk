@@ -1,0 +1,64 @@
+name: Build and Test
+
+env:
+  solution_file: 'Vipps.net.sln'
+  nuget_feed_name: 'Vipps-Azure-Artifacts-Feed'
+  nuget_feed_source: 'https://pkgs.dev.azure.com/vipps/_packaging/release/nuget/v3/index.json'
+  nuget_config: 'nuget.config'
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+    paths-ignore:
+      - 'docs/**'
+
+  workflow_dispatch:
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+      - name: Login to ACR
+        uses: docker/login-action@v2
+        with:
+          registry: vippsgfacr.azurecr.io
+          username: ${{ secrets.AZURE_CLIENT_ID }}
+          password: ${{ secrets.AZURE_CLIENT_SECRET }}
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: 7.0.x
+          # source-url: https://pkgs.dev.azure.com/<your-organization>/_packaging/<your-feed-name>/nuget/v3/index.json
+        #env:
+        #  NUGET_AUTH_TOKEN: ${{secrets.NUGET_AUTH_TOKEN}} # Note, create a secret with this name in Settings
+
+      - name: Start containers
+        run: docker-compose -f "docker-compose.yml" up --detach --force-recreate epayment-db vaam-integrationtest-db
+
+      - name: Remove anonymous access to Azure Artifacts source
+        run: dotnet nuget remove source netthandel --configfile ${{ env.nuget_config }}
+      
+      # dotnet does not support encrypted passwords under linux, so we have to provide the password (PAT) in clear text :(
+      - name: Add authorized access to Azure Artifacts
+        run: dotnet nuget add source ${{ env.nuget_feed_source }} --name ${{ env.nuget_feed_name }} --username az --password ${{ secrets.NUGET_AUTH_TOKEN }} --configfile ${{ env.nuget_config }} --store-password-in-clear-text
+      - name: Restore dependencies
+        run: dotnet restore ./Vipps.net.sln
+      - name: Restore tools
+        run: dotnet tool restore
+      - name: Build
+        run: dotnet build --no-restore ./Vipps.net.sln
+      - name: Test
+        run: dotnet test --no-build --verbosity normal --collect:"XPlat Code Coverage" ./Vipps.net.sln
+      - name: Install ReportGenerator tool
+        run: dotnet tool install --global dotnet-reportgenerator-globaltool --ignore-failed-sources
+      - name: Create reports
+        run: reportgenerator -reports:**/coverage.cobertura.xml -targetdir:coverlet/reports -reporttypes:"Cobertura"
+      - name: Upload a Build Artifact
+        uses: actions/upload-artifact@v3.1.1
+        with:
+          name: Coverage Report
+          path: coverlet/reports/Cobertura.xml
