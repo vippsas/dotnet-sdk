@@ -6,6 +6,7 @@ using Vipps.Models.Epayment.ForceApprove;
 using Vipps.Models.Epayment.GetPaymentEventLog;
 using Vipps.Models.Epayment.GetPaymentResponse;
 using Vipps.Models.Epayment.RefundPayment;
+using Vipps.net.Helpers;
 using Vipps.net.Infrastructure;
 using Vipps.net.Models.Base;
 
@@ -53,7 +54,7 @@ namespace Vipps.Services
             TRequest? data
             )
         {
-            var requestPath = $"{VippsConfigurationHolder.VippsConfiguration.BaseUrl}/";
+            var requestPath = $"{VippsConfigurationHolder.VippsConfiguration.BaseUrl}/epayment/v1/payments";
             if (reference is not null)
             {
                 requestPath += reference;
@@ -64,8 +65,8 @@ namespace Vipps.Services
             }
 
             var authToken = await AccessTokenService.GetAccessToken();
-            System.Net.Http.Headers.AuthenticationHeaderValue? authorizationheader = new System.Net.Http.Headers.AuthenticationHeaderValue(Vipps.net.Helpers.Constants.Bearer, authToken.Token);
-            var response = await VippsConfigurationHolder.VippsClient.ExecuteRequest<TRequest, TResponse>(requestPath, httpMethod, data, authorizationheader, null);
+            var headers = new Dictionary<string, string> { { Constants.HeaderNameAuthorization, $"{Constants.AuthorizationSchemeNameBearer} {authToken.Token}" } };
+            var response = await VippsConfigurationHolder.VippsClient.ExecuteRequest<TRequest, TResponse>(requestPath, httpMethod, data, headers, null);
             return response;
         }
     }

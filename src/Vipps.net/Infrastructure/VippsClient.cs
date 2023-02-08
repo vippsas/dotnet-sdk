@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.Logging;
+using System.Net.Http.Headers;
 using System.Net.Http.Json;
 using Vipps.Helpers;
 using Vipps.net.Models.Base;
@@ -27,41 +28,49 @@ namespace Vipps.net.Infrastructure
             return default!;
         }
 
-        public async Task<string> ExecuteRequest<TRequest>(string path, HttpMethod httpMethod, TRequest? data, Dictionary<string, string>? headers, CancellationToken? cancellationToken)
-        {
-            HttpResponseMessage response = await ExecuteRequestBase(path, httpMethod, data, headers, cancellationToken);
-            return await response.Content.ReadAsStringAsync() ?? throw new Exception("Failed reading response");
-        }
-
         private async Task<HttpResponseMessage> ExecuteRequestBase<TRequest>(string path, HttpMethod httpMethod, TRequest? data, Dictionary<string, string>? headers, CancellationToken? cancellationToken)
         {
+            var idempotencyKey = Guid.NewGuid().ToString();
             var retryPolicy = PolicyHelper.GetRetryPolicyWithFallback(
                            _logger,
                             $"Request for {path} failed even after retries"
                         );
-
-            var request = new HttpRequestMessage
+            var response = await retryPolicy.ExecuteAsync(async () =>
             {
-                RequestUri = new Uri(path),
-                Method = httpMethod,
-                Content = data is not null ? JsonContent.Create(data) : null,
-            };
-            request.Headers.Add("Idempotency-Key", Guid.NewGuid().ToString());
-            if (headers is not null)
-            {
-                request.Headers.Authorization = authorizationheader;
-            }
-
-            var response = await retryPolicy.ExecuteAsync(async () => await _vippsHttpClient.SendAsync(request, cancellationToken ?? default));
+                var requestMessage = new HttpRequestMessage
+                {
+                    RequestUri = new Uri(path),
+                    Method = httpMethod,
+                    Content = data is not null ? JsonContent.Create(data) : null,
+                };
+                requestMessage.Headers.Add("Idempotency-Key", idempotencyKey);
+                if (headers is not null)
+                {
+                    foreach (var item in headers)
+                    {
+                        AddOrUpdateHeader(requestMessage.Headers, item.Key, item.Value);
+                    }
+                }
+                return await _vippsHttpClient.SendAsync(requestMessage, cancellationToken ?? default);
+            });
 
             if (!response.IsSuccessStatusCode)
             {
-                // TODO: Read as problemdetails
                 var responseContent = await response.Content.ReadAsStringAsync();
                 throw new Exception($"Request failed with status code {response.StatusCode}, content: '{responseContent}'");
             }
 
             return response;
+        }
+
+        private static void AddOrUpdateHeader(HttpRequestHeaders headers, string key, string value)
+        {
+            if (headers.Contains(key))
+            {
+                headers.Remove(key);
+            }
+
+            headers.Add(key, value);
         }
     }
 }

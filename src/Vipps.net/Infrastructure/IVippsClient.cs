@@ -1,9 +1,7 @@
-﻿using System.Net.Http.Headers;
-
-namespace Vipps.net.Infrastructure
+﻿namespace Vipps.net.Infrastructure
 {
     public interface IVippsClient
     {
-        Task<TResponse> ExecuteRequest<TRequest, TResponse>(string path, HttpMethod httpMethod, TRequest? data, AuthenticationHeaderValue? authorizationheader, CancellationToken? cancellationToken);
+        Task<TResponse> ExecuteRequest<TRequest, TResponse>(string path, HttpMethod httpMethod, TRequest? data, Dictionary<string, string>? headers, CancellationToken? cancellationToken);
     }
 }

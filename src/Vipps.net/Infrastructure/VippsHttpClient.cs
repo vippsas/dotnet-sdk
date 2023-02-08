@@ -54,6 +54,7 @@
             AddOrUpdateHeader(httpClient, "Vipps-System-Version", "0.9");
             AddOrUpdateHeader(httpClient, "Vipps-System-Plugin-Name", "checkout-sandbox");
             AddOrUpdateHeader(httpClient, "Vipps-System-Plugin-Version", "0.9");
+            AddOrUpdateHeader(httpClient, "ContentType", "application/json");
         }
 
         private void AddOrUpdateHeader(HttpClient httpClient, string key, string value)
