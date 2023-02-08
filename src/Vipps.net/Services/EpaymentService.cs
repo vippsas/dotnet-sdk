@@ -90,17 +90,15 @@ namespace Vipps.Services
                 requestPath += path;
             }
 
-            var response = await retryPolicy.ExecuteAsync(async () =>
+            var request = new HttpRequestMessage
             {
-                var request = new HttpRequestMessage
-                {
-                    RequestUri = new Uri(requestPath),
-                    Method = httpMethod,
-                    Content = data is not null ? JsonContent.Create(data) : null
-                };
+                RequestUri = new Uri(requestPath),
+                Method = httpMethod,
+                Content = data is not null ? JsonContent.Create(data) : null,
+                Headers = { { "Idempotency-Key", Guid.NewGuid().ToString() } }
+            };
 
-                return await _httpClient.SendAsync(request);
-            });
+            var response = await retryPolicy.ExecuteAsync(async () => await _httpClient.SendAsync(request));
 
             if (!response.IsSuccessStatusCode)
             {
