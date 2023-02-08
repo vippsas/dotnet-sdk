@@ -82,9 +82,13 @@ namespace Vipps.Services
 
             var requestPath = $"{_httpClient.BaseAddress}/";
             if (reference is not null)
+            {
                 requestPath += reference;
+            }
             if (path is not null)
+            {
                 requestPath += path;
+            }
 
             var response = await retryPolicy.ExecuteAsync(async () =>
             {
