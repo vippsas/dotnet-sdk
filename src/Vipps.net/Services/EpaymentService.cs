@@ -62,25 +62,21 @@ public class EpaymentService
 
     public async Task<GetPaymentResponse> GetPayment(string reference)
     {
-        return await ExecuteEpaymentRequest<GetPaymentResponse>(
-            "approve",
-            reference,
-            null
-        );
+        return await ExecuteEpaymentRequest<GetPaymentResponse>("approve", reference, null);
     }
 
     public async Task<IEnumerable<GetPaymentEventLog>> GetPaymentEventLog(string reference)
     {
-        return await ExecuteEpaymentRequest<IEnumerable<GetPaymentEventLog>>("approve", reference, null);
-    }
-
-    public async Task<CancelPaymentResponse> CancelPayment(string reference)
-    {
-        return await ExecuteEpaymentRequest<CancelPaymentResponse>(
+        return await ExecuteEpaymentRequest<IEnumerable<GetPaymentEventLog>>(
             "approve",
             reference,
             null
         );
+    }
+
+    public async Task<CancelPaymentResponse> CancelPayment(string reference)
+    {
+        return await ExecuteEpaymentRequest<CancelPaymentResponse>("approve", reference, null);
     }
 
     public async Task<CapturePaymentResponse> CapturePayment(
@@ -96,23 +92,12 @@ public class EpaymentService
 
     public async Task<RefundPaymentResponse> RefundPayment(string reference)
     {
-        return await ExecuteEpaymentRequest<RefundPaymentResponse>(
-            "approve",
-            reference,
-            null
-        );
+        return await ExecuteEpaymentRequest<RefundPaymentResponse>("approve", reference, null);
     }
 
-    public async Task ForceApprovePayment(
-        string reference,
-        ForceApproveRequest forceApproveRequest
-    )
+    public async Task ForceApprovePayment(string reference, ForceApproveRequest forceApproveRequest)
     {
-        await ExecuteEpaymentRequest<VoidType>(
-            "approve",
-            reference,
-            forceApproveRequest
-        );
+        await ExecuteEpaymentRequest<VoidType>("approve", reference, forceApproveRequest);
     }
 
     private async Task<TResponse> ExecuteEpaymentRequest<TResponse>(
