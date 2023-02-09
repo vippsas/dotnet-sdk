@@ -17,7 +17,7 @@ namespace Vipps.Services
     {
         public static async Task<CreatePaymentResponse> CreatePayment(
             CreatePaymentRequest createPaymentRequest,
-            CancellationToken? cancellationToken
+            CancellationToken cancellationToken = default
         )
         {
             return await ExecuteEpaymentRequest<CreatePaymentRequest, CreatePaymentResponse>(
@@ -31,7 +31,7 @@ namespace Vipps.Services
 
         public static async Task<GetPaymentResponse> GetPayment(
             string reference,
-            CancellationToken? cancellationToken
+            CancellationToken cancellationToken = default
         )
         {
             return await ExecuteEpaymentRequest<GetPaymentResponse>(
@@ -44,7 +44,7 @@ namespace Vipps.Services
 
         public static async Task<IEnumerable<GetPaymentEventLog>> GetPaymentEventLog(
             string reference,
-            CancellationToken? cancellationToken
+            CancellationToken cancellationToken = default
         )
         {
             return await ExecuteEpaymentRequest<IEnumerable<GetPaymentEventLog>>(
@@ -57,7 +57,7 @@ namespace Vipps.Services
 
         public static async Task<CancelPaymentResponse> CancelPayment(
             string reference,
-            CancellationToken? cancellationToken
+            CancellationToken cancellationToken = default
         )
         {
             return await ExecuteEpaymentRequest<CancelPaymentResponse>(
@@ -70,7 +70,7 @@ namespace Vipps.Services
 
         public static async Task<CapturePaymentResponse> CapturePayment(
             CapturePaymentRequest capturePaymentRequest,
-            CancellationToken? cancellationToken
+            CancellationToken cancellationToken = default
         )
         {
             return await ExecuteEpaymentRequest<CapturePaymentRequest, CapturePaymentResponse>(
@@ -84,7 +84,7 @@ namespace Vipps.Services
 
         public static async Task<RefundPaymentResponse> RefundPayment(
             string reference,
-            CancellationToken? cancellationToken
+            CancellationToken cancellationToken = default
         )
         {
             return await ExecuteEpaymentRequest<RefundPaymentResponse>(
@@ -98,7 +98,7 @@ namespace Vipps.Services
         public static async Task ForceApprovePayment(
             string reference,
             ForceApproveRequest forceApproveRequest,
-            CancellationToken? cancellationToken
+            CancellationToken cancellationToken = default
         )
         {
             await ExecuteEpaymentRequest<ForceApproveRequest, VoidType>(
@@ -115,7 +115,7 @@ namespace Vipps.Services
             string? path,
             string? reference,
             TRequest? data,
-            CancellationToken? cancellationToken
+            CancellationToken cancellationToken
         )
             where TRequest : VippsRequest
         {
@@ -135,7 +135,7 @@ namespace Vipps.Services
             HttpMethod httpMethod,
             string? path,
             string? reference,
-            CancellationToken? cancellationToken
+            CancellationToken cancellationToken
         )
         {
             var requestPath = GetRequestPath(reference, path);
@@ -165,7 +165,7 @@ namespace Vipps.Services
         }
 
         private static async Task<Dictionary<string, string>> GetHeaders(
-            CancellationToken? cancellationToken
+            CancellationToken cancellationToken
         )
         {
             var authToken = await AccessTokenService.GetAccessToken(cancellationToken);

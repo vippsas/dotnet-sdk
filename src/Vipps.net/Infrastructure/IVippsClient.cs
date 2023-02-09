@@ -9,7 +9,7 @@ namespace Vipps.net.Infrastructure
             HttpMethod httpMethod,
             TRequest? data,
             Dictionary<string, string>? headers,
-            CancellationToken? cancellationToken
+            CancellationToken cancellationToken = default
         )
             where TRequest : VippsRequest;
 
@@ -17,7 +17,7 @@ namespace Vipps.net.Infrastructure
             string path,
             HttpMethod httpMethod,
             Dictionary<string, string>? headers,
-            CancellationToken? cancellationToken
+            CancellationToken cancellationToken = default
         );
     }
 }

@@ -9,7 +9,7 @@ namespace Vipps.Services
     {
         public static async Task<InitiateSessionResponse> InitiateSession(
             InitiateSessionRequest initiateSessionRequest,
-            CancellationToken? cancellationToken
+            CancellationToken cancellationToken = default
         )
         {
             var requestPath = $"{VippsConfiguration.BaseUrl}/checkout/v3/session";
@@ -32,7 +32,7 @@ namespace Vipps.Services
 
         public static async Task<GetSessionInfoResponse> GetSessionInfo(
             string reference,
-            CancellationToken? cancellationToken
+            CancellationToken cancellationToken = default
         )
         {
             var requestPath = $"{VippsConfiguration.BaseUrl}/checkout/v3/session/{reference}";

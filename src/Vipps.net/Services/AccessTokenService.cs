@@ -6,7 +6,9 @@ namespace Vipps.Services
 {
     public static class AccessTokenService
     {
-        public static async Task<AccessToken> GetAccessToken(CancellationToken? cancellationToken)
+        public static async Task<AccessToken> GetAccessToken(
+            CancellationToken cancellationToken = default
+        )
         {
             var key = $"{VippsConfiguration.ClientId}{VippsConfiguration.ClientSecret}";
             var cachedToken = AccessTokenCacheService.Get(key);

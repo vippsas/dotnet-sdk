@@ -31,7 +31,7 @@ namespace Vipps.net.Infrastructure
             HttpMethod httpMethod,
             TRequest? data,
             Dictionary<string, string>? headers,
-            CancellationToken? cancellationToken
+            CancellationToken cancellationToken = default
         )
             where TRequest : VippsRequest
         {
@@ -48,7 +48,7 @@ namespace Vipps.net.Infrastructure
             string path,
             HttpMethod httpMethod,
             Dictionary<string, string>? headers,
-            CancellationToken? cancellationToken
+            CancellationToken cancellationToken = default
         )
         {
             return await ExecuteRequestBaseAndParse<TResponse>(
@@ -65,7 +65,7 @@ namespace Vipps.net.Infrastructure
             HttpMethod httpMethod,
             HttpContent? httpContent,
             Dictionary<string, string>? headers,
-            CancellationToken? cancellationToken
+            CancellationToken cancellationToken
         )
         {
             var response = await ExecuteRequestBase(
@@ -76,8 +76,9 @@ namespace Vipps.net.Infrastructure
                 cancellationToken
             );
             if (typeof(TResponse) != typeof(VoidType))
-                return await response.Content.ReadFromJsonAsync<TResponse>()
-                    ?? throw new Exception("Failed deserializing response");
+                return await response.Content.ReadFromJsonAsync<TResponse>(
+                        cancellationToken: cancellationToken
+                    ) ?? throw new Exception("Failed deserializing response");
             return default!;
         }
 
@@ -86,7 +87,7 @@ namespace Vipps.net.Infrastructure
             HttpMethod httpMethod,
             HttpContent? httpContent,
             Dictionary<string, string>? headers,
-            CancellationToken? cancellationToken
+            CancellationToken cancellationToken
         )
         {
             var idempotencyKey = Guid.NewGuid().ToString();
@@ -110,15 +111,12 @@ namespace Vipps.net.Infrastructure
                         AddOrUpdateHeader(requestMessage.Headers, item.Key, item.Value);
                     }
                 }
-                return await _vippsHttpClient.SendAsync(
-                    requestMessage,
-                    cancellationToken ?? default
-                );
+                return await _vippsHttpClient.SendAsync(requestMessage, cancellationToken);
             });
 
             if (!response.IsSuccessStatusCode)
             {
-                var responseContent = await response.Content.ReadAsStringAsync();
+                var responseContent = await response.Content.ReadAsStringAsync(cancellationToken);
                 throw new Exception(
                     $"Request failed with status code {response.StatusCode}, content: '{responseContent}'"
                 );
