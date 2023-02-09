@@ -2,7 +2,7 @@
 
 namespace Vipps.Models.Epayment.ForceApprove;
 
-public class ForceApproveRequest
+public class ForceApproveRequest : VippsRequest
 {
     [property: JsonPropertyName("customer")]
     public Customer Customer { get; init; }

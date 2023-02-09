@@ -1,5 +1,6 @@
-﻿using Microsoft.Extensions.Logging;
-using System.Net.Http.Json;
+﻿using System.Net.Http.Json;
+using System.Text;
+using Microsoft.Extensions.Logging;
 using Vipps.Helpers;
 using Vipps.Models;
 using Vipps.Models.Epayment.CancelPayment;
@@ -10,6 +11,7 @@ using Vipps.Models.Epayment.ForceApprove;
 using Vipps.Models.Epayment.GetPaymentEventLog;
 using Vipps.Models.Epayment.GetPaymentResponse;
 using Vipps.Models.Epayment.RefundPayment;
+using Vipps.net.Helpers;
 
 namespace Vipps.Services;
 
@@ -51,7 +53,7 @@ public class EpaymentService
         CreatePaymentRequest createPaymentRequest
     )
     {
-        return await ExecuteEpaymentRequest<CreatePaymentRequest, CreatePaymentResponse>(
+        return await ExecuteEpaymentRequest<CreatePaymentResponse>(
             "approve",
             null,
             createPaymentRequest
@@ -60,16 +62,12 @@ public class EpaymentService
 
     public async Task<GetPaymentResponse> GetPayment(string reference)
     {
-        return await ExecuteEpaymentRequest<VoidType, GetPaymentResponse>(
-            "approve",
-            reference,
-            null
-        );
+        return await ExecuteEpaymentRequest<GetPaymentResponse>("approve", reference, null);
     }
 
     public async Task<IEnumerable<GetPaymentEventLog>> GetPaymentEventLog(string reference)
     {
-        return await ExecuteEpaymentRequest<ForceApproveRequest, IEnumerable<GetPaymentEventLog>>(
+        return await ExecuteEpaymentRequest<IEnumerable<GetPaymentEventLog>>(
             "approve",
             reference,
             null
@@ -78,18 +76,14 @@ public class EpaymentService
 
     public async Task<CancelPaymentResponse> CancelPayment(string reference)
     {
-        return await ExecuteEpaymentRequest<VoidType, CancelPaymentResponse>(
-            "approve",
-            reference,
-            null
-        );
+        return await ExecuteEpaymentRequest<CancelPaymentResponse>("approve", reference, null);
     }
 
     public async Task<CapturePaymentResponse> CapturePayment(
         CapturePaymentRequest capturePaymentRequest
     )
     {
-        return await ExecuteEpaymentRequest<CapturePaymentRequest, CapturePaymentResponse>(
+        return await ExecuteEpaymentRequest<CapturePaymentResponse>(
             "approve",
             null,
             capturePaymentRequest
@@ -98,26 +92,18 @@ public class EpaymentService
 
     public async Task<RefundPaymentResponse> RefundPayment(string reference)
     {
-        return await ExecuteEpaymentRequest<VoidType, RefundPaymentResponse>(
-            "approve",
-            reference,
-            null
-        );
+        return await ExecuteEpaymentRequest<RefundPaymentResponse>("approve", reference, null);
     }
 
     public async Task ForceApprovePayment(string reference, ForceApproveRequest forceApproveRequest)
     {
-        await ExecuteEpaymentRequest<ForceApproveRequest, VoidType>(
-            "approve",
-            reference,
-            forceApproveRequest
-        );
+        await ExecuteEpaymentRequest<VoidType>("approve", reference, forceApproveRequest);
     }
 
-    private async Task<TResponse> ExecuteEpaymentRequest<TRequest, TResponse>(
+    private async Task<TResponse> ExecuteEpaymentRequest<TResponse>(
         string path,
         string? reference,
-        TRequest? data
+        VippsRequest? data
     )
     {
         var retryPolicy = PolicyHelper.GetRetryPolicyWithFallback(
@@ -127,17 +113,14 @@ public class EpaymentService
 
         var requestPath = $"{_httpClient.BaseAddress}/";
         if (reference is not null)
-        {
             requestPath += reference;
-        }
-
         requestPath += path;
 
         var request = new HttpRequestMessage
         {
             RequestUri = new Uri(requestPath),
             Method = reference is not null ? HttpMethod.Get : HttpMethod.Post,
-            Content = data is not null ? JsonContent.Create(data) : null,
+            Content = CreateRequestContent(data),
             Headers = { { "Idempotency-Key", Guid.NewGuid().ToString() } }
         };
 
@@ -159,7 +142,17 @@ public class EpaymentService
         return default!;
     }
 
-    private class VoidType
+    private static HttpContent? CreateRequestContent(VippsRequest? vippsRequest)
+    {
+        if (vippsRequest is null)
+        {
+            return null;
+        }
+        var serializedRequest = VippsRequestSerializer.SerializeVippsRequest(vippsRequest);
+        return new StringContent(serializedRequest, Encoding.UTF8, "application/json");
+    }
+
+    private sealed class VoidType
     {
         public VoidType() { }
     }
