@@ -1,4 +1,10 @@
-﻿namespace Vipps.Services
+﻿using Vipps.Models.Checkout.GetSession;
+using Vipps.Models.Checkout.InitiateSession;
+using Vipps.net.Helpers;
+using Vipps.net.Infrastructure;
+using Vipps.net.Models.Base;
+
+namespace Vipps.Services
 {
     public static class CheckoutService
     {

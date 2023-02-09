@@ -1,4 +1,6 @@
-﻿namespace Vipps.Models.Epayment.CreatePaymentRequest;
+﻿using System.Text.Json.Serialization;
+
+namespace Vipps.Models.Epayment.CreatePaymentRequest;
 
 public class CreatePaymentRequest : VippsRequest
 {
