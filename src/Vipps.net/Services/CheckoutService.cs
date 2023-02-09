@@ -1,90 +1,51 @@
-﻿using System.Net.Http.Json;
-using Vipps.Models;
-using Vipps.Models.Checkout.GetSession;
+﻿using Vipps.Models.Checkout.GetSession;
 using Vipps.Models.Checkout.InitiateSession;
+using Vipps.net.Helpers;
+using Vipps.net.Infrastructure;
+using Vipps.net.Models.Base;
 
-namespace Vipps.Services;
-
-public class CheckoutService
+namespace Vipps.Services
 {
-    private VippsConfiguration _vippsConfiguration;
-    private HttpClient _httpClient;
-
-    public CheckoutService(VippsConfiguration vippsConfiguration, HttpClient httpClient)
+    public static class CheckoutService
     {
-        _vippsConfiguration = vippsConfiguration;
-        _httpClient = httpClient;
-
-        _httpClient.DefaultRequestHeaders.Add("client_id", vippsConfiguration.ClientId);
-        _httpClient.DefaultRequestHeaders.Add("client_secret", vippsConfiguration.ClientSecret);
-        _httpClient.DefaultRequestHeaders.Add(
-            "Ocp-Apim-Subscription-Key",
-            vippsConfiguration.SubscriptionKey
-        );
-        _httpClient.DefaultRequestHeaders.Add(
-            "Merchant-Serial-Number",
-            vippsConfiguration.MerchantSerialNumber
-        );
-        _httpClient.DefaultRequestHeaders.Add("Vipps-System-Name", "checkout-sandbox");
-        _httpClient.DefaultRequestHeaders.Add("Vipps-System-Version", "0.9");
-        _httpClient.DefaultRequestHeaders.Add("Vipps-System-Plugin-Name", "checkout-sandbox");
-        _httpClient.DefaultRequestHeaders.Add("Vipps-System-Plugin-Version", "0.9");
-    }
-
-    public async Task<InitiateSessionResponse> InitiateSession(
-        InitiateSessionRequest initiateSessionRequest
-    )
-    {
-        var orderId = "sandbox" + Guid.NewGuid();
-
-        var request = new HttpRequestMessage()
+        public static async Task<InitiateSessionResponse> InitiateSession(InitiateSessionRequest initiateSessionRequest)
         {
-            Content = JsonContent.Create(initiateSessionRequest),
-            RequestUri = new Uri(_vippsConfiguration.BaseUrl + "/checkout/v3/session"),
-            Method = HttpMethod.Post
-        };
-
-        var sessionInitiationResponse = await _httpClient.SendAsync(request);
-        if (!sessionInitiationResponse.IsSuccessStatusCode)
-        {
-            throw new Exception(
-                "Failed session initiation: "
-                    + await sessionInitiationResponse.Content.ReadAsStringAsync()
-            );
+            var requestPath = $"{VippsConfiguration.BaseUrl}/checkout/v3/session";
+            var sessionInitiationResult = await VippsConfiguration.VippsClient.ExecuteRequest<InitiateSessionRequest, InitiateSessionResponse>(requestPath, HttpMethod.Post, initiateSessionRequest, GetHeaders(), null);
+            if (sessionInitiationResult is null)
+            {
+                throw new Exception("Failed response from session initiation");
+            }
+            return sessionInitiationResult;
         }
 
-        var sessionInitiationResult =
-            await sessionInitiationResponse.Content.ReadFromJsonAsync<InitiateSessionResponse>();
-        if (sessionInitiationResult is null)
+        public static async Task<GetSessionInfoResponse> GetSessionInfo(string reference)
         {
-            throw new Exception("Failed response from session initiation");
+            var requestPath = $"{VippsConfiguration.BaseUrl}/checkout/v3/session/{reference}";
+            var getSessionResult = await VippsConfiguration.VippsClient.ExecuteRequest<VoidType, GetSessionInfoResponse>(requestPath, HttpMethod.Get, null, GetHeaders(), null);
+            if (getSessionResult is null)
+            {
+                throw new Exception("Failed response from session polling");
+            }
+            return getSessionResult;
         }
 
-        return sessionInitiationResult;
-    }
+        private static Dictionary<string, string> GetHeaders()
+        {
+            if (string.IsNullOrEmpty(VippsConfiguration.ClientId))
+            {
+                throw new InvalidOperationException($"Missing configuration: {nameof(VippsConfiguration.ClientId)}");
+            }
+            if (string.IsNullOrEmpty(VippsConfiguration.ClientSecret))
+            {
+                throw new InvalidOperationException($"Missing configuration: {nameof(VippsConfiguration.ClientSecret)}");
+            }
 
-    public async Task<GetSessionInfoResponse> GetSessionInfo(string reference)
-    {
-        var request = new HttpRequestMessage()
-        {
-            RequestUri = new Uri(_vippsConfiguration.BaseUrl + "/checkout/v3/session/" + reference),
-            Method = HttpMethod.Get
-        };
-        var getSessionResponse = await _httpClient.SendAsync(request);
-        if (!getSessionResponse.IsSuccessStatusCode)
-        {
-            throw new Exception(
-                "Failed session initiation: " + await getSessionResponse.Content.ReadAsStringAsync()
-            );
+            return new Dictionary<string, string>
+            {
+                { Constants.HeaderNameClientId, VippsConfiguration.ClientId },
+                { Constants.HeaderNameClientSecret, VippsConfiguration.ClientSecret }
+            };
         }
-
-        var getSessionResult =
-            await getSessionResponse.Content.ReadFromJsonAsync<GetSessionInfoResponse>();
-        if (getSessionResult is null)
-        {
-            throw new Exception("Failed response from session polling");
-        }
-
-        return getSessionResult;
     }
 }
