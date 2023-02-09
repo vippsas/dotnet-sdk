@@ -1,16 +1,4 @@
-﻿using Vipps.Models.Epayment.CancelPayment;
-using Vipps.Models.Epayment.CapturePayment;
-using Vipps.Models.Epayment.CreatePayment;
-using Vipps.Models.Epayment.CreatePaymentRequest;
-using Vipps.Models.Epayment.ForceApprove;
-using Vipps.Models.Epayment.GetPaymentEventLog;
-using Vipps.Models.Epayment.GetPaymentResponse;
-using Vipps.Models.Epayment.RefundPayment;
-using Vipps.net.Helpers;
-using Vipps.net.Infrastructure;
-using Vipps.net.Models.Base;
-
-namespace Vipps.Services
+﻿namespace Vipps.Services
 {
     public static class EpaymentService
     {
