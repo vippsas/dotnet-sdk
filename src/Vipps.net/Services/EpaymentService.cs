@@ -193,7 +193,8 @@ namespace Vipps.Services
                 {
                     Constants.HeaderNameAuthorization,
                     $"{Constants.AuthorizationSchemeNameBearer} {authToken.Token}"
-                }
+                },
+                { "Idempotency-Key", Guid.NewGuid().ToString() }
             };
             return headers;
         }

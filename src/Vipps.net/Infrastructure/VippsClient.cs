@@ -105,7 +105,6 @@ namespace Vipps.net.Infrastructure
             CancellationToken cancellationToken
         )
         {
-            var idempotencyKey = Guid.NewGuid().ToString();
             var retryPolicy = PolicyHelper.GetRetryPolicyWithFallback(
                 _logger,
                 $"Request for {path} failed even after retries"
@@ -118,7 +117,6 @@ namespace Vipps.net.Infrastructure
                     Method = httpMethod,
                     Content = httpContent,
                 };
-                requestMessage.Headers.Add("Idempotency-Key", idempotencyKey);
                 if (headers is not null)
                 {
                     foreach (var item in headers)
