@@ -2,6 +2,9 @@
 {
     public interface IVippsHttpClient
     {
-        Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken);
+        Task<HttpResponseMessage> SendAsync(
+            HttpRequestMessage request,
+            CancellationToken cancellationToken
+        );
     }
 }

@@ -15,11 +15,8 @@ namespace Vipps.Helpers
         private const string CommonWarningMessage =
             "Retry #{retryCount} failed because response status was {responseStatus}. Exception was {exception}. Sleeping for {sleepDurationMs} ms.";
 
-        private static readonly ImmutableArray<int> _defaultSleepDurationsMs = ImmutableArray.Create(
-            100,
-            250,
-            1000
-        );
+        private static readonly ImmutableArray<int> _defaultSleepDurationsMs =
+            ImmutableArray.Create(100, 250, 1000);
 
         internal static AsyncFallbackPolicy<HttpResponseMessage> GetFallbackPolicy(
             ILogger logger,

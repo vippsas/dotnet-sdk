@@ -15,14 +15,15 @@ namespace Vipps.Services
         public static void Add(string key, AccessToken token)
         {
             var tokenValidTo = _lifetimeService.GetValidTo(token.Token);
-            var tokenValidToWithBackoff = tokenValidTo.HasValue ? tokenValidTo.Value.Subtract(_backoffTimespan) : (DateTimeOffset?)null;
-            if (tokenValidToWithBackoff.HasValue && tokenValidToWithBackoff.Value > DateTimeOffset.Now)
+            var tokenValidToWithBackoff = tokenValidTo.HasValue
+                ? tokenValidTo.Value.Subtract(_backoffTimespan)
+                : (DateTimeOffset?)null;
+            if (
+                tokenValidToWithBackoff.HasValue
+                && tokenValidToWithBackoff.Value > DateTimeOffset.Now
+            )
             {
-                _memoryCache.Set(
-                    GetPrefixedHashedKey(key),
-                    token,
-                    tokenValidToWithBackoff.Value
-                );
+                _memoryCache.Set(GetPrefixedHashedKey(key), token, tokenValidToWithBackoff.Value);
             }
         }
 

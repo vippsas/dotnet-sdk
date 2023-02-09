@@ -2,6 +2,12 @@
 {
     public interface IVippsClient
     {
-        Task<TResponse> ExecuteRequest<TRequest, TResponse>(string path, HttpMethod httpMethod, TRequest? data, Dictionary<string, string>? headers, CancellationToken? cancellationToken);
+        Task<TResponse> ExecuteRequest<TRequest, TResponse>(
+            string path,
+            HttpMethod httpMethod,
+            TRequest? data,
+            Dictionary<string, string>? headers,
+            CancellationToken? cancellationToken
+        );
     }
 }

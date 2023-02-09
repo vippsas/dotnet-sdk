@@ -31,7 +31,10 @@
         private static string? _subscriptionKey;
         public static string SubscriptionKey
         {
-            get { return _subscriptionKey ?? throw new ArgumentNullException(nameof(SubscriptionKey)); }
+            get
+            {
+                return _subscriptionKey ?? throw new ArgumentNullException(nameof(SubscriptionKey));
+            }
             set
             {
                 if (_subscriptionKey is not null)
@@ -44,7 +47,11 @@
         private static string? _merchantSerialNumber;
         public static string MerchantSerialNumber
         {
-            get { return _merchantSerialNumber ?? throw new ArgumentNullException(nameof(MerchantSerialNumber)); }
+            get
+            {
+                return _merchantSerialNumber
+                    ?? throw new ArgumentNullException(nameof(MerchantSerialNumber));
+            }
             set
             {
                 if (_merchantSerialNumber is not null)
@@ -68,7 +75,8 @@
             }
         }
 
-        public static string BaseUrl => TestMode == true ? "https://api-test.vipps.no" : "https://api.vipps.no";
+        public static string BaseUrl =>
+            TestMode == true ? "https://api-test.vipps.no" : "https://api.vipps.no";
 
         private static IVippsClient? _vippsClient;
         public static IVippsClient VippsClient
@@ -86,7 +94,9 @@
             {
                 if (_vippsClient is not null)
                 {
-                    throw new InvalidOperationException("Once created, VippsClient cannot be modified");
+                    throw new InvalidOperationException(
+                        "Once created, VippsClient cannot be modified"
+                    );
                 }
                 _vippsClient = value;
             }

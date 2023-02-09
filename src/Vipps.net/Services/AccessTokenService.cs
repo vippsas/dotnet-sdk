@@ -17,7 +17,10 @@ namespace Vipps.Services
             }
 
             var requestPath = $"{VippsConfiguration.BaseUrl}/accesstoken/get";
-            var accessToken = await VippsConfiguration.VippsClient.ExecuteRequest<VoidType, AccessToken>(requestPath, HttpMethod.Post, null, GetHeaders(), null);
+            var accessToken = await VippsConfiguration.VippsClient.ExecuteRequest<
+                VoidType,
+                AccessToken
+            >(requestPath, HttpMethod.Post, null, GetHeaders(), null);
             AccessTokenCacheService.Add(key, accessToken);
             return accessToken;
         }

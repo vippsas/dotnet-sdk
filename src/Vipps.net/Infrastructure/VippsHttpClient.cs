@@ -5,9 +5,7 @@
         private HttpClient? _httpClient;
         private readonly TimeSpan DefaultTimeOut = TimeSpan.FromSeconds(100);
 
-        public VippsHttpClient()
-        {
-        }
+        public VippsHttpClient() { }
 
         public VippsHttpClient(HttpClient httpClient)
         {
@@ -24,9 +22,14 @@
             }
         }
 
-        public async Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
+        public async Task<HttpResponseMessage> SendAsync(
+            HttpRequestMessage request,
+            CancellationToken cancellationToken
+        )
         {
-            var response = await HttpClient.SendAsync(request, cancellationToken).ConfigureAwait(false);
+            var response = await HttpClient
+                .SendAsync(request, cancellationToken)
+                .ConfigureAwait(false);
             return response;
         }
 
@@ -44,8 +47,16 @@
 
         private static void SetupHttpClientHeaders(HttpClient httpClient)
         {
-            AddOrUpdateHeader(httpClient, "Ocp-Apim-Subscription-Key", VippsConfiguration.SubscriptionKey);
-            AddOrUpdateHeader(httpClient, "Merchant-Serial-Number", VippsConfiguration.MerchantSerialNumber);
+            AddOrUpdateHeader(
+                httpClient,
+                "Ocp-Apim-Subscription-Key",
+                VippsConfiguration.SubscriptionKey
+            );
+            AddOrUpdateHeader(
+                httpClient,
+                "Merchant-Serial-Number",
+                VippsConfiguration.MerchantSerialNumber
+            );
             AddOrUpdateHeader(httpClient, "Vipps-System-Name", "checkout-sandbox");
             AddOrUpdateHeader(httpClient, "Vipps-System-Version", "0.9");
             AddOrUpdateHeader(httpClient, "Vipps-System-Plugin-Name", "checkout-sandbox");

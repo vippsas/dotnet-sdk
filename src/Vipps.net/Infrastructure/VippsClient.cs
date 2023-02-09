@@ -9,7 +9,10 @@ namespace Vipps.net.Infrastructure
     public class VippsClient : IVippsClient
     {
         private readonly IVippsHttpClient _vippsHttpClient;
-        private readonly ILogger<VippsClient> _logger = LoggerFactory.Create((ILoggingBuilder lb) => { }).CreateLogger<VippsClient>();
+        private readonly ILogger<VippsClient> _logger = LoggerFactory
+            .Create((ILoggingBuilder lb) => { })
+            .CreateLogger<VippsClient>();
+
         public VippsClient()
         {
             _vippsHttpClient = new VippsHttpClient();
@@ -20,21 +23,40 @@ namespace Vipps.net.Infrastructure
             _vippsHttpClient = new VippsHttpClient(httpClient);
         }
 
-        public async Task<TResponse> ExecuteRequest<TRequest, TResponse>(string path, HttpMethod httpMethod, TRequest? data, Dictionary<string, string>? headers, CancellationToken? cancellationToken)
+        public async Task<TResponse> ExecuteRequest<TRequest, TResponse>(
+            string path,
+            HttpMethod httpMethod,
+            TRequest? data,
+            Dictionary<string, string>? headers,
+            CancellationToken? cancellationToken
+        )
         {
-            HttpResponseMessage response = await ExecuteRequestBase(path, httpMethod, data, headers, cancellationToken);
+            HttpResponseMessage response = await ExecuteRequestBase(
+                path,
+                httpMethod,
+                data,
+                headers,
+                cancellationToken
+            );
             if (typeof(TResponse) != typeof(VoidType))
-                return await response.Content.ReadFromJsonAsync<TResponse>() ?? throw new Exception("Failed deserializing response");
+                return await response.Content.ReadFromJsonAsync<TResponse>()
+                    ?? throw new Exception("Failed deserializing response");
             return default!;
         }
 
-        private async Task<HttpResponseMessage> ExecuteRequestBase<TRequest>(string path, HttpMethod httpMethod, TRequest? data, Dictionary<string, string>? headers, CancellationToken? cancellationToken)
+        private async Task<HttpResponseMessage> ExecuteRequestBase<TRequest>(
+            string path,
+            HttpMethod httpMethod,
+            TRequest? data,
+            Dictionary<string, string>? headers,
+            CancellationToken? cancellationToken
+        )
         {
             var idempotencyKey = Guid.NewGuid().ToString();
             var retryPolicy = PolicyHelper.GetRetryPolicyWithFallback(
-                           _logger,
-                            $"Request for {path} failed even after retries"
-                        );
+                _logger,
+                $"Request for {path} failed even after retries"
+            );
             var response = await retryPolicy.ExecuteAsync(async () =>
             {
                 var requestMessage = new HttpRequestMessage
@@ -51,13 +73,18 @@ namespace Vipps.net.Infrastructure
                         AddOrUpdateHeader(requestMessage.Headers, item.Key, item.Value);
                     }
                 }
-                return await _vippsHttpClient.SendAsync(requestMessage, cancellationToken ?? default);
+                return await _vippsHttpClient.SendAsync(
+                    requestMessage,
+                    cancellationToken ?? default
+                );
             });
 
             if (!response.IsSuccessStatusCode)
             {
                 var responseContent = await response.Content.ReadAsStringAsync();
-                throw new Exception($"Request failed with status code {response.StatusCode}, content: '{responseContent}'");
+                throw new Exception(
+                    $"Request failed with status code {response.StatusCode}, content: '{responseContent}'"
+                );
             }
 
             return response;
