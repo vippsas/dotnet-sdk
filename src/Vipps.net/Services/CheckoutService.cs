@@ -7,8 +7,8 @@ namespace Vipps.Services
 {
     public class CheckoutService
     {
-        private VippsConfiguration _vippsConfiguration;
-        private HttpClient _httpClient;
+        private readonly VippsConfiguration _vippsConfiguration;
+        private readonly HttpClient _httpClient;
 
         public CheckoutService(VippsConfiguration vippsConfiguration, HttpClient httpClient)
         {
@@ -35,16 +35,20 @@ namespace Vipps.Services
             InitiateSessionRequest initiateSessionRequest
         )
         {
-            var orderId = "sandbox" + Guid.NewGuid();
+            dynamic sessionRequest = initiateSessionRequest;
+            if (initiateSessionRequest.ExtraParameters is not null)
+            {
 
-            var request = new HttpRequestMessage()
+            }
+
+            HttpRequestMessage request = new HttpRequestMessage()
             {
                 Content = JsonContent.Create(initiateSessionRequest),
                 RequestUri = new Uri(_vippsConfiguration.BaseUrl + "/checkout/v3/session"),
                 Method = HttpMethod.Post
             };
 
-            var sessionInitiationResponse = await _httpClient.SendAsync(request);
+            HttpResponseMessage sessionInitiationResponse = await _httpClient.SendAsync(request);
             if (!sessionInitiationResponse.IsSuccessStatusCode)
             {
                 throw new Exception(
@@ -52,7 +56,7 @@ namespace Vipps.Services
                         + await sessionInitiationResponse.Content.ReadAsStringAsync()
                 );
             }
-            var sessionInitiationResult =
+            InitiateSessionResponse? sessionInitiationResult =
                 await sessionInitiationResponse.Content.ReadFromJsonAsync<InitiateSessionResponse>();
             if (sessionInitiationResult is null)
             {
@@ -63,14 +67,14 @@ namespace Vipps.Services
 
         public async Task<GetSessionInfoResponse> GetSessionInfo(string reference)
         {
-            var request = new HttpRequestMessage()
+            HttpRequestMessage request = new HttpRequestMessage()
             {
                 RequestUri = new Uri(
                     _vippsConfiguration.BaseUrl + "/checkout/v3/session/" + reference
                 ),
                 Method = HttpMethod.Get
             };
-            var getSessionResponse = await _httpClient.SendAsync(request);
+            HttpResponseMessage getSessionResponse = await _httpClient.SendAsync(request);
             if (!getSessionResponse.IsSuccessStatusCode)
             {
                 throw new Exception(
@@ -78,7 +82,7 @@ namespace Vipps.Services
                         + await getSessionResponse.Content.ReadAsStringAsync()
                 );
             }
-            var getSessionResult =
+            GetSessionInfoResponse? getSessionResult =
                 await getSessionResponse.Content.ReadFromJsonAsync<GetSessionInfoResponse>();
             if (getSessionResult is null)
             {

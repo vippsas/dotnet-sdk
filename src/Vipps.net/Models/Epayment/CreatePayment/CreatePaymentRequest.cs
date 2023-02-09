@@ -2,6 +2,50 @@
 
 namespace Vipps.Models.Epayment.CreatePaymentRequest
 {
+    public class CreatePaymentRequest : VippsRequest
+    {
+        [property: JsonPropertyName("amount")]
+        public Amount Amount { get; init; }
+
+        [property: JsonPropertyName("directCapture")]
+        public bool? DirectCapture { get; init; }
+
+        [property: JsonPropertyName("customer")]
+        public Customer Customer { get; init; }
+
+        [property: JsonPropertyName("customerInteraction")]
+        public string CustomerInteraction { get; init; }
+
+        [property: JsonPropertyName("industryData")]
+        public IndustryData IndustryData { get; init; }
+
+        [property: JsonPropertyName("receipt")]
+        public Receipt Receipt { get; init; }
+
+        [property: JsonPropertyName("paymentMethod")]
+        public PaymentMethod PaymentMethod { get; init; }
+
+        [property: JsonPropertyName("profile")]
+        public Profile Profile { get; init; }
+
+        [property: JsonPropertyName("reference")]
+        public string Reference { get; init; }
+
+        [property: JsonPropertyName("returnUrl")]
+        public string ReturnUrl { get; init; }
+
+        [property: JsonPropertyName("userFlow")]
+        public string UserFlow { get; init; }
+
+        [property: JsonPropertyName("expiresAt")]
+        public DateTime? ExpiresAt { get; init; }
+
+        [property: JsonPropertyName("qrFormat")]
+        public QrFormat QrFormat { get; init; }
+
+        [property: JsonPropertyName("paymentDescription")]
+        public string PaymentDescription { get; init; }
+    }
     public class AirlineData
     {
         [property: JsonPropertyName("agencyInvoiceNumber")]
@@ -135,51 +179,6 @@ namespace Vipps.Models.Epayment.CreatePaymentRequest
 
         [property: JsonPropertyName("bottomLine")]
         public BottomLine BottomLine { get; init; }
-    }
-
-    public class CreatePaymentRequest
-    {
-        [property: JsonPropertyName("amount")]
-        public Amount Amount { get; init; }
-
-        [property: JsonPropertyName("directCapture")]
-        public bool? DirectCapture { get; init; }
-
-        [property: JsonPropertyName("customer")]
-        public Customer Customer { get; init; }
-
-        [property: JsonPropertyName("customerInteraction")]
-        public string CustomerInteraction { get; init; }
-
-        [property: JsonPropertyName("industryData")]
-        public IndustryData IndustryData { get; init; }
-
-        [property: JsonPropertyName("receipt")]
-        public Receipt Receipt { get; init; }
-
-        [property: JsonPropertyName("paymentMethod")]
-        public PaymentMethod PaymentMethod { get; init; }
-
-        [property: JsonPropertyName("profile")]
-        public Profile Profile { get; init; }
-
-        [property: JsonPropertyName("reference")]
-        public string Reference { get; init; }
-
-        [property: JsonPropertyName("returnUrl")]
-        public string ReturnUrl { get; init; }
-
-        [property: JsonPropertyName("userFlow")]
-        public string UserFlow { get; init; }
-
-        [property: JsonPropertyName("expiresAt")]
-        public DateTime? ExpiresAt { get; init; }
-
-        [property: JsonPropertyName("qrFormat")]
-        public QrFormat QrFormat { get; init; }
-
-        [property: JsonPropertyName("paymentDescription")]
-        public string PaymentDescription { get; init; }
     }
 
     public class ShippingInfo

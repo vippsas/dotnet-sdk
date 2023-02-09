@@ -1,6 +1,4 @@
-﻿using System.Text.Json.Serialization;
-
-namespace Vipps.Models.Checkout.InitiateSession
+﻿namespace Vipps.Models.Checkout.InitiateSession
 {
     /// <summary>
     /// Request to set up a Checkout session
@@ -10,7 +8,7 @@ namespace Vipps.Models.Checkout.InitiateSession
     /// <param name="Logistics"></param>
     /// <param name="PrefillCustomer">If customer information is known, it can be prefilled.</param>
     /// <param name="Configuration"></param>
-    public class InitiateSessionRequest
+    public class InitiateSessionRequest : VippsRequest
     {
         public PaymentMerchantInfo MerchantInfo { get; init; }
         public PaymentTransaction Transaction { get; init; }
