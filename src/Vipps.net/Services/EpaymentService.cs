@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.Logging;
 using System.Net.Http.Json;
+using System.Text;
 using Vipps.Helpers;
 using Vipps.Models;
 using Vipps.Models.Epayment.CancelPayment;
@@ -10,6 +11,7 @@ using Vipps.Models.Epayment.ForceApprove;
 using Vipps.Models.Epayment.GetPaymentEventLog;
 using Vipps.Models.Epayment.GetPaymentResponse;
 using Vipps.Models.Epayment.RefundPayment;
+using Vipps.net.Helpers;
 
 namespace Vipps.Services
 {
@@ -51,7 +53,7 @@ namespace Vipps.Services
             CreatePaymentRequest createPaymentRequest
         )
         {
-            return await ExecuteEpaymentRequest<CreatePaymentRequest, CreatePaymentResponse>(
+            return await ExecuteEpaymentRequest<CreatePaymentResponse>(
                 "approve",
                 null,
                 createPaymentRequest
@@ -60,7 +62,7 @@ namespace Vipps.Services
 
         public async Task<GetPaymentResponse> GetPayment(string reference)
         {
-            return await ExecuteEpaymentRequest<VoidType, GetPaymentResponse>(
+            return await ExecuteEpaymentRequest<GetPaymentResponse>(
                 "approve",
                 reference,
                 null
@@ -69,15 +71,12 @@ namespace Vipps.Services
 
         public async Task<IEnumerable<GetPaymentEventLog>> GetPaymentEventLog(string reference)
         {
-            return await ExecuteEpaymentRequest<
-                ForceApproveRequest,
-                IEnumerable<GetPaymentEventLog>
-            >("approve", reference, null);
+            return await ExecuteEpaymentRequest<IEnumerable<GetPaymentEventLog>>("approve", reference, null);
         }
 
         public async Task<CancelPaymentResponse> CancelPayment(string reference)
         {
-            return await ExecuteEpaymentRequest<VoidType, CancelPaymentResponse>(
+            return await ExecuteEpaymentRequest<CancelPaymentResponse>(
                 "approve",
                 reference,
                 null
@@ -88,7 +87,7 @@ namespace Vipps.Services
             CapturePaymentRequest capturePaymentRequest
         )
         {
-            return await ExecuteEpaymentRequest<CapturePaymentRequest, CapturePaymentResponse>(
+            return await ExecuteEpaymentRequest<CapturePaymentResponse>(
                 "approve",
                 null,
                 capturePaymentRequest
@@ -97,7 +96,7 @@ namespace Vipps.Services
 
         public async Task<RefundPaymentResponse> RefundPayment(string reference)
         {
-            return await ExecuteEpaymentRequest<VoidType, RefundPaymentResponse>(
+            return await ExecuteEpaymentRequest<RefundPaymentResponse>(
                 "approve",
                 reference,
                 null
@@ -109,38 +108,38 @@ namespace Vipps.Services
             ForceApproveRequest forceApproveRequest
         )
         {
-            await ExecuteEpaymentRequest<ForceApproveRequest, VoidType>(
+            await ExecuteEpaymentRequest<VoidType>(
                 "approve",
                 reference,
                 forceApproveRequest
             );
         }
 
-        private async Task<TResponse> ExecuteEpaymentRequest<TRequest, TResponse>(
+        private async Task<TResponse> ExecuteEpaymentRequest<TResponse>(
             string path,
             string? reference,
-            TRequest? data
+            VippsRequest? data
         )
         {
-            var retryPolicy = PolicyHelper.GetRetryPolicyWithFallback(
+            Polly.AsyncPolicy<HttpResponseMessage> retryPolicy = PolicyHelper.GetRetryPolicyWithFallback(
                 _logger,
                 $"Request for {path} failed even after retries"
             );
 
-            var requestPath = $"{_httpClient.BaseAddress}/";
+            string requestPath = $"{_httpClient.BaseAddress}/";
             if (reference is not null)
                 requestPath += reference;
             requestPath += path;
 
-            var request = new HttpRequestMessage
+            HttpRequestMessage request = new HttpRequestMessage
             {
                 RequestUri = new Uri(requestPath),
                 Method = reference is not null ? HttpMethod.Get : HttpMethod.Post,
-                Content = data is not null ? JsonContent.Create(data) : null,
+                Content = CreateRequestContent(data),
                 Headers = { { "Idempotency-Key", Guid.NewGuid().ToString() } }
             };
 
-            var response = await retryPolicy.ExecuteAsync(
+            HttpResponseMessage response = await retryPolicy.ExecuteAsync(
                 async () => await _httpClient.SendAsync(request)
             );
 
@@ -152,6 +151,16 @@ namespace Vipps.Services
                 return await response.Content.ReadFromJsonAsync<TResponse>()
                     ?? throw new Exception("Failed deserializing response");
             return default!;
+        }
+
+        private static HttpContent? CreateRequestContent(VippsRequest? vippsRequest)
+        {
+            if (vippsRequest is null)
+            {
+                return null;
+            }
+            string serializedRequest = VippsRequestSerializer.SerializeVippsRequest(vippsRequest);
+            return new StringContent(serializedRequest, Encoding.UTF8, "application/json");
         }
 
         private class VoidType
