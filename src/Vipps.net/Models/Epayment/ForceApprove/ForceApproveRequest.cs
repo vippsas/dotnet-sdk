@@ -1,19 +1,18 @@
 ﻿using System.Text.Json.Serialization;
 
-namespace Vipps.Models.Epayment.ForceApprove
+namespace Vipps.Models.Epayment.ForceApprove;
+
+public class ForceApproveRequest : VippsRequest
 {
-    public class ForceApproveRequest : VippsRequest
-    {
-        [property: JsonPropertyName("customer")]
-        public Customer Customer { get; init; }
+    [property: JsonPropertyName("customer")]
+    public Customer Customer { get; init; }
 
-        [property: JsonPropertyName("token")]
-        public string Token { get; init; }
-    }
+    [property: JsonPropertyName("token")]
+    public string Token { get; init; }
+}
 
-    public class Customer
-    {
-        [property: JsonPropertyName("phoneNumber")]
-        public long PhoneNumber { get; init; }
-    }
+public class Customer
+{
+    [property: JsonPropertyName("phoneNumber")]
+    public long PhoneNumber { get; init; }
 }
