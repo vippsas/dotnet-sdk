@@ -9,15 +9,15 @@ namespace Vipps.Services
     {
         public static async Task<AccessToken> GetAccessToken()
         {
-            var key = $"{VippsConfigurationHolder.VippsConfiguration.ClientId}{VippsConfigurationHolder.VippsConfiguration.ClientSecret}";
+            var key = $"{VippsConfiguration.ClientId}{VippsConfiguration.ClientSecret}";
             var cachedToken = AccessTokenCacheService.Get(key);
             if (cachedToken is not null)
             {
                 return cachedToken;
             }
 
-            var requestPath = $"{VippsConfigurationHolder.VippsConfiguration.BaseUrl}/accesstoken/get";
-            var accessToken = await VippsConfigurationHolder.VippsClient.ExecuteRequest<VoidType, AccessToken>(requestPath, HttpMethod.Post, null, GetHeaders(), null);
+            var requestPath = $"{VippsConfiguration.BaseUrl}/accesstoken/get";
+            var accessToken = await VippsConfiguration.VippsClient.ExecuteRequest<VoidType, AccessToken>(requestPath, HttpMethod.Post, null, GetHeaders(), null);
             AccessTokenCacheService.Add(key, accessToken);
             return accessToken;
         }
@@ -26,8 +26,8 @@ namespace Vipps.Services
         {
             return new Dictionary<string, string>
             {
-                { Constants.HeaderNameClientId, VippsConfigurationHolder.VippsConfiguration.ClientId },
-                { Constants.HeaderNameClientSecret, VippsConfigurationHolder.VippsConfiguration.ClientSecret }
+                { Constants.HeaderNameClientId, VippsConfiguration.ClientId },
+                { Constants.HeaderNameClientSecret, VippsConfiguration.ClientSecret }
             };
         }
     }

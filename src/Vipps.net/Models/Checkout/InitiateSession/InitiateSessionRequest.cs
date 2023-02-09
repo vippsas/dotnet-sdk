@@ -1,6 +1,4 @@
-﻿using System.Text.Json.Serialization;
-
-namespace Vipps.Models.Checkout.InitiateSession;
+﻿namespace Vipps.Models.Checkout.InitiateSession;
 
 /// <summary>
 /// Request to set up a Checkout session

@@ -1,14 +1,9 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using System.Collections.Immutable;
+using System.Net;
+using Microsoft.Extensions.Logging;
+using Polly;
 using Polly.Fallback;
 using Polly.Retry;
-using Polly;
-using System;
-using System.Collections.Generic;
-using System.Collections.Immutable;
-using System.Linq;
-using System.Net;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Vipps.Helpers;
 

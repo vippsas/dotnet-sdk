@@ -53,7 +53,7 @@ namespace Vipps.Services
             TRequest? data
             )
         {
-            var requestPath = $"{VippsConfigurationHolder.VippsConfiguration.BaseUrl}/epayment/v1/payments";
+            var requestPath = $"{VippsConfiguration.BaseUrl}/epayment/v1/payments";
             if (reference is not null)
             {
                 requestPath += reference;
@@ -65,7 +65,7 @@ namespace Vipps.Services
 
             var authToken = await AccessTokenService.GetAccessToken();
             var headers = new Dictionary<string, string> { { Constants.HeaderNameAuthorization, $"{Constants.AuthorizationSchemeNameBearer} {authToken.Token}" } };
-            var response = await VippsConfigurationHolder.VippsClient.ExecuteRequest<TRequest, TResponse>(requestPath, httpMethod, data, headers, null);
+            var response = await VippsConfiguration.VippsClient.ExecuteRequest<TRequest, TResponse>(requestPath, httpMethod, data, headers, null);
             return response;
         }
     }

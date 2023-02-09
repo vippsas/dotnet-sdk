@@ -35,7 +35,7 @@
             var httpClient = new HttpClient()
             {
                 Timeout = DefaultTimeOut,
-                BaseAddress = new Uri($"{VippsConfigurationHolder.VippsConfiguration.BaseUrl}")
+                BaseAddress = new Uri($"{VippsConfiguration.BaseUrl}")
             };
 
             SetupHttpClientHeaders(httpClient);
@@ -44,8 +44,8 @@
 
         private static void SetupHttpClientHeaders(HttpClient httpClient)
         {
-            AddOrUpdateHeader(httpClient, "Ocp-Apim-Subscription-Key", VippsConfigurationHolder.VippsConfiguration.SubscriptionKey);
-            AddOrUpdateHeader(httpClient, "Merchant-Serial-Number", VippsConfigurationHolder.VippsConfiguration.MerchantSerialNumber);
+            AddOrUpdateHeader(httpClient, "Ocp-Apim-Subscription-Key", VippsConfiguration.SubscriptionKey);
+            AddOrUpdateHeader(httpClient, "Merchant-Serial-Number", VippsConfiguration.MerchantSerialNumber);
             AddOrUpdateHeader(httpClient, "Vipps-System-Name", "checkout-sandbox");
             AddOrUpdateHeader(httpClient, "Vipps-System-Version", "0.9");
             AddOrUpdateHeader(httpClient, "Vipps-System-Plugin-Name", "checkout-sandbox");

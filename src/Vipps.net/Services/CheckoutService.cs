@@ -10,8 +10,8 @@ namespace Vipps.Services
     {
         public static async Task<InitiateSessionResponse> InitiateSession(InitiateSessionRequest initiateSessionRequest)
         {
-            var requestPath = $"{VippsConfigurationHolder.VippsConfiguration.BaseUrl}/checkout/v3/session";
-            var sessionInitiationResult = await VippsConfigurationHolder.VippsClient.ExecuteRequest<InitiateSessionRequest, InitiateSessionResponse>(requestPath, HttpMethod.Post, initiateSessionRequest, GetHeaders(), null);
+            var requestPath = $"{VippsConfiguration.BaseUrl}/checkout/v3/session";
+            var sessionInitiationResult = await VippsConfiguration.VippsClient.ExecuteRequest<InitiateSessionRequest, InitiateSessionResponse>(requestPath, HttpMethod.Post, initiateSessionRequest, GetHeaders(), null);
             if (sessionInitiationResult is null)
             {
                 throw new Exception("Failed response from session initiation");
@@ -21,8 +21,8 @@ namespace Vipps.Services
 
         public static async Task<GetSessionInfoResponse> GetSessionInfo(string reference)
         {
-            var requestPath = $"{VippsConfigurationHolder.VippsConfiguration.BaseUrl}/checkout/v3/session/{reference}";
-            var getSessionResult = await VippsConfigurationHolder.VippsClient.ExecuteRequest<VoidType, GetSessionInfoResponse>(requestPath, HttpMethod.Get, null, GetHeaders(), null);
+            var requestPath = $"{VippsConfiguration.BaseUrl}/checkout/v3/session/{reference}";
+            var getSessionResult = await VippsConfiguration.VippsClient.ExecuteRequest<VoidType, GetSessionInfoResponse>(requestPath, HttpMethod.Get, null, GetHeaders(), null);
             if (getSessionResult is null)
             {
                 throw new Exception("Failed response from session polling");
@@ -32,10 +32,19 @@ namespace Vipps.Services
 
         private static Dictionary<string, string> GetHeaders()
         {
+            if (string.IsNullOrEmpty(VippsConfiguration.ClientId))
+            {
+                throw new InvalidOperationException($"Missing configuration: {nameof(VippsConfiguration.ClientId)}");
+            }
+            if (string.IsNullOrEmpty(VippsConfiguration.ClientSecret))
+            {
+                throw new InvalidOperationException($"Missing configuration: {nameof(VippsConfiguration.ClientSecret)}");
+            }
+
             return new Dictionary<string, string>
             {
-                { Constants.HeaderNameClientId, VippsConfigurationHolder.VippsConfiguration.ClientId },
-                { Constants.HeaderNameClientSecret, VippsConfigurationHolder.VippsConfiguration.ClientSecret }
+                { Constants.HeaderNameClientId, VippsConfiguration.ClientId },
+                { Constants.HeaderNameClientSecret, VippsConfiguration.ClientSecret }
             };
         }
     }
