@@ -9,7 +9,6 @@ using Vipps.Models.Epayment.GetPaymentResponse;
 using Vipps.Models.Epayment.RefundPayment;
 using Vipps.net.Helpers;
 using Vipps.net.Infrastructure;
-using Vipps.net.Models.Base;
 
 namespace Vipps.Services
 {
@@ -101,7 +100,7 @@ namespace Vipps.Services
             CancellationToken cancellationToken = default
         )
         {
-            await ExecuteEpaymentRequest<ForceApproveRequest, VoidType>(
+            await ExecuteEpaymentRequest<ForceApproveRequest>(
                 HttpMethod.Post,
                 "approve",
                 reference,
@@ -129,6 +128,26 @@ namespace Vipps.Services
                 cancellationToken
             );
             return response;
+        }
+
+        private static async Task ExecuteEpaymentRequest<TRequest>(
+            HttpMethod httpMethod,
+            string? path,
+            string? reference,
+            TRequest? data,
+            CancellationToken cancellationToken
+        )
+            where TRequest : VippsRequest
+        {
+            var requestPath = GetRequestPath(reference, path);
+            var headers = await GetHeaders(cancellationToken);
+            await VippsConfiguration.VippsClient.ExecuteRequest(
+                requestPath,
+                httpMethod,
+                data,
+                headers,
+                cancellationToken
+            );
         }
 
         private static async Task<TResponse> ExecuteEpaymentRequest<TResponse>(

@@ -5,7 +5,6 @@ using Microsoft.Extensions.Logging;
 using Vipps.Helpers;
 using Vipps.Models;
 using Vipps.net.Helpers;
-using Vipps.net.Models.Base;
 
 namespace Vipps.net.Infrastructure
 {
@@ -36,6 +35,24 @@ namespace Vipps.net.Infrastructure
             where TRequest : VippsRequest
         {
             return await ExecuteRequestBaseAndParse<TResponse>(
+                path,
+                httpMethod,
+                CreateRequestContent(data),
+                headers,
+                cancellationToken
+            );
+        }
+
+        public async Task ExecuteRequest<TRequest>(
+            string path,
+            HttpMethod httpMethod,
+            TRequest? data,
+            Dictionary<string, string>? headers,
+            CancellationToken cancellationToken = default
+        )
+            where TRequest : VippsRequest
+        {
+            await ExecuteRequestBase(
                 path,
                 httpMethod,
                 CreateRequestContent(data),
@@ -75,11 +92,9 @@ namespace Vipps.net.Infrastructure
                 headers,
                 cancellationToken
             );
-            if (typeof(TResponse) != typeof(VoidType))
-                return await response.Content.ReadFromJsonAsync<TResponse>(
-                        cancellationToken: cancellationToken
-                    ) ?? throw new Exception("Failed deserializing response");
-            return default!;
+            return await response.Content.ReadFromJsonAsync<TResponse>(
+                    cancellationToken: cancellationToken
+                ) ?? throw new Exception("Failed deserializing response");
         }
 
         private async Task<HttpResponseMessage> ExecuteRequestBase(

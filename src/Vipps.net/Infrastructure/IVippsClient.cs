@@ -13,6 +13,15 @@ namespace Vipps.net.Infrastructure
         )
             where TRequest : VippsRequest;
 
+        Task ExecuteRequest<TRequest>(
+            string path,
+            HttpMethod httpMethod,
+            TRequest? data,
+            Dictionary<string, string>? headers,
+            CancellationToken cancellationToken = default
+        )
+            where TRequest : VippsRequest;
+
         Task<TResponse> ExecuteRequest<TResponse>(
             string path,
             HttpMethod httpMethod,
