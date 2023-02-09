@@ -208,4 +208,5 @@ namespace Vipps.Models.Epayment.CreatePaymentRequest
         [property: JsonPropertyName("quantityUnit")]
         public string QuantityUnit { get; init; }
     }
+
 }
