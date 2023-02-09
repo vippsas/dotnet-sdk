@@ -3,7 +3,7 @@ using System.Security.Claims;
 using Vipps.Models.Epayment.AccessToken;
 using Vipps.Services;
 
-namespace Vipps.net.Test
+namespace Vipps.net.Tests
 {
     [TestClass]
     public class AccessTokenCacheServiceTests
