@@ -2,7 +2,7 @@
 
 namespace Vipps.Services;
 
-internal class AccessTokenLifetimeService
+internal sealed class AccessTokenLifetimeService
 {
     private readonly JwtSecurityTokenHandler _handler = new();
 

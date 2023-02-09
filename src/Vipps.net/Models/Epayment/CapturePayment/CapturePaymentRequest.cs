@@ -2,7 +2,7 @@
 
 namespace Vipps.Models.Epayment.CapturePayment;
 
-public class CapturePaymentRequest
+public class CapturePaymentRequest : VippsRequest
 {
     [property: JsonPropertyName("modificationAmount")]
     public ModificationAmount ModificationAmount { get; init; }
