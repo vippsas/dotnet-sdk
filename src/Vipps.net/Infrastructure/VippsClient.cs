@@ -1,7 +1,10 @@
 ﻿using System.Net.Http.Headers;
 using System.Net.Http.Json;
+using System.Text;
 using Microsoft.Extensions.Logging;
 using Vipps.Helpers;
+using Vipps.Models;
+using Vipps.net.Helpers;
 using Vipps.net.Models.Base;
 
 namespace Vipps.net.Infrastructure
@@ -30,11 +33,45 @@ namespace Vipps.net.Infrastructure
             Dictionary<string, string>? headers,
             CancellationToken? cancellationToken
         )
+            where TRequest : VippsRequest
         {
-            HttpResponseMessage response = await ExecuteRequestBase(
+            return await ExecuteRequestBaseAndParse<TResponse>(
                 path,
                 httpMethod,
-                data,
+                CreateRequestContent(data),
+                headers,
+                cancellationToken
+            );
+        }
+
+        public async Task<TResponse> ExecuteRequest<TResponse>(
+            string path,
+            HttpMethod httpMethod,
+            Dictionary<string, string>? headers,
+            CancellationToken? cancellationToken
+        )
+        {
+            return await ExecuteRequestBaseAndParse<TResponse>(
+                path,
+                httpMethod,
+                null,
+                headers,
+                cancellationToken
+            );
+        }
+
+        private async Task<TResponse> ExecuteRequestBaseAndParse<TResponse>(
+            string path,
+            HttpMethod httpMethod,
+            HttpContent? httpContent,
+            Dictionary<string, string>? headers,
+            CancellationToken? cancellationToken
+        )
+        {
+            var response = await ExecuteRequestBase(
+                path,
+                httpMethod,
+                httpContent,
                 headers,
                 cancellationToken
             );
@@ -44,10 +81,10 @@ namespace Vipps.net.Infrastructure
             return default!;
         }
 
-        private async Task<HttpResponseMessage> ExecuteRequestBase<TRequest>(
+        private async Task<HttpResponseMessage> ExecuteRequestBase(
             string path,
             HttpMethod httpMethod,
-            TRequest? data,
+            HttpContent? httpContent,
             Dictionary<string, string>? headers,
             CancellationToken? cancellationToken
         )
@@ -63,7 +100,7 @@ namespace Vipps.net.Infrastructure
                 {
                     RequestUri = new Uri(path),
                     Method = httpMethod,
-                    Content = data is not null ? JsonContent.Create(data) : null,
+                    Content = httpContent,
                 };
                 requestMessage.Headers.Add("Idempotency-Key", idempotencyKey);
                 if (headers is not null)
@@ -88,6 +125,17 @@ namespace Vipps.net.Infrastructure
             }
 
             return response;
+        }
+
+        private static HttpContent? CreateRequestContent<TRequest>(TRequest? vippsRequest)
+            where TRequest : VippsRequest
+        {
+            if (vippsRequest is null)
+            {
+                return null;
+            }
+            var serializedRequest = VippsRequestSerializer.SerializeVippsRequest(vippsRequest);
+            return new StringContent(serializedRequest, Encoding.UTF8, "application/json");
         }
 
         private static void AddOrUpdateHeader(HttpRequestHeaders headers, string key, string value)

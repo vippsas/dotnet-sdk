@@ -1,4 +1,6 @@
-﻿namespace Vipps.net.Infrastructure
+﻿using Vipps.Models;
+
+namespace Vipps.net.Infrastructure
 {
     public interface IVippsClient
     {
@@ -6,6 +8,14 @@
             string path,
             HttpMethod httpMethod,
             TRequest? data,
+            Dictionary<string, string>? headers,
+            CancellationToken? cancellationToken
+        )
+            where TRequest : VippsRequest;
+
+        Task<TResponse> ExecuteRequest<TResponse>(
+            string path,
+            HttpMethod httpMethod,
             Dictionary<string, string>? headers,
             CancellationToken? cancellationToken
         );

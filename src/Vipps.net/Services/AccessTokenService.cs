@@ -1,13 +1,12 @@
 ﻿using Vipps.Models.Epayment.AccessToken;
 using Vipps.net.Helpers;
 using Vipps.net.Infrastructure;
-using Vipps.net.Models.Base;
 
 namespace Vipps.Services
 {
     public static class AccessTokenService
     {
-        public static async Task<AccessToken> GetAccessToken()
+        public static async Task<AccessToken> GetAccessToken(CancellationToken? cancellationToken)
         {
             var key = $"{VippsConfiguration.ClientId}{VippsConfiguration.ClientSecret}";
             var cachedToken = AccessTokenCacheService.Get(key);
@@ -17,10 +16,12 @@ namespace Vipps.Services
             }
 
             var requestPath = $"{VippsConfiguration.BaseUrl}/accesstoken/get";
-            var accessToken = await VippsConfiguration.VippsClient.ExecuteRequest<
-                VoidType,
-                AccessToken
-            >(requestPath, HttpMethod.Post, null, GetHeaders(), null);
+            var accessToken = await VippsConfiguration.VippsClient.ExecuteRequest<AccessToken>(
+                requestPath,
+                HttpMethod.Post,
+                GetHeaders(),
+                cancellationToken
+            );
             AccessTokenCacheService.Add(key, accessToken);
             return accessToken;
         }
