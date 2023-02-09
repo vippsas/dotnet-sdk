@@ -28,6 +28,16 @@ namespace Vipps.net.Test
             Assert.IsNull(res);
         }
 
+        [TestMethod]
+        public void Can_Not_Retrieve_Saved_NotValidForLongEnough()
+        {
+            var key = Guid.NewGuid().ToString();
+            var accessToken = GetToken(DateTime.Now.AddHours(-2), DateTime.Now.AddMinutes(1));
+            AccessTokenCacheService.Add(key, accessToken);
+            var res = AccessTokenCacheService.Get(key);
+            Assert.IsNull(res);
+        }
+
         private static AccessToken GetToken(DateTime? notBefore, DateTime? expiresAt)
         {
             var jwt = new JwtSecurityToken(
