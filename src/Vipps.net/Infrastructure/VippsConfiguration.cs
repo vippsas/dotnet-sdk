@@ -75,13 +75,13 @@
             }
         }
 
-        public static string BaseUrl =>
+        internal static string BaseUrl =>
             TestMode == true ? "https://api-test.vipps.no" : "https://api.vipps.no";
 
         private static IVippsClient? _vippsClient;
         public static IVippsClient VippsClient
         {
-            get
+            internal get
             {
                 if (_vippsClient is null)
                 {
