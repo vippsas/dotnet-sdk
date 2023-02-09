@@ -1,14 +1,15 @@
 ﻿using Microsoft.Extensions.Configuration;
-using Vipps.Models;
+using Vipps.Infrastructure;
 
-namespace Vipps.net
+namespace Vipps.net.Infrastructure
 {
     public static class DependencyInjection
     {
         public static void ConfigureVipps(IConfiguration configuration, string sectionName)
         {
-            var settings = new VippsConfiguration();
+            var settings = new VippsConfigurationSection();
             configuration.GetSection(sectionName).Bind(settings);
+            // Update settings here
         }
     }
 }
