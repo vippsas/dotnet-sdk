@@ -1,14 +1,16 @@
 ﻿using System.Net.Http.Json;
+using System.Text;
 using Vipps.Models;
 using Vipps.Models.Checkout.GetSession;
 using Vipps.Models.Checkout.InitiateSession;
+using Vipps.net.Helpers;
 
 namespace Vipps.Services;
 
 public class CheckoutService
 {
-    private VippsConfiguration _vippsConfiguration;
-    private HttpClient _httpClient;
+    private readonly VippsConfiguration _vippsConfiguration;
+    private readonly HttpClient _httpClient;
 
     public CheckoutService(VippsConfiguration vippsConfiguration, HttpClient httpClient)
     {
@@ -35,11 +37,12 @@ public class CheckoutService
         InitiateSessionRequest initiateSessionRequest
     )
     {
-        var orderId = "sandbox" + Guid.NewGuid();
+        var serializedRequest = VippsRequestSerializer.SerializeVippsRequest(initiateSessionRequest);
+        var content = new StringContent(serializedRequest, Encoding.UTF8, "application/json");
 
         var request = new HttpRequestMessage()
         {
-            Content = JsonContent.Create(initiateSessionRequest),
+            Content = content,
             RequestUri = new Uri(_vippsConfiguration.BaseUrl + "/checkout/v3/session"),
             Method = HttpMethod.Post
         };
