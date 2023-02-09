@@ -1,5 +1,4 @@
 ﻿using Vipps.Models.Epayment.AccessToken;
-using Vipps.net.Helpers;
 using Vipps.net.Infrastructure;
 
 namespace Vipps.Services
@@ -18,23 +17,14 @@ namespace Vipps.Services
             }
 
             var requestPath = $"{VippsConfiguration.BaseUrl}/accesstoken/get";
-            var accessToken = await VippsConfiguration.VippsClient.ExecuteRequest<AccessToken>(
-                requestPath,
-                HttpMethod.Post,
-                GetHeaders(),
-                cancellationToken
-            );
+            var accessToken =
+                await VippsConfiguration.AccessTokenServiceClient.ExecuteRequest<AccessToken>(
+                    requestPath,
+                    HttpMethod.Post,
+                    cancellationToken
+                );
             AccessTokenCacheService.Add(key, accessToken);
             return accessToken;
-        }
-
-        private static Dictionary<string, string> GetHeaders()
-        {
-            return new Dictionary<string, string>
-            {
-                { Constants.HeaderNameClientId, VippsConfiguration.ClientId },
-                { Constants.HeaderNameClientSecret, VippsConfiguration.ClientSecret }
-            };
         }
     }
 }

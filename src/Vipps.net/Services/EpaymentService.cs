@@ -1,5 +1,4 @@
-﻿using Vipps.Models;
-using Vipps.Models.Epayment.CancelPayment;
+﻿using Vipps.Models.Epayment.CancelPayment;
 using Vipps.Models.Epayment.CapturePayment;
 using Vipps.Models.Epayment.CreatePayment;
 using Vipps.Models.Epayment.CreatePaymentRequest;
@@ -7,7 +6,6 @@ using Vipps.Models.Epayment.ForceApprove;
 using Vipps.Models.Epayment.GetPaymentEventLog;
 using Vipps.Models.Epayment.GetPaymentResponse;
 using Vipps.Models.Epayment.RefundPayment;
-using Vipps.net.Helpers;
 using Vipps.net.Infrastructure;
 
 namespace Vipps.Services
@@ -19,13 +17,10 @@ namespace Vipps.Services
             CancellationToken cancellationToken = default
         )
         {
-            return await ExecuteEpaymentRequest<CreatePaymentRequest, CreatePaymentResponse>(
-                HttpMethod.Post,
-                null,
-                null,
-                createPaymentRequest,
-                cancellationToken
-            );
+            return await VippsConfiguration.EpaymentServiceClient.ExecuteRequest<
+                CreatePaymentRequest,
+                CreatePaymentResponse
+            >(GetRequestPath(null, null), HttpMethod.Post, createPaymentRequest, cancellationToken);
         }
 
         public static async Task<GetPaymentResponse> GetPayment(
@@ -33,10 +28,9 @@ namespace Vipps.Services
             CancellationToken cancellationToken = default
         )
         {
-            return await ExecuteEpaymentRequest<GetPaymentResponse>(
+            return await VippsConfiguration.EpaymentServiceClient.ExecuteRequest<GetPaymentResponse>(
+                GetRequestPath(null, null),
                 HttpMethod.Get,
-                null,
-                reference,
                 cancellationToken
             );
         }
@@ -46,12 +40,9 @@ namespace Vipps.Services
             CancellationToken cancellationToken = default
         )
         {
-            return await ExecuteEpaymentRequest<IEnumerable<GetPaymentEventLog>>(
-                HttpMethod.Get,
-                "events",
-                reference,
-                cancellationToken
-            );
+            return await VippsConfiguration.EpaymentServiceClient.ExecuteRequest<
+                IEnumerable<GetPaymentEventLog>
+            >(GetRequestPath(reference, "events"), HttpMethod.Get, cancellationToken);
         }
 
         public static async Task<CancelPaymentResponse> CancelPayment(
@@ -59,10 +50,9 @@ namespace Vipps.Services
             CancellationToken cancellationToken = default
         )
         {
-            return await ExecuteEpaymentRequest<CancelPaymentResponse>(
+            return await VippsConfiguration.EpaymentServiceClient.ExecuteRequest<CancelPaymentResponse>(
+                GetRequestPath(reference, "cancel"),
                 HttpMethod.Post,
-                "cancel",
-                reference,
                 cancellationToken
             );
         }
@@ -72,10 +62,12 @@ namespace Vipps.Services
             CancellationToken cancellationToken = default
         )
         {
-            return await ExecuteEpaymentRequest<CapturePaymentRequest, CapturePaymentResponse>(
+            return await VippsConfiguration.EpaymentServiceClient.ExecuteRequest<
+                CapturePaymentRequest,
+                CapturePaymentResponse
+            >(
+                GetRequestPath(null, "capture"),
                 HttpMethod.Post,
-                "capture",
-                null,
                 capturePaymentRequest,
                 cancellationToken
             );
@@ -86,10 +78,9 @@ namespace Vipps.Services
             CancellationToken cancellationToken = default
         )
         {
-            return await ExecuteEpaymentRequest<RefundPaymentResponse>(
+            return await VippsConfiguration.EpaymentServiceClient.ExecuteRequest<RefundPaymentResponse>(
+                GetRequestPath(reference, "refund"),
                 HttpMethod.Post,
-                "refund",
-                reference,
                 cancellationToken
             );
         }
@@ -100,72 +91,12 @@ namespace Vipps.Services
             CancellationToken cancellationToken = default
         )
         {
-            await ExecuteEpaymentRequest(
+            await VippsConfiguration.EpaymentServiceClient.ExecuteRequest(
+                GetRequestPath(reference, "approve"),
                 HttpMethod.Post,
-                "approve",
-                reference,
                 forceApproveRequest,
                 cancellationToken
             );
-        }
-
-        private static async Task<TResponse> ExecuteEpaymentRequest<TRequest, TResponse>(
-            HttpMethod httpMethod,
-            string? path,
-            string? reference,
-            TRequest? data,
-            CancellationToken cancellationToken
-        )
-            where TRequest : VippsRequest
-        {
-            var requestPath = GetRequestPath(reference, path);
-            var headers = await GetHeaders(cancellationToken);
-            var response = await VippsConfiguration.VippsClient.ExecuteRequest<TRequest, TResponse>(
-                requestPath,
-                httpMethod,
-                data,
-                headers,
-                cancellationToken
-            );
-            return response;
-        }
-
-        private static async Task ExecuteEpaymentRequest<TRequest>(
-            HttpMethod httpMethod,
-            string? path,
-            string? reference,
-            TRequest? data,
-            CancellationToken cancellationToken
-        )
-            where TRequest : VippsRequest
-        {
-            var requestPath = GetRequestPath(reference, path);
-            var headers = await GetHeaders(cancellationToken);
-            await VippsConfiguration.VippsClient.ExecuteRequest(
-                requestPath,
-                httpMethod,
-                data,
-                headers,
-                cancellationToken
-            );
-        }
-
-        private static async Task<TResponse> ExecuteEpaymentRequest<TResponse>(
-            HttpMethod httpMethod,
-            string? path,
-            string? reference,
-            CancellationToken cancellationToken
-        )
-        {
-            var requestPath = GetRequestPath(reference, path);
-            var headers = await GetHeaders(cancellationToken);
-            var response = await VippsConfiguration.VippsClient.ExecuteRequest<TResponse>(
-                requestPath,
-                httpMethod,
-                headers,
-                cancellationToken
-            );
-            return response;
         }
 
         private static string GetRequestPath(string? reference, string? path)
@@ -173,30 +104,14 @@ namespace Vipps.Services
             var requestPath = $"{VippsConfiguration.BaseUrl}/epayment/v1/payments";
             if (reference is not null)
             {
-                requestPath += reference;
+                requestPath += $"/{reference}";
             }
             if (path is not null)
             {
-                requestPath += path;
+                requestPath += $"/{path}";
             }
 
             return requestPath;
-        }
-
-        private static async Task<Dictionary<string, string>> GetHeaders(
-            CancellationToken cancellationToken
-        )
-        {
-            var authToken = await AccessTokenService.GetAccessToken(cancellationToken);
-            var headers = new Dictionary<string, string>
-            {
-                {
-                    Constants.HeaderNameAuthorization,
-                    $"{Constants.AuthorizationSchemeNameBearer} {authToken.Token}"
-                },
-                { "Idempotency-Key", Guid.NewGuid().ToString() }
-            };
-            return headers;
         }
     }
 }

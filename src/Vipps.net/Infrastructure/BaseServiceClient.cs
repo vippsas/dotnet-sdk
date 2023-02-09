@@ -8,28 +8,14 @@ using Vipps.net.Helpers;
 
 namespace Vipps.net.Infrastructure
 {
-    public class VippsClient : IVippsClient
+    internal abstract class BaseServiceClient
     {
-        private readonly IVippsHttpClient _vippsHttpClient;
-        private readonly ILogger<VippsClient> _logger = LoggerFactory
-            .Create((ILoggingBuilder lb) => { })
-            .CreateLogger<VippsClient>();
-
-        public VippsClient()
-        {
-            _vippsHttpClient = new VippsHttpClient();
-        }
-
-        public VippsClient(HttpClient httpClient)
-        {
-            _vippsHttpClient = new VippsHttpClient(httpClient);
-        }
+        protected virtual ILogger<BaseServiceClient> Logger { get; init; }
 
         public async Task<TResponse> ExecuteRequest<TRequest, TResponse>(
             string path,
             HttpMethod httpMethod,
             TRequest? data,
-            Dictionary<string, string>? headers,
             CancellationToken cancellationToken = default
         )
             where TRequest : VippsRequest
@@ -38,7 +24,6 @@ namespace Vipps.net.Infrastructure
                 path,
                 httpMethod,
                 CreateRequestContent(data),
-                headers,
                 cancellationToken
             );
         }
@@ -47,7 +32,6 @@ namespace Vipps.net.Infrastructure
             string path,
             HttpMethod httpMethod,
             TRequest? data,
-            Dictionary<string, string>? headers,
             CancellationToken cancellationToken = default
         )
             where TRequest : VippsRequest
@@ -56,7 +40,6 @@ namespace Vipps.net.Infrastructure
                 path,
                 httpMethod,
                 CreateRequestContent(data),
-                headers,
                 cancellationToken
             );
         }
@@ -64,7 +47,6 @@ namespace Vipps.net.Infrastructure
         public async Task<TResponse> ExecuteRequest<TResponse>(
             string path,
             HttpMethod httpMethod,
-            Dictionary<string, string>? headers,
             CancellationToken cancellationToken = default
         )
         {
@@ -72,16 +54,21 @@ namespace Vipps.net.Infrastructure
                 path,
                 httpMethod,
                 null,
-                headers,
                 cancellationToken
             );
+        }
+
+        protected virtual async Task<Dictionary<string, string>?> GetHeaders(
+            CancellationToken cancellationToken
+        )
+        {
+            return await Task.FromResult((Dictionary<string, string>?)null);
         }
 
         private async Task<TResponse> ExecuteRequestBaseAndParse<TResponse>(
             string path,
             HttpMethod httpMethod,
             HttpContent? httpContent,
-            Dictionary<string, string>? headers,
             CancellationToken cancellationToken
         )
         {
@@ -89,7 +76,6 @@ namespace Vipps.net.Infrastructure
                 path,
                 httpMethod,
                 httpContent,
-                headers,
                 cancellationToken
             );
             return await response.Content.ReadFromJsonAsync<TResponse>(
@@ -101,14 +87,14 @@ namespace Vipps.net.Infrastructure
             string path,
             HttpMethod httpMethod,
             HttpContent? httpContent,
-            Dictionary<string, string>? headers,
             CancellationToken cancellationToken
         )
         {
             var retryPolicy = PolicyHelper.GetRetryPolicyWithFallback(
-                _logger,
+                Logger,
                 $"Request for {path} failed even after retries"
             );
+            var headers = await GetHeaders(cancellationToken);
             var response = await retryPolicy.ExecuteAsync(async () =>
             {
                 var requestMessage = new HttpRequestMessage
@@ -124,7 +110,10 @@ namespace Vipps.net.Infrastructure
                         AddOrUpdateHeader(requestMessage.Headers, item.Key, item.Value);
                     }
                 }
-                return await _vippsHttpClient.SendAsync(requestMessage, cancellationToken);
+                return await VippsConfiguration.VippsHttpClient.SendAsync(
+                    requestMessage,
+                    cancellationToken
+                );
             });
 
             if (!response.IsSuccessStatusCode)

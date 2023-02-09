@@ -78,33 +78,75 @@
         internal static string BaseUrl =>
             TestMode == true ? "https://api-test.vipps.no" : "https://api.vipps.no";
 
-        private static IVippsClient? _vippsClient;
-        public static IVippsClient VippsClient
+        private static IVippsHttpClient? _vippsHttpClient;
+        public static IVippsHttpClient VippsHttpClient
         {
             internal get
             {
-                if (_vippsClient is null)
+                if (_vippsHttpClient is null)
                 {
-                    _vippsClient = CreateDefaultVippsClient();
+                    _vippsHttpClient = CreateDefaultVippsHttpClient();
                 }
 
-                return _vippsClient;
+                return _vippsHttpClient;
             }
             set
             {
-                if (_vippsClient is not null)
+                if (_vippsHttpClient is not null)
                 {
                     throw new InvalidOperationException(
-                        "Once created, VippsClient cannot be modified"
+                        "Once created, VippsHttpClient cannot be modified"
                     );
                 }
-                _vippsClient = value;
+                _vippsHttpClient = value;
             }
         }
 
-        private static IVippsClient CreateDefaultVippsClient()
+        private static EpaymentServiceClient _epaymentServiceClient;
+        internal static EpaymentServiceClient EpaymentServiceClient
         {
-            return new VippsClient();
+            get
+            {
+                if (_epaymentServiceClient == null)
+                {
+                    _epaymentServiceClient = new EpaymentServiceClient();
+                }
+
+                return _epaymentServiceClient;
+            }
+        }
+
+        private static AccessTokenServiceClient _accessTokenServiceClient;
+        internal static AccessTokenServiceClient AccessTokenServiceClient
+        {
+            get
+            {
+                if (_accessTokenServiceClient == null)
+                {
+                    _accessTokenServiceClient = new AccessTokenServiceClient();
+                }
+
+                return _accessTokenServiceClient;
+            }
+        }
+
+        private static CheckoutServiceClient _checkoutServiceClient;
+        internal static CheckoutServiceClient CheckoutServiceClient
+        {
+            get
+            {
+                if (_checkoutServiceClient == null)
+                {
+                    _checkoutServiceClient = new CheckoutServiceClient();
+                }
+
+                return _checkoutServiceClient;
+            }
+        }
+
+        private static IVippsHttpClient CreateDefaultVippsHttpClient()
+        {
+            return new VippsHttpClient();
         }
     }
 }
