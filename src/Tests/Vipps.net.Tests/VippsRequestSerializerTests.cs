@@ -98,5 +98,49 @@ namespace Vipps.net.Tests
             Assert.IsNotNull(deserialized);
             Assert.IsNull(deserialized?.ExtraParameters);
         }
+
+        [TestMethod]
+        public void Can_Deserialize_Without_Extra_Parameters()
+        {
+            InitiateSessionResponse initiateSessionResponse =
+                new()
+                {
+                    CheckoutFrontendUrl = "https://vipps.no/checkout-frontend",
+                    PollingUrl = "https://api.vipps.no/checkout/v3/session/reference101",
+                    Token = "eynghsvdsjhkfgasf"
+                };
+            var serializedResponse = JsonSerializer.Serialize(initiateSessionResponse);
+            var deserializedResponse = JsonSerializer.Deserialize<InitiateSessionResponse>(
+                serializedResponse
+            );
+            Assert.IsNotNull(deserializedResponse);
+            Assert.IsNull(deserializedResponse?.ExtraParameters);
+        }
+
+        [TestMethod]
+        public void Can_Deserialize_With_Extra_Parameters()
+        {
+            InitiateSessionResponse initiateSessionResponse =
+                new()
+                {
+                    CheckoutFrontendUrl = "https://vipps.no/checkout-frontend",
+                    PollingUrl = "https://api.vipps.no/checkout/v3/session/reference101",
+                    Token = "eynghsvdsjhkfgasf",
+                    ExtraParameters = new
+                    {
+                        CancellationUrl = "https://api.vipps.no/checkout/v3/session/reference101/cancel"
+                    }
+                };
+            var serializedResponse = JsonSerializer.Serialize(initiateSessionResponse);
+            var deserializedResponse = JsonSerializer.Deserialize<InitiateSessionResponse>(
+                serializedResponse
+            );
+            Assert.IsNotNull(deserializedResponse);
+            Assert.IsNotNull(deserializedResponse?.ExtraParameters);
+            Assert.AreEqual(
+                initiateSessionResponse.ExtraParameters.CancellationUrl,
+                deserializedResponse?.ExtraParameters?.CancellationUrl
+            );
+        }
     }
 }
