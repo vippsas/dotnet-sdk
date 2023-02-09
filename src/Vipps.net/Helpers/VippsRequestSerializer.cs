@@ -11,11 +11,16 @@ namespace Vipps.net.Helpers
         public static string SerializeVippsRequest(VippsRequest vippsRequest)
         {
             dynamic extraParameters = vippsRequest.ExtraParameters;
-            vippsRequest.ExtraParameters = null;
-            string serializedRequest = JsonSerializer.Serialize(vippsRequest, vippsRequest.GetType());
+            string serializedRequest = JsonSerializer.Serialize(
+                vippsRequest,
+                vippsRequest.GetType()
+            );
             if (extraParameters is not null)
             {
-                dynamic serializedExtraParameters = JsonSerializer.Serialize(extraParameters, extraParameters.GetType());
+                dynamic serializedExtraParameters = JsonSerializer.Serialize(
+                    extraParameters,
+                    extraParameters.GetType()
+                );
                 serializedRequest = Merge(serializedRequest, serializedExtraParameters);
             }
             return serializedRequest;
@@ -27,12 +32,20 @@ namespace Vipps.net.Helpers
 
             using (JsonDocument parsedRequest = JsonDocument.Parse(request))
             using (JsonDocument parsedExtraParameters = JsonDocument.Parse(extraParameters))
-            using (Utf8JsonWriter jsonWriter = new Utf8JsonWriter(outputBuffer, new JsonWriterOptions { Indented = true }))
+            using (
+                Utf8JsonWriter jsonWriter = new Utf8JsonWriter(
+                    outputBuffer,
+                    new JsonWriterOptions { Indented = true }
+                )
+            )
             {
                 JsonElement requestRoot = parsedRequest.RootElement;
                 JsonElement extraParametersRoot = parsedExtraParameters.RootElement;
 
-                if (requestRoot.ValueKind != JsonValueKind.Array && requestRoot.ValueKind != JsonValueKind.Object)
+                if (
+                    requestRoot.ValueKind != JsonValueKind.Array
+                    && requestRoot.ValueKind != JsonValueKind.Object
+                )
                 {
                     return request;
                 }
@@ -56,7 +69,11 @@ namespace Vipps.net.Helpers
             return Encoding.UTF8.GetString(outputBuffer.WrittenSpan);
         }
 
-        private static void MergeObjects(Utf8JsonWriter jsonWriter, JsonElement requestRoot, JsonElement extraParametersRoot)
+        private static void MergeObjects(
+            Utf8JsonWriter jsonWriter,
+            JsonElement requestRoot,
+            JsonElement extraParametersRoot
+        )
         {
             Debug.Assert(requestRoot.ValueKind == JsonValueKind.Object);
             Debug.Assert(extraParametersRoot.ValueKind == JsonValueKind.Object);
@@ -65,18 +82,27 @@ namespace Vipps.net.Helpers
 
             foreach (JsonProperty property in requestRoot.EnumerateObject())
             {
-                if (extraParametersRoot.TryGetProperty(property.Name, out JsonElement newValue) && newValue.ValueKind != JsonValueKind.Null)
+                if (
+                    extraParametersRoot.TryGetProperty(property.Name, out JsonElement newValue)
+                    && newValue.ValueKind != JsonValueKind.Null
+                )
                 {
                     jsonWriter.WritePropertyName(property.Name);
 
                     JsonElement originalValue = property.Value;
                     JsonValueKind originalValueKind = originalValue.ValueKind;
 
-                    if (newValue.ValueKind == JsonValueKind.Object && originalValueKind == JsonValueKind.Object)
+                    if (
+                        newValue.ValueKind == JsonValueKind.Object
+                        && originalValueKind == JsonValueKind.Object
+                    )
                     {
                         MergeObjects(jsonWriter, originalValue, newValue);
                     }
-                    else if (newValue.ValueKind == JsonValueKind.Array && originalValueKind == JsonValueKind.Array)
+                    else if (
+                        newValue.ValueKind == JsonValueKind.Array
+                        && originalValueKind == JsonValueKind.Array
+                    )
                     {
                         MergeArrays(jsonWriter, originalValue, newValue);
                     }
@@ -102,7 +128,11 @@ namespace Vipps.net.Helpers
             jsonWriter.WriteEndObject();
         }
 
-        private static void MergeArrays(Utf8JsonWriter jsonWriter, JsonElement originalValue, JsonElement newValue)
+        private static void MergeArrays(
+            Utf8JsonWriter jsonWriter,
+            JsonElement originalValue,
+            JsonElement newValue
+        )
         {
             jsonWriter.WriteStartArray();
 
@@ -117,6 +147,5 @@ namespace Vipps.net.Helpers
 
             jsonWriter.WriteEndArray();
         }
-
     }
 }
