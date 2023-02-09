@@ -100,7 +100,7 @@ namespace Vipps.Services
             CancellationToken cancellationToken = default
         )
         {
-            await ExecuteEpaymentRequest<ForceApproveRequest>(
+            await ExecuteEpaymentRequest(
                 HttpMethod.Post,
                 "approve",
                 reference,
