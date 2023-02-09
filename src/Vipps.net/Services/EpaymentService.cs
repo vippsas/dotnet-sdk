@@ -1,4 +1,19 @@
-﻿namespace Vipps.Services;
+﻿using System.Net.Http.Json;
+using System.Text;
+using Microsoft.Extensions.Logging;
+using Vipps.Helpers;
+using Vipps.Models;
+using Vipps.Models.Epayment.CancelPayment;
+using Vipps.Models.Epayment.CapturePayment;
+using Vipps.Models.Epayment.CreatePayment;
+using Vipps.Models.Epayment.CreatePaymentRequest;
+using Vipps.Models.Epayment.ForceApprove;
+using Vipps.Models.Epayment.GetPaymentEventLog;
+using Vipps.Models.Epayment.GetPaymentResponse;
+using Vipps.Models.Epayment.RefundPayment;
+using Vipps.net.Helpers;
+
+namespace Vipps.Services;
 
 public class EpaymentService
 {
@@ -111,7 +126,7 @@ public class EpaymentService
             $"Request for {path} failed even after retries"
         );
 
-        string requestPath = $"{_httpClient.BaseAddress}/";
+        var requestPath = $"{_httpClient.BaseAddress}/";
         if (reference is not null)
             requestPath += reference;
         requestPath += path;
@@ -148,13 +163,12 @@ public class EpaymentService
         {
             return null;
         }
-        string serializedRequest = VippsRequestSerializer.SerializeVippsRequest(vippsRequest);
+        var serializedRequest = VippsRequestSerializer.SerializeVippsRequest(vippsRequest);
         return new StringContent(serializedRequest, Encoding.UTF8, "application/json");
     }
 
-    private class VoidType
+    private sealed class VoidType
     {
         public VoidType() { }
     }
-}
 }
