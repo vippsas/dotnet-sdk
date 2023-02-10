@@ -1,9 +1,11 @@
 ﻿using System.Net.Http.Json;
 using System.Text;
+using Microsoft.Extensions.Logging;
 using Vipps.Models;
 using Vipps.Models.Checkout.GetSession;
 using Vipps.Models.Checkout.InitiateSession;
 using Vipps.net.Helpers;
+using Vipps.net.Infrastructure;
 
 namespace Vipps.Services;
 
@@ -11,6 +13,8 @@ public class CheckoutService
 {
     private readonly VippsConfiguration _vippsConfiguration;
     private readonly HttpClient _httpClient;
+    private readonly ILogger<CheckoutService> _logger =
+        VippsLogging.LoggerFactory.CreateLogger<CheckoutService>();
 
     public CheckoutService(VippsConfiguration vippsConfiguration, HttpClient httpClient)
     {
@@ -31,13 +35,16 @@ public class CheckoutService
         _httpClient.DefaultRequestHeaders.Add("Vipps-System-Version", "0.9");
         _httpClient.DefaultRequestHeaders.Add("Vipps-System-Plugin-Name", "checkout-sandbox");
         _httpClient.DefaultRequestHeaders.Add("Vipps-System-Plugin-Version", "0.9");
+        _logger.LogInformation("Checkoutservice initiated");
     }
 
     public async Task<InitiateSessionResponse> InitiateSession(
         InitiateSessionRequest initiateSessionRequest
     )
     {
-        var serializedRequest = VippsRequestSerializer.SerializeVippsRequest(initiateSessionRequest);
+        var serializedRequest = VippsRequestSerializer.SerializeVippsRequest(
+            initiateSessionRequest
+        );
         var content = new StringContent(serializedRequest, Encoding.UTF8, "application/json");
 
         var request = new HttpRequestMessage()
