@@ -96,14 +96,6 @@ namespace Vipps.net.Infrastructure
             CancellationToken cancellationToken
         )
         {
-            //TODO: remove this logging
-            Logger.LogInformation(
-                "{type} Making request: {method} {path}",
-                GetType().Name,
-                httpMethod.Method,
-                path
-            );
-
             var retryPolicy = PolicyHelper.GetRetryPolicyWithFallback(
                 Logger,
                 $"Request for {path} failed even after retries"
