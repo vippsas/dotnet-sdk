@@ -1,11 +1,4 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Options;
-using Vipps.Infrastructure;
-using Vipps.Models;
-using Vipps.Models.Checkout.InitiateSession;
-using Vipps.Services;
-
-namespace Vipps.net.Demo.Controllers
+﻿namespace Vipps.net.Demo.Controllers
 {
     [ApiController]
     [Route("[controller]")]

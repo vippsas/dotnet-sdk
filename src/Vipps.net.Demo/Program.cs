@@ -1,8 +1,4 @@
-﻿using Azure.Identity;
-using Vipps.net.Demo.Controllers;
-using Vipps.net.Infrastructure;
-
-internal sealed class Program
+﻿internal sealed class Program
 {
     private static void Main(string[] args)
     {
