@@ -59,7 +59,7 @@ namespace Vipps.Helpers
                         logger.LogWarning(
                             CommonWarningMessage,
                             retryCount,
-                            response?.Result.StatusCode,
+                            response?.Result?.StatusCode,
                             response?.Exception,
                             Convert.ToInt32(sleepDuration.Milliseconds)
                         )
