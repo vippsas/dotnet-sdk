@@ -1,52 +1,30 @@
-﻿using System.Net.Http.Json;
-using Vipps.Models;
-using Vipps.Models.Epayment.AccessToken;
+﻿using Vipps.Models.Epayment.AccessToken;
+using Vipps.net.Infrastructure;
 
-namespace Vipps.Services;
-
-public class AccessTokenService
+namespace Vipps.Services
 {
-    private readonly VippsConfiguration _vippsConfiguration;
-    private readonly HttpClient _httpClient;
-
-    public AccessTokenService(VippsConfiguration vippsConfiguration, HttpClient httpClient)
+    public static class AccessTokenService
     {
-        _vippsConfiguration = vippsConfiguration;
-        _httpClient = httpClient;
-
-        _httpClient.DefaultRequestHeaders.Add("client_id", vippsConfiguration.ClientId);
-        _httpClient.DefaultRequestHeaders.Add("client_secret", vippsConfiguration.ClientSecret);
-        _httpClient.DefaultRequestHeaders.Add(
-            "Ocp-Apim-Subscription-Key",
-            vippsConfiguration.SubscriptionKey
-        );
-    }
-
-    public async Task<AccessToken> GetAccessToken()
-    {
-        var key = $"{_vippsConfiguration.ClientId}{_vippsConfiguration.ClientSecret}";
-        var cachedToken = AccessTokenCacheService.Get(key);
-        if (cachedToken is not null)
+        public static async Task<AccessToken> GetAccessToken(
+            CancellationToken cancellationToken = default
+        )
         {
-            return cachedToken;
+            var key = $"{VippsConfiguration.ClientId}{VippsConfiguration.ClientSecret}";
+            var cachedToken = AccessTokenCacheService.Get(key);
+            if (cachedToken is not null)
+            {
+                return cachedToken;
+            }
+
+            var requestPath = $"{VippsConfiguration.BaseUrl}/accesstoken/get";
+            var accessToken =
+                await VippsServices.AccessTokenServiceClient.ExecuteRequest<AccessToken>(
+                    requestPath,
+                    HttpMethod.Post,
+                    cancellationToken
+                );
+            AccessTokenCacheService.Add(key, accessToken);
+            return accessToken;
         }
-
-        var request = new HttpRequestMessage
-        {
-            RequestUri = new Uri(_vippsConfiguration.BaseUrl + "/accesstoken/get"),
-            Method = HttpMethod.Post
-        };
-
-        var response = await _httpClient.SendAsync(request);
-        if (!response.IsSuccessStatusCode)
-        {
-            throw new Exception($"Request failed with status code {response.StatusCode}");
-        }
-
-        var accessToken =
-            await response.Content.ReadFromJsonAsync<AccessToken>()
-            ?? throw new Exception("Failed deserializing access token");
-        AccessTokenCacheService.Add(key, accessToken);
-        return accessToken;
     }
 }

@@ -1,23 +1,24 @@
 ﻿using System.IdentityModel.Tokens.Jwt;
 
-namespace Vipps.Services;
-
-internal sealed class AccessTokenLifetimeService
+namespace Vipps.Services
 {
-    private readonly JwtSecurityTokenHandler _handler = new();
-
-    public AccessTokenLifetimeService() { }
-
-    public DateTimeOffset? GetValidTo(string token)
+    internal sealed class AccessTokenLifetimeService
     {
-        try
+        private readonly JwtSecurityTokenHandler _handler = new();
+
+        public AccessTokenLifetimeService() { }
+
+        public DateTimeOffset? GetValidTo(string token)
         {
-            var jwt = _handler.ReadToken(token);
-            return jwt.ValidTo;
-        }
-        catch
-        {
-            return null;
+            try
+            {
+                var jwt = _handler.ReadToken(token);
+                return jwt.ValidTo;
+            }
+            catch
+            {
+                return null;
+            }
         }
     }
 }
