@@ -1,22 +1,18 @@
-﻿namespace Vipps.net.Demo.Controllers
+﻿using Microsoft.AspNetCore.Mvc;
+using Vipps.Models.Checkout.InitiateSession;
+using Vipps.Services;
+
+namespace Vipps.net.Demo.Controllers
 {
     [ApiController]
     [Route("[controller]")]
     public class CheckoutController : ControllerBase
     {
         private readonly ILogger<CheckoutController> _logger;
-        private readonly IOptions<VippsConfigurationSection> _options;
-        private readonly HttpClient _httpClient;
 
-        public CheckoutController(
-            ILogger<CheckoutController> logger,
-            IOptions<VippsConfigurationSection> vippsConfigurationOptions,
-            HttpClient httpClient
-        )
+        public CheckoutController(ILogger<CheckoutController> logger)
         {
             _logger = logger;
-            _options = vippsConfigurationOptions;
-            _httpClient = httpClient;
         }
 
         [HttpPost]
@@ -43,26 +39,13 @@
                 request.Transaction.Reference
             );
 
-            var service = new CheckoutService(GetFromSection(), _httpClient);
-            var result = await service.InitiateSession(request);
+            var result = await CheckoutService.InitiateSession(request);
 
             _logger.LogInformation(
                 "Created session with reference {reference}",
                 request.Transaction.Reference
             );
             return Ok(result);
-        }
-
-        private VippsConfiguration GetFromSection()
-        {
-            return new VippsConfiguration
-            {
-                TestMode = _options.Value.UseTestMode,
-                ClientId = _options.Value.ClientId,
-                ClientSecret = _options.Value.ClientSecret,
-                MerchantSerialNumber = _options.Value.MerchantSerialNumber,
-                SubscriptionKey = _options.Value.SubscriptionKey,
-            };
         }
     }
 }

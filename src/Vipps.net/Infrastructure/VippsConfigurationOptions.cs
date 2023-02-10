@@ -1,6 +1,6 @@
 ﻿namespace Vipps.Infrastructure;
 
-public class VippsConfigurationSection
+public class VippsConfigurationOptions
 {
     public string ClientId { get; set; }
     public string ClientSecret { get; set; }

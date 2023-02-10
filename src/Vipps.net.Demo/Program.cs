@@ -1,4 +1,9 @@
-﻿internal sealed class Program
+﻿using Azure.Identity;
+using Vipps.Infrastructure;
+using Vipps.net.Demo.Controllers;
+using Vipps.net.Infrastructure;
+
+internal sealed class Program
 {
     private static void Main(string[] args)
     {
@@ -19,7 +24,20 @@
         builder.Services.AddScoped<CheckoutController>().AddHttpClient();
 
         // This line configures vipps from a configuration section named "Vipps"
-        builder.Services.ConfigureVipps(builder.Configuration, "Vipps");
+        //builder.Services.ConfigureVipps(builder.Configuration, "Vipps");
+
+        // This line configures vipps with custom settings
+        var vippsConfigurationOptions = new VippsConfigurationOptions
+        {
+            ClientId = builder.Configuration.GetValue<string>("CLIENT-ID")!,
+            ClientSecret = builder.Configuration.GetValue<string>("CLIENT-SECRET")!,
+            MerchantSerialNumber = builder.Configuration.GetValue<string>(
+                "MERCHANT-SERIAL-NUMBER"
+            )!,
+            SubscriptionKey = builder.Configuration.GetValue<string>("SUBSCRIPTION-KEY")!,
+            UseTestMode = true
+        };
+        builder.Services.ConfigureVipps(vippsConfigurationOptions);
 
         var app = builder.Build();
         // Configure the HTTP request pipeline.
