@@ -102,48 +102,6 @@
             }
         }
 
-        private static EpaymentServiceClient _epaymentServiceClient;
-        internal static EpaymentServiceClient EpaymentServiceClient
-        {
-            get
-            {
-                if (_epaymentServiceClient == null)
-                {
-                    _epaymentServiceClient = new EpaymentServiceClient();
-                }
-
-                return _epaymentServiceClient;
-            }
-        }
-
-        private static AccessTokenServiceClient _accessTokenServiceClient;
-        internal static AccessTokenServiceClient AccessTokenServiceClient
-        {
-            get
-            {
-                if (_accessTokenServiceClient == null)
-                {
-                    _accessTokenServiceClient = new AccessTokenServiceClient();
-                }
-
-                return _accessTokenServiceClient;
-            }
-        }
-
-        private static CheckoutServiceClient _checkoutServiceClient;
-        internal static CheckoutServiceClient CheckoutServiceClient
-        {
-            get
-            {
-                if (_checkoutServiceClient == null)
-                {
-                    _checkoutServiceClient = new CheckoutServiceClient();
-                }
-
-                return _checkoutServiceClient;
-            }
-        }
-
         private static IVippsHttpClient CreateDefaultVippsHttpClient()
         {
             return new VippsHttpClient();

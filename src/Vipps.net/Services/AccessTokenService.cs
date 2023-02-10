@@ -18,7 +18,7 @@ namespace Vipps.Services
 
             var requestPath = $"{VippsConfiguration.BaseUrl}/accesstoken/get";
             var accessToken =
-                await VippsConfiguration.AccessTokenServiceClient.ExecuteRequest<AccessToken>(
+                await VippsServices.AccessTokenServiceClient.ExecuteRequest<AccessToken>(
                     requestPath,
                     HttpMethod.Post,
                     cancellationToken

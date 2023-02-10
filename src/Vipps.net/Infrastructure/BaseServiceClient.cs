@@ -11,6 +11,12 @@ namespace Vipps.net.Infrastructure
     internal abstract class BaseServiceClient
     {
         protected virtual ILogger<BaseServiceClient> Logger { get; init; }
+        protected readonly IVippsHttpClient _vippsHttpClient;
+
+        protected BaseServiceClient(IVippsHttpClient vippsHttpClient)
+        {
+            _vippsHttpClient = vippsHttpClient;
+        }
 
         public async Task<TResponse> ExecuteRequest<TRequest, TResponse>(
             string path,
@@ -110,10 +116,7 @@ namespace Vipps.net.Infrastructure
                         AddOrUpdateHeader(requestMessage.Headers, item.Key, item.Value);
                     }
                 }
-                return await VippsConfiguration.VippsHttpClient.SendAsync(
-                    requestMessage,
-                    cancellationToken
-                );
+                return await _vippsHttpClient.SendAsync(requestMessage, cancellationToken);
             });
 
             if (!response.IsSuccessStatusCode)

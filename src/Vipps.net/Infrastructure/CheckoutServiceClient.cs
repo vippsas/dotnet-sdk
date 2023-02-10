@@ -5,7 +5,8 @@ namespace Vipps.net.Infrastructure
 {
     internal sealed class CheckoutServiceClient : BaseServiceClient
     {
-        internal CheckoutServiceClient()
+        internal CheckoutServiceClient(IVippsHttpClient vippsHttpClient)
+            : base(vippsHttpClient)
         {
             Logger = LoggerFactory
                 .Create((ILoggingBuilder lb) => { })

@@ -17,7 +17,7 @@ namespace Vipps.Services
             CancellationToken cancellationToken = default
         )
         {
-            return await VippsConfiguration.EpaymentServiceClient.ExecuteRequest<
+            return await VippsServices.EpaymentServiceClient.ExecuteRequest<
                 CreatePaymentRequest,
                 CreatePaymentResponse
             >(GetRequestPath(null, null), HttpMethod.Post, createPaymentRequest, cancellationToken);
@@ -28,8 +28,8 @@ namespace Vipps.Services
             CancellationToken cancellationToken = default
         )
         {
-            return await VippsConfiguration.EpaymentServiceClient.ExecuteRequest<GetPaymentResponse>(
-                GetRequestPath(null, null),
+            return await VippsServices.EpaymentServiceClient.ExecuteRequest<GetPaymentResponse>(
+                GetRequestPath(reference, null),
                 HttpMethod.Get,
                 cancellationToken
             );
@@ -40,7 +40,7 @@ namespace Vipps.Services
             CancellationToken cancellationToken = default
         )
         {
-            return await VippsConfiguration.EpaymentServiceClient.ExecuteRequest<
+            return await VippsServices.EpaymentServiceClient.ExecuteRequest<
                 IEnumerable<GetPaymentEventLog>
             >(GetRequestPath(reference, "events"), HttpMethod.Get, cancellationToken);
         }
@@ -50,7 +50,7 @@ namespace Vipps.Services
             CancellationToken cancellationToken = default
         )
         {
-            return await VippsConfiguration.EpaymentServiceClient.ExecuteRequest<CancelPaymentResponse>(
+            return await VippsServices.EpaymentServiceClient.ExecuteRequest<CancelPaymentResponse>(
                 GetRequestPath(reference, "cancel"),
                 HttpMethod.Post,
                 cancellationToken
@@ -62,7 +62,7 @@ namespace Vipps.Services
             CancellationToken cancellationToken = default
         )
         {
-            return await VippsConfiguration.EpaymentServiceClient.ExecuteRequest<
+            return await VippsServices.EpaymentServiceClient.ExecuteRequest<
                 CapturePaymentRequest,
                 CapturePaymentResponse
             >(
@@ -78,7 +78,7 @@ namespace Vipps.Services
             CancellationToken cancellationToken = default
         )
         {
-            return await VippsConfiguration.EpaymentServiceClient.ExecuteRequest<RefundPaymentResponse>(
+            return await VippsServices.EpaymentServiceClient.ExecuteRequest<RefundPaymentResponse>(
                 GetRequestPath(reference, "refund"),
                 HttpMethod.Post,
                 cancellationToken
@@ -91,7 +91,7 @@ namespace Vipps.Services
             CancellationToken cancellationToken = default
         )
         {
-            await VippsConfiguration.EpaymentServiceClient.ExecuteRequest(
+            await VippsServices.EpaymentServiceClient.ExecuteRequest(
                 GetRequestPath(reference, "approve"),
                 HttpMethod.Post,
                 forceApproveRequest,

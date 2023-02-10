@@ -12,11 +12,10 @@ namespace Vipps.Services
         )
         {
             var requestPath = $"{VippsConfiguration.BaseUrl}/checkout/v3/session";
-            var sessionInitiationResult =
-                await VippsConfiguration.CheckoutServiceClient.ExecuteRequest<
-                    InitiateSessionRequest,
-                    InitiateSessionResponse
-                >(requestPath, HttpMethod.Post, initiateSessionRequest, cancellationToken);
+            var sessionInitiationResult = await VippsServices.CheckoutServiceClient.ExecuteRequest<
+                InitiateSessionRequest,
+                InitiateSessionResponse
+            >(requestPath, HttpMethod.Post, initiateSessionRequest, cancellationToken);
             if (sessionInitiationResult is null)
             {
                 throw new Exception("Failed response from session initiation");
@@ -31,7 +30,7 @@ namespace Vipps.Services
         {
             var requestPath = $"{VippsConfiguration.BaseUrl}/checkout/v3/session/{reference}";
             var getSessionResult =
-                await VippsConfiguration.CheckoutServiceClient.ExecuteRequest<GetSessionInfoResponse>(
+                await VippsServices.CheckoutServiceClient.ExecuteRequest<GetSessionInfoResponse>(
                     requestPath,
                     HttpMethod.Get,
                     cancellationToken
