@@ -30,10 +30,9 @@ namespace Vipps.net.Infrastructure
             VippsConfiguration.SubscriptionKey = vippsConfigurationOptions.SubscriptionKey;
             VippsConfiguration.TestMode = vippsConfigurationOptions.UseTestMode;
 
-            // Maybe not required service?
-            VippsLogging.LoggerFactory = services
-                .BuildServiceProvider()
-                .GetRequiredService<ILoggerFactory>();
+            VippsLogging.LoggerFactory =
+                services.BuildServiceProvider().GetService<ILoggerFactory>()
+                ?? LoggerFactory.Create((lb) => { });
         }
     }
 }
