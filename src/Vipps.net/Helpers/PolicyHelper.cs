@@ -47,7 +47,6 @@ namespace Vipps.Helpers
 
             return HttpPolicyExtensions
                 .HandleTransientHttpError()
-                .OrResult(msg => msg.StatusCode == HttpStatusCode.InternalServerError)
                 .WaitAndRetryAsync(
                     delay,
                     (
