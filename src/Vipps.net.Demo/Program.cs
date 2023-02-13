@@ -14,19 +14,18 @@ internal sealed class Program
             new DefaultAzureCredential()
         );
 
-        // Add services to the container.
         builder.Services.AddControllers();
-
-        // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
         builder.Services.AddEndpointsApiExplorer();
         builder.Services.AddSwaggerGen();
 
+        // The following line sets up dependency injection of an http Client to be used for CheckoutController.
         builder.Services.AddScoped<CheckoutController>().AddHttpClient();
 
-        // This line configures vipps from a configuration section named "Vipps"
+        // The following (commented out) line configures vipps from a configuration section named "Vipps"
         //builder.Services.ConfigureVipps(builder.Configuration, "Vipps");
 
-        // This line configures vipps with custom settings
+
+        // The following lines initialises VippConfigurationOptions with values fetched from key vault
         var vippsConfigurationOptions = new VippsConfigurationOptions
         {
             ClientId = builder.Configuration.GetValue<string>("CLIENT-ID")!,
@@ -37,10 +36,11 @@ internal sealed class Program
             SubscriptionKey = builder.Configuration.GetValue<string>("SUBSCRIPTION-KEY")!,
             UseTestMode = true
         };
+
+        // The following line configures vipps with custom settings
         builder.Services.ConfigureVipps(vippsConfigurationOptions);
 
         var app = builder.Build();
-        // Configure the HTTP request pipeline.
         if (app.Environment.IsDevelopment())
         {
             app.UseSwagger();
