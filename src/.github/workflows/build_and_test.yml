@@ -2,9 +2,6 @@ name: Build and Test
 
 env:
   solution_file: 'Vipps.net.sln'
-  nuget_feed_name: 'Vipps-Azure-Artifacts-Feed'
-  nuget_feed_source: 'https://pkgs.dev.azure.com/vipps/_packaging/release/nuget/v3/index.json'
-  nuget_config: 'nuget.config'
 on:
   push:
     branches: [ "main" ]
@@ -13,7 +10,6 @@ on:
     paths-ignore:
       - 'docs/**'
 
-  workflow_dispatch:
 
 jobs:
   build:
@@ -21,6 +17,7 @@ jobs:
     strategy:
       matrix:
         dotnet-version: [ '7.0.x' ]
+        configuration: [ Debug, Release ]
     steps:
       - uses: actions/checkout@v3
       - name: Setup .NET Core SDK ${{ matrix.dotnet-version }}
@@ -30,6 +27,6 @@ jobs:
       - name: Install dependencies
         run: dotnet restore
       - name: Build
-        run: dotnet build --configuration Release --no-restore
+        run: dotnet build --configuration ${{ matrix.configuration }} --no-restore
       - name: Test
         run: dotnet test --no-restore --verbosity normal
