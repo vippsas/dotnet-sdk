@@ -6,6 +6,6 @@ public class VippsConfiguration
     public string ClientSecret { get; init; }
     public string SubscriptionKey { get; init; }
     public string MerchantSerialNumber { get; init; }
-    public bool TestMode { get; init; } = false;
+    public bool TestMode { get; init; }
     public string BaseUrl => TestMode ? "https://api-test.vipps.no" : "https://api.vipps.no";
 }
