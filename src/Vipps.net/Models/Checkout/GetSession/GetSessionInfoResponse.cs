@@ -100,7 +100,7 @@ public class ShippingDetails
 /// <param name="UserInfo"></param>
 /// <param name="ShippingDetails"></param>
 /// <param name="BillingDetails"></param>
-public class GetSessionInfoResponse
+public class GetSessionInfoResponse : VippsResponse
 {
     public string SessionId { get; init; }
     public string? MerchantSerialNumber { get; init; }

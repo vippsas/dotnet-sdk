@@ -2,7 +2,7 @@
 
 namespace Vipps.Models.Epayment.RefundPayment;
 
-public class RefundPaymentResponse
+public class RefundPaymentResponse : VippsResponse
 {
     [property: JsonPropertyName("amount")]
     public Amount Amount { get; init; }

@@ -53,7 +53,7 @@ public class RefundedAmount
     public int? Value { get; init; }
 }
 
-public class GetPaymentResponse
+public class GetPaymentResponse : VippsResponse
 {
     [property: JsonPropertyName("aggregate")]
     public Aggregate Aggregate { get; init; }

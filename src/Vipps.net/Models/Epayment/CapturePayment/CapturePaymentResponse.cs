@@ -2,7 +2,7 @@
 
 namespace Vipps.Models.Epayment.CapturePayment;
 
-public class CapturePaymentResponse
+public class CapturePaymentResponse : VippsResponse
 {
     [property: JsonPropertyName("amount")]
     public Amount Amount { get; init; }

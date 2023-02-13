@@ -2,7 +2,7 @@
 
 namespace Vipps.Models.Epayment.CreatePayment;
 
-public class CreatePaymentResponse
+public class CreatePaymentResponse : VippsResponse
 {
     [property: JsonPropertyName("redirectUrl")]
     public string RedirectUrl { get; init; }
