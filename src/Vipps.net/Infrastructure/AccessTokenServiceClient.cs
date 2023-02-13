@@ -13,6 +13,14 @@ namespace Vipps.net.Infrastructure
                 .CreateLogger<AccessTokenServiceClient>();
         }
 
+        
+        
+        
+        
+        
+        
+        
+        
         protected override async Task<Dictionary<string, string>?> GetHeaders(
             CancellationToken cancellationToken
         )
