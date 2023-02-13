@@ -30,6 +30,6 @@ jobs:
       - name: Test
         run: dotnet test src/ --no-restore --verbosity normal
       - name: Restore tools
-        run: dotnet tool restore --tool-manifest src/.config
+        run: dotnet tool restore --tool-manifest src/.config/dotnet
       - name: Formatting check
         run: dotnet csharpier --check src/
