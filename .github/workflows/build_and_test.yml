@@ -1,7 +1,7 @@
 name: Build and Test
 
 env:
-  solution_file: '/src/Vipps.net.sln'
+  solution_file: 'src/Vipps.net.sln'
 on:
   push:
     branches: [ "main" ]
@@ -25,8 +25,8 @@ jobs:
         with:
           dotnet-version: ${{ matrix.dotnet-version }}
       - name: Install dependencies
-        run: dotnet restore /src
+        run: dotnet restore src/
       - name: Build
-        run: dotnet build /src --configuration ${{ matrix.configuration }} --no-restore
+        run: dotnet build src/ --configuration ${{ matrix.configuration }} --no-restore
       - name: Test
-        run: dotnet test /src --no-restore --verbosity normal
+        run: dotnet test src/ --no-restore --verbosity normal
