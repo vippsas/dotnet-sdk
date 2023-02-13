@@ -17,7 +17,6 @@ jobs:
     strategy:
       matrix:
         dotnet-version: [ '7.0.x' ]
-        configuration: [ Debug, Release ]
     steps:
       - uses: actions/checkout@v3
       - name: Setup .NET Core SDK ${{ matrix.dotnet-version }}
@@ -27,6 +26,6 @@ jobs:
       - name: Install dependencies
         run: dotnet restore src/
       - name: Build
-        run: dotnet build src/ --configuration ${{ matrix.configuration }} --no-restore
+        run: dotnet build src/ --no-restore
       - name: Test
         run: dotnet test src/ --no-restore --verbosity normal
