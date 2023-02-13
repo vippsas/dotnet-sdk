@@ -84,9 +84,9 @@ namespace Vipps.net.Infrastructure
                 httpContent,
                 cancellationToken
             );
-            return await response.Content.ReadFromJsonAsync<TResponse>(
-                    cancellationToken: cancellationToken
-                ) ?? throw new Exception("Failed deserializing response");
+            return await response.Content
+                    .ReadFromJsonAsync<TResponse>(cancellationToken: cancellationToken)
+                    .ConfigureAwait(false) ?? throw new Exception("Failed deserializing response");
         }
 
         private async Task<HttpResponseMessage> ExecuteRequestBase(
@@ -116,12 +116,16 @@ namespace Vipps.net.Infrastructure
                         AddOrUpdateHeader(requestMessage.Headers, item.Key, item.Value);
                     }
                 }
-                return await _vippsHttpClient.SendAsync(requestMessage, cancellationToken);
+                return await _vippsHttpClient
+                    .SendAsync(requestMessage, cancellationToken)
+                    .ConfigureAwait(false);
             });
 
             if (!response.IsSuccessStatusCode)
             {
-                var responseContent = await response.Content.ReadAsStringAsync(cancellationToken);
+                var responseContent = await response.Content
+                    .ReadAsStringAsync(cancellationToken)
+                    .ConfigureAwait(false);
                 throw new Exception(
                     $"Request failed with status code {response.StatusCode}, content: '{responseContent}'"
                 );
