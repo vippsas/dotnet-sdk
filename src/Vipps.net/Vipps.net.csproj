@@ -15,8 +15,8 @@
     <PackageReference Include="Microsoft.Extensions.Logging" Version="7.0.0" />
     <PackageReference Include="Microsoft.Extensions.Options.ConfigurationExtensions" Version="7.0.0" />
     <PackageReference Include="Polly.Extensions.Http" Version="3.0.0" />
-	<PackageReference Include="Polly.Contrib.WaitAndRetry" Version="1.1.1" />
-	<PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="6.26.1" />
+    <PackageReference Include="Polly.Contrib.WaitAndRetry" Version="1.1.1" />
+    <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="6.26.1" />
     <PackageReference Include="System.Runtime.Caching" Version="7.0.0" />
   </ItemGroup>
 
