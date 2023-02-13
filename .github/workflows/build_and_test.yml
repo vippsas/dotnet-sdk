@@ -29,7 +29,7 @@ jobs:
         run: dotnet build src/ --no-restore
       - name: Test
         run: dotnet test src/ --no-restore --verbosity normal
-      - name: Restore tools
-        run: dotnet tool restore --tool-manifest src/.config/dotnet-tools.json
-      - name: Formatting check
-        run: dotnet csharpier --check src/
+      - name: CSharpier check
+        run: |
+          dotnet tool restore --tool-manifest src/.config/dotnet-tools.json
+          dotnet csharpier --check src/
