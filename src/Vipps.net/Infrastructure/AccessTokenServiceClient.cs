@@ -8,9 +8,7 @@ namespace Vipps.net.Infrastructure
         internal AccessTokenServiceClient(IVippsHttpClient vippsHttpClient)
             : base(vippsHttpClient)
         {
-            Logger = LoggerFactory
-                .Create((ILoggingBuilder lb) => { })
-                .CreateLogger<AccessTokenServiceClient>();
+            Logger = VippsLogging.LoggerFactory.CreateLogger<AccessTokenServiceClient>();
         }
 
         protected override async Task<Dictionary<string, string>?> GetHeaders(

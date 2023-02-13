@@ -8,9 +8,7 @@ namespace Vipps.net.Infrastructure
         internal CheckoutServiceClient(IVippsHttpClient vippsHttpClient)
             : base(vippsHttpClient)
         {
-            Logger = LoggerFactory
-                .Create((ILoggingBuilder lb) => { })
-                .CreateLogger<CheckoutServiceClient>();
+            Logger = VippsLogging.LoggerFactory.CreateLogger<CheckoutServiceClient>();
         }
 
         protected override async Task<Dictionary<string, string>?> GetHeaders(
