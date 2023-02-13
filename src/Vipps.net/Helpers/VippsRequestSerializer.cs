@@ -30,12 +30,12 @@ namespace Vipps.net.Helpers
             {
                 throw new ArgumentException("Response could not be deserialized to {type}", nameof(T));
             }
-            var deserializedDynamic = JsonSerializer.Deserialize<JsonObject>(vippsResponse);
-            if (deserializedDynamic is null)
+            var deserializedRaw = JsonSerializer.Deserialize<JsonObject>(vippsResponse);
+            if (deserializedRaw is null)
             {
                 throw new ArgumentException("Response could not be deserialized to {type}", nameof(JsonObject));
             }
-            deserializedTyped.RawResponse = deserializedDynamic;
+            deserializedTyped.RawResponse = deserializedRaw;
             return deserializedTyped;
         }
 
