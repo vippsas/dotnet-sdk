@@ -1,7 +1,7 @@
 ﻿using System.Buffers;
-using System.Diagnostics;
 using System.Text;
 using System.Text.Json;
+using System.Text.Json.Nodes;
 using Vipps.Models;
 
 namespace Vipps.net.Helpers
@@ -25,7 +25,18 @@ namespace Vipps.net.Helpers
         public static T DeserializeVippsResponse<T>(string vippsResponse)
             where T : VippsResponse
         {
-            return default(T);
+            var deserializedTyped = JsonSerializer.Deserialize<T>(vippsResponse);
+            if (deserializedTyped is null)
+            {
+                throw new ArgumentException("Response could not be deserialized to {type}", nameof(T));
+            }
+            var deserializedDynamic = JsonSerializer.Deserialize<JsonObject>(vippsResponse);
+            if (deserializedDynamic is null)
+            {
+                throw new ArgumentException("Response could not be deserialized to {type}", nameof(JsonObject));
+            }
+            deserializedTyped.RawResponse = deserializedDynamic;
+            return deserializedTyped;
         }
 
         private static string Merge(string request, string extraParameters)
@@ -77,9 +88,6 @@ namespace Vipps.net.Helpers
             JsonElement extraParametersRoot
         )
         {
-            Debug.Assert(requestRoot.ValueKind == JsonValueKind.Object);
-            Debug.Assert(extraParametersRoot.ValueKind == JsonValueKind.Object);
-
             jsonWriter.WriteStartObject();
 
             foreach (var property in requestRoot.EnumerateObject())

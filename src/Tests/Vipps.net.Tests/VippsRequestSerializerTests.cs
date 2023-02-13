@@ -100,7 +100,7 @@ namespace Vipps.net.Tests
         }
 
         [TestMethod]
-        public void Can_Deserialize_Without_Extra_Parameters()
+        public void Can_Deserialize_Response_Without_Extra_Properties()
         {
             InitiateSessionResponse initiateSessionResponse =
                 new()
@@ -110,36 +110,65 @@ namespace Vipps.net.Tests
                     Token = "eynghsvdsjhkfgasf"
                 };
             var serializedResponse = JsonSerializer.Serialize(initiateSessionResponse);
-            var deserializedResponse = JsonSerializer.Deserialize<InitiateSessionResponse>(
-                serializedResponse
-            );
+            var deserializedResponse =
+                VippsRequestSerializer.DeserializeVippsResponse<InitiateSessionResponse>(
+                    serializedResponse
+                );
             Assert.IsNotNull(deserializedResponse);
-            Assert.IsNull(deserializedResponse?.ExtraParameters);
         }
 
         [TestMethod]
-        public void Can_Deserialize_With_Extra_Parameters()
+        public void Can_Deserialize_Response_With_Extra_Properties()
         {
-            InitiateSessionResponse initiateSessionResponse =
-                new()
-                {
-                    CheckoutFrontendUrl = "https://vipps.no/checkout-frontend",
-                    PollingUrl = "https://api.vipps.no/checkout/v3/session/reference101",
-                    Token = "eynghsvdsjhkfgasf",
-                    ExtraParameters = new
-                    {
-                        CancellationUrl = "https://api.vipps.no/checkout/v3/session/reference101/cancel"
-                    }
-                };
+            dynamic initiateSessionResponse = new
+            {
+                checkoutFrontendUrl = "https://vipps.no/checkout-frontend",
+                pollingUrl = "https://api.vipps.no/checkout/v3/session/reference101",
+                token = "eynghsvdsjhkfgasf",
+                cancellationUrl = "https://api.vipps.no/checkout/v3/session/reference101/cancel"
+            };
             var serializedResponse = JsonSerializer.Serialize(initiateSessionResponse);
-            var deserializedResponse = JsonSerializer.Deserialize<InitiateSessionResponse>(
-                serializedResponse
-            );
+            InitiateSessionResponse deserializedResponse =
+                VippsRequestSerializer.DeserializeVippsResponse<InitiateSessionResponse>(
+                    serializedResponse
+                );
             Assert.IsNotNull(deserializedResponse);
-            Assert.IsNotNull(deserializedResponse?.ExtraParameters);
+            Assert.IsNotNull(deserializedResponse.RawResponse);
             Assert.AreEqual(
-                initiateSessionResponse.ExtraParameters.CancellationUrl,
-                deserializedResponse?.ExtraParameters?.CancellationUrl
+                initiateSessionResponse.cancellationUrl,
+                deserializedResponse.RawResponse.First(property => property.Key == "cancellationUrl").Value?.GetValue<string>()
+            );
+        }
+
+        [TestMethod]
+        public void Can_Deserialize_Response_With_Nested_Extra_Properties()
+        {
+            dynamic initiateSessionResponse = new
+            {
+                checkoutFrontendUrl = "https://vipps.no/checkout-frontend",
+                pollingUrl = "https://api.vipps.no/checkout/v3/session/reference101",
+                token = "eynghsvdsjhkfgasf",
+                epayment = new
+                {
+                    pollingUrl = "https://api.vipps.no/epayment/v1/payment/reference101",
+                    captureUrl = "https://api.vipps.no/epayment/v1/payment/reference101/capture"
+                }
+            };
+            var serializedResponse = JsonSerializer.Serialize(initiateSessionResponse);
+            InitiateSessionResponse deserializedResponse =
+                VippsRequestSerializer.DeserializeVippsResponse<InitiateSessionResponse>(
+                    serializedResponse
+                );
+            Assert.IsNotNull(deserializedResponse);
+            Assert.IsNotNull(deserializedResponse.RawResponse);
+            var epaymentObject = deserializedResponse.RawResponse.First(property => property.Key == "epayment").Value?.AsObject();
+            Assert.AreEqual(
+                initiateSessionResponse.epayment.pollingUrl,
+                epaymentObject?.First(property => property.Key == "pollingUrl").Value?.GetValue<string>()
+            );
+            Assert.AreEqual(
+                initiateSessionResponse.epayment.captureUrl,
+                epaymentObject?.First(property => property.Key == "captureUrl").Value?.GetValue<string>()
             );
         }
     }

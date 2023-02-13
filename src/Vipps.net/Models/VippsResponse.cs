@@ -1,10 +1,11 @@
-﻿using System.Text.Json.Serialization;
+﻿using System.Text.Json.Nodes;
+using System.Text.Json.Serialization;
 
 namespace Vipps.Models
 {
     public class VippsResponse
     {
         [JsonIgnore]
-        public dynamic? ExtraParameters { get; set; }
+        public JsonObject RawResponse { get; set; }
     }
 }
