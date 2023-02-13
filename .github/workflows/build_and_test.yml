@@ -32,4 +32,4 @@ jobs:
       - name: Restore tools
         run: dotnet tool restore src/
       - name: Formatting check
-      - run: dotnet csharpier --check src/
+        run: dotnet csharpier --check src/
