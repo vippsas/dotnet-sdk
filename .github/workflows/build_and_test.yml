@@ -29,3 +29,11 @@ jobs:
         run: dotnet build src/ --no-restore
       - name: Test
         run: dotnet test src/ --no-restore --verbosity normal
+  check_formatting:
+    runs-on: ubuntu-latest
+    name: Check Formatting
+    steps:
+      - uses: actions/checkout@v2
+      - run: |
+        dotnet tool restore src/
+        dotnet csharpier src/ --check .
