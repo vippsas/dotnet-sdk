@@ -1,9 +1,4 @@
-﻿using System.Net.Http.Json;
-using System.Text;
-using Microsoft.Extensions.Logging;
-using Vipps.Helpers;
-using Vipps.Models;
-using Vipps.Models.Epayment.CancelPayment;
+﻿using Vipps.Models.Epayment.CancelPayment;
 using Vipps.Models.Epayment.CapturePayment;
 using Vipps.Models.Epayment.CreatePayment;
 using Vipps.Models.Epayment.CreatePaymentRequest;
@@ -11,149 +6,112 @@ using Vipps.Models.Epayment.ForceApprove;
 using Vipps.Models.Epayment.GetPaymentEventLog;
 using Vipps.Models.Epayment.GetPaymentResponse;
 using Vipps.Models.Epayment.RefundPayment;
-using Vipps.net.Helpers;
+using Vipps.net.Infrastructure;
 
-namespace Vipps.Services;
-
-public class EpaymentService
+namespace Vipps.Services
 {
-    private readonly VippsConfiguration _vippsConfiguration;
-    private readonly HttpClient _httpClient;
-    private readonly ILogger<EpaymentService> _logger;
-
-    public EpaymentService(
-        VippsConfiguration vippsConfiguration,
-        HttpClient httpClient,
-        ILogger<EpaymentService> logger
-    )
+    public static class EpaymentService
     {
-        _vippsConfiguration = vippsConfiguration;
-        _httpClient = httpClient;
-        _logger = logger;
-
-        _httpClient.DefaultRequestHeaders.Add(
-            "Ocp-Apim-Subscription-Key",
-            _vippsConfiguration.SubscriptionKey
-        );
-        _httpClient.DefaultRequestHeaders.Add(
-            "Merchant-Serial-Number",
-            _vippsConfiguration.MerchantSerialNumber
-        );
-        _httpClient.DefaultRequestHeaders.Add("Vipps-System-Name", "checkout-sandbox");
-        _httpClient.DefaultRequestHeaders.Add("Vipps-System-Version", "0.9");
-        _httpClient.DefaultRequestHeaders.Add("Vipps-System-Plugin-Name", "checkout-sandbox");
-        _httpClient.DefaultRequestHeaders.Add("Vipps-System-Plugin-Version", "0.9");
-
-        _httpClient.BaseAddress = new Uri(
-            $"{vippsConfiguration.BaseUrl}/epayment/v1/test/payments"
-        );
-    }
-
-    public async Task<CreatePaymentResponse> CreatePayment(
-        CreatePaymentRequest createPaymentRequest
-    )
-    {
-        return await ExecuteEpaymentRequest<CreatePaymentResponse>(
-            "approve",
-            null,
-            createPaymentRequest
-        );
-    }
-
-    public async Task<GetPaymentResponse> GetPayment(string reference)
-    {
-        return await ExecuteEpaymentRequest<GetPaymentResponse>("approve", reference, null);
-    }
-
-    public async Task<IEnumerable<GetPaymentEventLog>> GetPaymentEventLog(string reference)
-    {
-        return await ExecuteEpaymentRequest<IEnumerable<GetPaymentEventLog>>(
-            "approve",
-            reference,
-            null
-        );
-    }
-
-    public async Task<CancelPaymentResponse> CancelPayment(string reference)
-    {
-        return await ExecuteEpaymentRequest<CancelPaymentResponse>("approve", reference, null);
-    }
-
-    public async Task<CapturePaymentResponse> CapturePayment(
-        CapturePaymentRequest capturePaymentRequest
-    )
-    {
-        return await ExecuteEpaymentRequest<CapturePaymentResponse>(
-            "approve",
-            null,
-            capturePaymentRequest
-        );
-    }
-
-    public async Task<RefundPaymentResponse> RefundPayment(string reference)
-    {
-        return await ExecuteEpaymentRequest<RefundPaymentResponse>("approve", reference, null);
-    }
-
-    public async Task ForceApprovePayment(string reference, ForceApproveRequest forceApproveRequest)
-    {
-        await ExecuteEpaymentRequest<VoidType>("approve", reference, forceApproveRequest);
-    }
-
-    private async Task<TResponse> ExecuteEpaymentRequest<TResponse>(
-        string path,
-        string? reference,
-        VippsRequest? data
-    )
-    {
-        var retryPolicy = PolicyHelper.GetRetryPolicyWithFallback(
-            _logger,
-            $"Request for {path} failed even after retries"
-        );
-
-        var requestPath = $"{_httpClient.BaseAddress}/";
-        if (reference is not null)
-            requestPath += reference;
-        requestPath += path;
-
-        var request = new HttpRequestMessage
+        public static async Task<CreatePaymentResponse> CreatePayment(
+            CreatePaymentRequest createPaymentRequest,
+            CancellationToken cancellationToken = default
+        )
         {
-            RequestUri = new Uri(requestPath),
-            Method = reference is not null ? HttpMethod.Get : HttpMethod.Post,
-            Content = CreateRequestContent(data),
-            Headers = { { "Idempotency-Key", Guid.NewGuid().ToString() } }
-        };
-
-        var response = await retryPolicy.ExecuteAsync(
-            async () => await _httpClient.SendAsync(request)
-        );
-
-        if (!response.IsSuccessStatusCode)
-        {
-            throw new Exception($"Request failed with status code {response.StatusCode}");
+            return await VippsServices.EpaymentServiceClient.ExecuteRequest<
+                CreatePaymentRequest,
+                CreatePaymentResponse
+            >(GetRequestPath(null, null), HttpMethod.Post, createPaymentRequest, cancellationToken);
         }
 
-        if (typeof(TResponse) != typeof(VoidType))
+        public static async Task<GetPaymentResponse> GetPayment(
+            string reference,
+            CancellationToken cancellationToken = default
+        )
         {
-            return await response.Content.ReadFromJsonAsync<TResponse>()
-                ?? throw new Exception("Failed deserializing response");
+            return await VippsServices.EpaymentServiceClient.ExecuteRequest<GetPaymentResponse>(
+                GetRequestPath(reference, null),
+                HttpMethod.Get,
+                cancellationToken
+            );
         }
 
-        return default!;
-    }
-
-    private static HttpContent? CreateRequestContent(VippsRequest? vippsRequest)
-    {
-        if (vippsRequest is null)
+        public static async Task<IEnumerable<GetPaymentEventLog>> GetPaymentEventLog(
+            string reference,
+            CancellationToken cancellationToken = default
+        )
         {
-            return null;
+            return await VippsServices.EpaymentServiceClient.ExecuteRequest<
+                IEnumerable<GetPaymentEventLog>
+            >(GetRequestPath(reference, "events"), HttpMethod.Get, cancellationToken);
         }
-        var serializedRequest = VippsRequestSerializer.SerializeVippsRequest(vippsRequest);
-        return new StringContent(serializedRequest, Encoding.UTF8, "application/json");
-    }
 
-    private sealed class VoidType
-    {
-        public VoidType() { }
+        public static async Task<CancelPaymentResponse> CancelPayment(
+            string reference,
+            CancellationToken cancellationToken = default
+        )
+        {
+            return await VippsServices.EpaymentServiceClient.ExecuteRequest<CancelPaymentResponse>(
+                GetRequestPath(reference, "cancel"),
+                HttpMethod.Post,
+                cancellationToken
+            );
+        }
+
+        public static async Task<CapturePaymentResponse> CapturePayment(
+            CapturePaymentRequest capturePaymentRequest,
+            CancellationToken cancellationToken = default
+        )
+        {
+            return await VippsServices.EpaymentServiceClient.ExecuteRequest<
+                CapturePaymentRequest,
+                CapturePaymentResponse
+            >(
+                GetRequestPath(null, "capture"),
+                HttpMethod.Post,
+                capturePaymentRequest,
+                cancellationToken
+            );
+        }
+
+        public static async Task<RefundPaymentResponse> RefundPayment(
+            string reference,
+            CancellationToken cancellationToken = default
+        )
+        {
+            return await VippsServices.EpaymentServiceClient.ExecuteRequest<RefundPaymentResponse>(
+                GetRequestPath(reference, "refund"),
+                HttpMethod.Post,
+                cancellationToken
+            );
+        }
+
+        public static async Task ForceApprovePayment(
+            string reference,
+            ForceApproveRequest forceApproveRequest,
+            CancellationToken cancellationToken = default
+        )
+        {
+            await VippsServices.EpaymentServiceClient.ExecuteRequest(
+                GetRequestPath(reference, "approve"),
+                HttpMethod.Post,
+                forceApproveRequest,
+                cancellationToken
+            );
+        }
+
+        private static string GetRequestPath(string? reference, string? path)
+        {
+            var requestPath = $"{VippsConfiguration.BaseUrl}/epayment/v1/payments";
+            if (reference is not null)
+            {
+                requestPath += $"/{reference}";
+            }
+            if (path is not null)
+            {
+                requestPath += $"/{path}";
+            }
+
+            return requestPath;
+        }
     }
 }

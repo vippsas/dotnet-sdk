@@ -1,6 +1,4 @@
-﻿using System.Text.Json.Serialization;
-
-namespace Vipps.Models.Epayment.CreatePaymentRequest;
+﻿namespace Vipps.Models.Epayment.CreatePaymentRequest;
 
 public class CreatePaymentRequest : VippsRequest
 {
@@ -11,22 +9,22 @@ public class CreatePaymentRequest : VippsRequest
     public bool? DirectCapture { get; init; }
 
     [property: JsonPropertyName("customer")]
-    public Customer Customer { get; init; }
+    public Customer? Customer { get; init; }
 
     [property: JsonPropertyName("customerInteraction")]
     public string CustomerInteraction { get; init; }
 
     [property: JsonPropertyName("industryData")]
-    public IndustryData IndustryData { get; init; }
+    public IndustryData? IndustryData { get; init; }
 
     [property: JsonPropertyName("receipt")]
-    public Receipt Receipt { get; init; }
+    public Receipt? Receipt { get; init; }
 
     [property: JsonPropertyName("paymentMethod")]
     public PaymentMethod PaymentMethod { get; init; }
 
     [property: JsonPropertyName("profile")]
-    public Profile Profile { get; init; }
+    public Profile? Profile { get; init; }
 
     [property: JsonPropertyName("reference")]
     public string Reference { get; init; }
@@ -35,13 +33,13 @@ public class CreatePaymentRequest : VippsRequest
     public string ReturnUrl { get; init; }
 
     [property: JsonPropertyName("userFlow")]
-    public string UserFlow { get; init; }
+    public string? UserFlow { get; init; }
 
     [property: JsonPropertyName("expiresAt")]
     public DateTime? ExpiresAt { get; init; }
 
     [property: JsonPropertyName("qrFormat")]
-    public QrFormat QrFormat { get; init; }
+    public QrFormat? QrFormat { get; init; }
 
     [property: JsonPropertyName("paymentDescription")]
     public string PaymentDescription { get; init; }
