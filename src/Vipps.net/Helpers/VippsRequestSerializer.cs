@@ -1,7 +1,7 @@
 ﻿using System.Buffers;
-using System.Diagnostics;
 using System.Text;
 using System.Text.Json;
+using System.Text.Json.Nodes;
 using Vipps.Models;
 
 namespace Vipps.net.Helpers
@@ -10,37 +10,50 @@ namespace Vipps.net.Helpers
     {
         public static string SerializeVippsRequest(VippsRequest vippsRequest)
         {
-            dynamic? extraParameters = vippsRequest.ExtraParameters;
-            string serializedRequest = JsonSerializer.Serialize(
-                vippsRequest,
-                vippsRequest.GetType()
-            );
-            if (extraParameters is not null)
+            var serializedRequest = JsonSerializer.Serialize(vippsRequest, vippsRequest.GetType());
+            if (vippsRequest.ExtraParameters is not null)
             {
                 dynamic serializedExtraParameters = JsonSerializer.Serialize(
-                    extraParameters,
-                    extraParameters.GetType()
+                    vippsRequest.ExtraParameters,
+                    vippsRequest.ExtraParameters.GetType()
                 );
                 serializedRequest = Merge(serializedRequest, serializedExtraParameters);
             }
             return serializedRequest;
         }
 
+        public static T DeserializeVippsResponse<T>(string vippsResponse)
+            where T : VippsResponse
+        {
+            var deserializedTyped = JsonSerializer.Deserialize<T>(vippsResponse);
+            if (deserializedTyped is null)
+            {
+                throw new ArgumentException("Response could not be deserialized to {type}", nameof(T));
+            }
+            var deserializedRaw = JsonSerializer.Deserialize<JsonObject>(vippsResponse);
+            if (deserializedRaw is null)
+            {
+                throw new ArgumentException("Response could not be deserialized to {type}", nameof(JsonObject));
+            }
+            deserializedTyped.RawResponse = deserializedRaw;
+            return deserializedTyped;
+        }
+
         private static string Merge(string request, string extraParameters)
         {
-            ArrayBufferWriter<byte> outputBuffer = new ArrayBufferWriter<byte>();
+            var outputBuffer = new ArrayBufferWriter<byte>();
 
-            using (JsonDocument parsedRequest = JsonDocument.Parse(request))
-            using (JsonDocument parsedExtraParameters = JsonDocument.Parse(extraParameters))
+            using (var parsedRequest = JsonDocument.Parse(request))
+            using (var parsedExtraParameters = JsonDocument.Parse(extraParameters))
             using (
-                Utf8JsonWriter jsonWriter = new Utf8JsonWriter(
+                var jsonWriter = new Utf8JsonWriter(
                     outputBuffer,
                     new JsonWriterOptions { Indented = true }
                 )
             )
             {
-                JsonElement requestRoot = parsedRequest.RootElement;
-                JsonElement extraParametersRoot = parsedExtraParameters.RootElement;
+                var requestRoot = parsedRequest.RootElement;
+                var extraParametersRoot = parsedExtraParameters.RootElement;
 
                 if (
                     requestRoot.ValueKind != JsonValueKind.Array
@@ -75,22 +88,19 @@ namespace Vipps.net.Helpers
             JsonElement extraParametersRoot
         )
         {
-            Debug.Assert(requestRoot.ValueKind == JsonValueKind.Object);
-            Debug.Assert(extraParametersRoot.ValueKind == JsonValueKind.Object);
-
             jsonWriter.WriteStartObject();
 
-            foreach (JsonProperty property in requestRoot.EnumerateObject())
+            foreach (var property in requestRoot.EnumerateObject())
             {
                 if (
-                    extraParametersRoot.TryGetProperty(property.Name, out JsonElement newValue)
+                    extraParametersRoot.TryGetProperty(property.Name, out var newValue)
                     && newValue.ValueKind != JsonValueKind.Null
                 )
                 {
                     jsonWriter.WritePropertyName(property.Name);
 
-                    JsonElement originalValue = property.Value;
-                    JsonValueKind originalValueKind = originalValue.ValueKind;
+                    var originalValue = property.Value;
+                    var originalValueKind = originalValue.ValueKind;
 
                     if (
                         newValue.ValueKind == JsonValueKind.Object
@@ -117,7 +127,7 @@ namespace Vipps.net.Helpers
                 }
             }
 
-            foreach (JsonProperty property in extraParametersRoot.EnumerateObject())
+            foreach (var property in extraParametersRoot.EnumerateObject())
             {
                 if (!requestRoot.TryGetProperty(property.Name, out _))
                 {
@@ -136,11 +146,11 @@ namespace Vipps.net.Helpers
         {
             jsonWriter.WriteStartArray();
 
-            foreach (JsonElement element in originalValue.EnumerateArray())
+            foreach (var element in originalValue.EnumerateArray())
             {
                 element.WriteTo(jsonWriter);
             }
-            foreach (JsonElement element in newValue.EnumerateArray())
+            foreach (var element in newValue.EnumerateArray())
             {
                 element.WriteTo(jsonWriter);
             }
