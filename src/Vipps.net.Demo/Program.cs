@@ -8,7 +8,9 @@ internal sealed class Program
     private static void Main(string[] args)
     {
         var builder = WebApplication.CreateBuilder(args);
+        // The following line fetches the name of the key vault to be used for fetching secretes.
         var host = builder.Configuration.GetValue<string>("keyvaultHost");
+        // The following lines adds secrets from the key vault to the configuration.
         builder.Configuration.AddAzureKeyVault(
             new Uri($"https://{host}.vault.azure.net/"),
             new DefaultAzureCredential()
@@ -21,11 +23,11 @@ internal sealed class Program
         // The following line sets up dependency injection of an http Client to be used for CheckoutController.
         builder.Services.AddScoped<CheckoutController>().AddHttpClient();
 
-        // The following (commented out) line configures vipps from a configuration section named "Vipps"
+        // The following (commented out) line configures vipps from a configuration section named "Vipps".
         //builder.Services.ConfigureVipps(builder.Configuration, "Vipps");
 
 
-        // The following lines initialises VippConfigurationOptions with values fetched from key vault
+        // The following lines initialises VippConfigurationOptions with values fetched from key vault.
         var vippsConfigurationOptions = new VippsConfigurationOptions
         {
             ClientId = builder.Configuration.GetValue<string>("CLIENT-ID")!,
