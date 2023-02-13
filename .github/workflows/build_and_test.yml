@@ -25,8 +25,8 @@ jobs:
         with:
           dotnet-version: ${{ matrix.dotnet-version }}
       - name: Install dependencies
-        run: dotnet restore
+        run: dotnet restore /src
       - name: Build
-        run: dotnet build --configuration ${{ matrix.configuration }} --no-restore
+        run: dotnet build /src --configuration ${{ matrix.configuration }} --no-restore
       - name: Test
-        run: dotnet test --no-restore --verbosity normal
+        run: dotnet test /src --no-restore --verbosity normal
