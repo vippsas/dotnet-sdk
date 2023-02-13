@@ -1,4 +1,8 @@
-﻿namespace Vipps.net.Tests
+﻿using System.Text.Json;
+using Vipps.Models.Checkout.InitiateSession;
+using Vipps.net.Helpers;
+
+namespace Vipps.net.Tests
 {
     [TestClass]
     public class VippsRequestSerializerTests
