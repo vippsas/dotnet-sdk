@@ -6,7 +6,8 @@ namespace Vipps.net.Infrastructure
 {
     internal sealed class EpaymentServiceClient : BaseServiceClient
     {
-        internal EpaymentServiceClient(IVippsHttpClient vippsHttpClient) : base(vippsHttpClient)
+        internal EpaymentServiceClient(IVippsHttpClient vippsHttpClient)
+            : base(vippsHttpClient)
         {
             Logger = VippsLogging.LoggerFactory.CreateLogger<EpaymentServiceClient>();
         }
