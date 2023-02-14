@@ -8,6 +8,6 @@
   <ItemGroup>
     <PackageReference Include="Azure.Extensions.AspNetCore.Configuration.Secrets" Version="1.2.2" />
     <PackageReference Include="Azure.Identity" Version="1.8.2" />
-    <PackageReference Include="Vipps.net" Version="0.9.2" />
+    <PackageReference Include="Vipps.net" Version="0.9.3" />
   </ItemGroup>
 </Project>

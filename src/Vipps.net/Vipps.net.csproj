@@ -5,7 +5,7 @@
     <ImplicitUsings>disable</ImplicitUsings>
     <Nullable>disable</Nullable>
     <PackageId>Vipps.net</PackageId>
-    <Version>0.9.2</Version>
+    <Version>0.9.3</Version>
     <Authors>Vipps</Authors>
     <Company>Vipps Mobilepay</Company>
   </PropertyGroup>
