@@ -1,6 +1,6 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Linq;
-using System.Runtime.Caching;
 using System.Security.Cryptography;
 using System.Text;
 using Vipps.Models.Epayment.AccessToken;
@@ -12,11 +12,14 @@ namespace Vipps.Services
 #pragma warning disable IDE0090 // Use 'new(...)'
         private static readonly AccessTokenLifetimeService _lifetimeService =
             new AccessTokenLifetimeService();
-        private static readonly MemoryCache _memoryCache = new MemoryCache(
-            nameof(AccessTokenCacheService)
-        );
-#pragma warning restore IDE0090 // Use 'new(...)'
+
         private static readonly TimeSpan _backoffTimespan = TimeSpan.FromMinutes(2);
+        private static readonly ConcurrentDictionary<
+            string,
+            (AccessToken token, DateTimeOffset validTo)
+        > _dictionary =
+            new ConcurrentDictionary<string, (AccessToken token, DateTimeOffset validTo)>();
+#pragma warning restore IDE0090 // Use 'new(...)'
         private const string KeyPrefix = "access-token-";
 
         public static void Add(string key, AccessToken token)
@@ -30,13 +33,27 @@ namespace Vipps.Services
                 && tokenValidToWithBackoff.Value > DateTimeOffset.Now
             )
             {
-                _memoryCache.Set(GetPrefixedHashedKey(key), token, tokenValidToWithBackoff.Value);
+                _dictionary.AddOrUpdate(
+                    GetPrefixedHashedKey(key),
+                    (token, tokenValidToWithBackoff.Value),
+                    (oldToken, oldValidTo) => (token, tokenValidToWithBackoff.Value)
+                );
             }
         }
 
         public static AccessToken Get(string key)
         {
-            return _memoryCache.Get(GetPrefixedHashedKey(key)) as AccessToken;
+            if (_dictionary.TryGetValue(GetPrefixedHashedKey(key), out var values))
+            {
+                if (values.validTo < DateTimeOffset.Now)
+                {
+                    _dictionary.TryRemove(key, out _);
+                    return null;
+                }
+                return values.token;
+            }
+
+            return null;
         }
 
         private static string GetPrefixedHashedKey(string key)
