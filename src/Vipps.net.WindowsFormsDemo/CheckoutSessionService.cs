@@ -5,7 +5,7 @@ using Vipps.Services;
 
 namespace Vipps.net.WindowsFormsDemo
 {
-    internal static class CheckoutSessionCreator
+    internal static class CheckoutSessionService
     {
         internal static async Task<string> CreateSession()
         {

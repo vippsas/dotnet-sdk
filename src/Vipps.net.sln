@@ -16,7 +16,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Vipps.net.Demo", "Vipps.net
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Vipps.net.WindowsFormsDemo", "Vipps.net.WindowsFormsDemo\Vipps.net.WindowsFormsDemo.csproj", "{8C10598F-5D12-40FF-987E-E248996CFB62}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Vipps.net.AspCore31Demo", "Vipps.net.AspCore31Demo\Vipps.net.AspCore31Demo.csproj", "{09540EAC-72F5-4562-910E-56299A663C0A}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Vipps.net.AspCoreDemo", "Vipps.net.AspCoreDemo\Vipps.net.AspCoreDemo.csproj", "{09540EAC-72F5-4562-910E-56299A663C0A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

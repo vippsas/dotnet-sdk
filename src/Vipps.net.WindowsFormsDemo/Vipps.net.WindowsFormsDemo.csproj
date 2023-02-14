@@ -155,7 +155,7 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="CheckoutSessionCreator.cs" />
+    <Compile Include="CheckoutSessionService.cs" />
     <Compile Include="Form1.cs">
       <SubType>Form</SubType>
     </Compile>

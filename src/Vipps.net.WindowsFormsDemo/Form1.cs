@@ -12,7 +12,7 @@ namespace Vipps.net.WindowsFormsDemo
 
         private async void button1_Click(object sender, EventArgs e)
         {
-            var pollingUrl = await CheckoutSessionCreator.CreateSession();
+            var pollingUrl = await CheckoutSessionService.CreateSession();
             label1.Text = pollingUrl;
         }
 
