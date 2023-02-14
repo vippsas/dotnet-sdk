@@ -1,4 +1,6 @@
-﻿using System.Runtime.Caching;
+﻿using System;
+using System.Linq;
+using System.Runtime.Caching;
 using System.Security.Cryptography;
 using System.Text;
 using Vipps.Models.Epayment.AccessToken;
@@ -7,8 +9,13 @@ namespace Vipps.Services
 {
     public static class AccessTokenCacheService
     {
-        private static readonly AccessTokenLifetimeService _lifetimeService = new();
-        private static readonly MemoryCache _memoryCache = new(nameof(AccessTokenCacheService));
+#pragma warning disable IDE0090 // Use 'new(...)'
+        private static readonly AccessTokenLifetimeService _lifetimeService =
+            new AccessTokenLifetimeService();
+        private static readonly MemoryCache _memoryCache = new MemoryCache(
+            nameof(AccessTokenCacheService)
+        );
+#pragma warning restore IDE0090 // Use 'new(...)'
         private static readonly TimeSpan _backoffTimespan = TimeSpan.FromMinutes(2);
         private const string KeyPrefix = "access-token-";
 
@@ -27,7 +34,7 @@ namespace Vipps.Services
             }
         }
 
-        public static AccessToken? Get(string key)
+        public static AccessToken Get(string key)
         {
             return _memoryCache.Get(GetPrefixedHashedKey(key)) as AccessToken;
         }
@@ -39,8 +46,19 @@ namespace Vipps.Services
 
         private static string GetHashedKey(string key)
         {
-            var hash = SHA256.HashData(Encoding.UTF8.GetBytes(key));
-            return Convert.ToHexString(hash);
+            // Not fully compatible with all target frameworks
+            //var hash = SHA256.HashData(Encoding.UTF8.GetBytes(key));
+            //return Convert.ToHexString(hash);
+
+#pragma warning disable CA1850 // Prefer static 'System.Security.Cryptography.SHA256.HashData' method over 'ComputeHash'
+            byte[] hash = null;
+            using (var sha256 = SHA256.Create())
+            {
+                hash = sha256.ComputeHash(Encoding.UTF8.GetBytes(key));
+            }
+#pragma warning restore CA1850 // Prefer static 'System.Security.Cryptography.SHA256.HashData' method over 'ComputeHash'
+
+            return string.Join(string.Empty, hash.Select(x => x.ToString("X2")));
         }
     }
 }

@@ -1,4 +1,4 @@
-﻿using System.Text.Json.Nodes;
+﻿using System.Text.Json;
 using System.Text.Json.Serialization;
 
 namespace Vipps.Models
@@ -6,6 +6,6 @@ namespace Vipps.Models
     public class VippsResponse
     {
         [JsonIgnore]
-        public JsonObject RawResponse { get; set; }
+        public JsonElement RawResponse { get; set; }
     }
 }

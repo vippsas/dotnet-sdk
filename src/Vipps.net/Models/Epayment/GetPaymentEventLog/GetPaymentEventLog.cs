@@ -1,42 +1,44 @@
-﻿using System.Text.Json.Serialization;
+﻿using System;
+using System.Text.Json.Serialization;
 
-namespace Vipps.Models.Epayment.GetPaymentEventLog;
-
-public class Amount
+namespace Vipps.Models.Epayment.GetPaymentEventLog
 {
-    [property: JsonPropertyName("currency")]
-    public string Currency { get; init; }
+    public class Amount
+    {
+        [property: JsonPropertyName("currency")]
+        public string Currency { get; private set; }
 
-    [property: JsonPropertyName("value")]
-    public int Value { get; init; }
-}
+        [property: JsonPropertyName("value")]
+        public int Value { get; private set; }
+    }
 
-public class GetPaymentEventLog
-{
-    [property: JsonPropertyName("reference")]
-    public string Reference { get; init; }
+    public class GetPaymentEventLog
+    {
+        [property: JsonPropertyName("reference")]
+        public string Reference { get; private set; }
 
-    [property: JsonPropertyName("pspReference")]
-    public string PspReference { get; init; }
+        [property: JsonPropertyName("pspReference")]
+        public string PspReference { get; private set; }
 
-    [property: JsonPropertyName("name")]
-    public string Name { get; init; }
+        [property: JsonPropertyName("name")]
+        public string Name { get; private set; }
 
-    [property: JsonPropertyName("paymentAction")]
-    public string PaymentAction { get; init; }
+        [property: JsonPropertyName("paymentAction")]
+        public string PaymentAction { get; private set; }
 
-    [property: JsonPropertyName("amount")]
-    public Amount Amount { get; init; }
+        [property: JsonPropertyName("amount")]
+        public Amount Amount { get; private set; }
 
-    [property: JsonPropertyName("timestamp")]
-    public DateTime Timestamp { get; init; }
+        [property: JsonPropertyName("timestamp")]
+        public DateTime Timestamp { get; private set; }
 
-    [property: JsonPropertyName("processedAt")]
-    public DateTime ProcessedAt { get; init; }
+        [property: JsonPropertyName("processedAt")]
+        public DateTime ProcessedAt { get; private set; }
 
-    [property: JsonPropertyName("idempotencyKey")]
-    public string IdempotencyKey { get; init; }
+        [property: JsonPropertyName("idempotencyKey")]
+        public string IdempotencyKey { get; private set; }
 
-    [property: JsonPropertyName("success")]
-    public bool Success { get; init; }
+        [property: JsonPropertyName("success")]
+        public bool Success { get; private set; }
+    }
 }

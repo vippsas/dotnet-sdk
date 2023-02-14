@@ -1,6 +1,11 @@
-﻿using System.Net.Http.Headers;
-using System.Net.Http.Json;
+﻿using System;
+using System.Collections.Generic;
+using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Text;
+using System.Text.Json;
+using System.Threading;
+using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using Vipps.Helpers;
 using Vipps.Models;
@@ -10,7 +15,11 @@ namespace Vipps.net.Infrastructure
 {
     internal abstract class BaseServiceClient
     {
-        protected virtual ILogger<BaseServiceClient> Logger { get; init; }
+        protected ILogger<BaseServiceClient> _logger;
+        protected virtual ILogger<BaseServiceClient> Logger
+        {
+            get { return _logger; }
+        }
         protected readonly IVippsHttpClient _vippsHttpClient;
 
         protected BaseServiceClient(IVippsHttpClient vippsHttpClient)
@@ -21,10 +30,11 @@ namespace Vipps.net.Infrastructure
         public async Task<TResponse> ExecuteRequest<TRequest, TResponse>(
             string path,
             HttpMethod httpMethod,
-            TRequest? data,
+            TRequest data,
             CancellationToken cancellationToken = default
         )
             where TRequest : VippsRequest
+            where TResponse : class
         {
             return await ExecuteRequestBaseAndParse<TResponse>(
                 path,
@@ -37,7 +47,7 @@ namespace Vipps.net.Infrastructure
         public async Task ExecuteRequest<TRequest>(
             string path,
             HttpMethod httpMethod,
-            TRequest? data,
+            TRequest data,
             CancellationToken cancellationToken = default
         )
             where TRequest : VippsRequest
@@ -55,6 +65,7 @@ namespace Vipps.net.Infrastructure
             HttpMethod httpMethod,
             CancellationToken cancellationToken = default
         )
+            where TResponse : class
         {
             return await ExecuteRequestBaseAndParse<TResponse>(
                 path,
@@ -64,19 +75,20 @@ namespace Vipps.net.Infrastructure
             );
         }
 
-        protected virtual async Task<Dictionary<string, string>?> GetHeaders(
+        protected virtual async Task<Dictionary<string, string>> GetHeaders(
             CancellationToken cancellationToken
         )
         {
-            return await Task.FromResult((Dictionary<string, string>?)null);
+            return await Task.FromResult((Dictionary<string, string>)null);
         }
 
         private async Task<TResponse> ExecuteRequestBaseAndParse<TResponse>(
             string path,
             HttpMethod httpMethod,
-            HttpContent? httpContent,
+            HttpContent httpContent,
             CancellationToken cancellationToken
         )
+            where TResponse : class
         {
             var response = await ExecuteRequestBase(
                 path,
@@ -84,15 +96,22 @@ namespace Vipps.net.Infrastructure
                 httpContent,
                 cancellationToken
             );
-            return await response.Content
-                    .ReadFromJsonAsync<TResponse>(cancellationToken: cancellationToken)
-                    .ConfigureAwait(false) ?? throw new Exception("Failed deserializing response");
+#pragma warning disable CA2016 // Forward the 'CancellationToken' parameter to methods
+            var contentString = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
+#pragma warning restore CA2016 // Forward the 'CancellationToken' parameter to methods
+            var responseObject = JsonSerializer.Deserialize<TResponse>(contentString);
+            if (responseObject is null)
+            {
+                throw new Exception("Failed deserializing response");
+            }
+
+            return responseObject;
         }
 
         private async Task<HttpResponseMessage> ExecuteRequestBase(
             string path,
             HttpMethod httpMethod,
-            HttpContent? httpContent,
+            HttpContent httpContent,
             CancellationToken cancellationToken
         )
         {
@@ -109,7 +128,7 @@ namespace Vipps.net.Infrastructure
                     Method = httpMethod,
                     Content = httpContent,
                 };
-                if (headers is not null)
+                if (headers != null)
                 {
                     foreach (var item in headers)
                     {
@@ -123,9 +142,11 @@ namespace Vipps.net.Infrastructure
 
             if (!response.IsSuccessStatusCode)
             {
+#pragma warning disable CA2016 // Forward the 'CancellationToken' parameter to methods
                 var responseContent = await response.Content
-                    .ReadAsStringAsync(cancellationToken)
+                    .ReadAsStringAsync()
                     .ConfigureAwait(false);
+#pragma warning restore CA2016 // Forward the 'CancellationToken' parameter to methods
                 throw new Exception(
                     $"Request failed with status code {response.StatusCode}, content: '{responseContent}'"
                 );
@@ -134,7 +155,7 @@ namespace Vipps.net.Infrastructure
             return response;
         }
 
-        private static HttpContent? CreateRequestContent<TRequest>(TRequest? vippsRequest)
+        private static HttpContent CreateRequestContent<TRequest>(TRequest vippsRequest)
             where TRequest : VippsRequest
         {
             if (vippsRequest is null)

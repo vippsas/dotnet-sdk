@@ -1,7 +1,7 @@
-﻿using System.Buffers;
+﻿using System;
+using System.IO;
 using System.Text;
 using System.Text.Json;
-using System.Text.Json.Nodes;
 using Vipps.Models;
 
 namespace Vipps.net.Helpers
@@ -10,8 +10,12 @@ namespace Vipps.net.Helpers
     {
         public static string SerializeVippsRequest(VippsRequest vippsRequest)
         {
-            var serializedRequest = JsonSerializer.Serialize(vippsRequest, vippsRequest.GetType());
-            if (vippsRequest.ExtraParameters is not null)
+            dynamic extraParameters = vippsRequest.ExtraParameters;
+            string serializedRequest = JsonSerializer.Serialize(
+                vippsRequest,
+                vippsRequest.GetType()
+            );
+            if (extraParameters != null)
             {
                 dynamic serializedExtraParameters = JsonSerializer.Serialize(
                     vippsRequest.ExtraParameters,
@@ -28,26 +32,31 @@ namespace Vipps.net.Helpers
             var deserializedTyped = JsonSerializer.Deserialize<T>(vippsResponse);
             if (deserializedTyped is null)
             {
-                throw new ArgumentException("Response could not be deserialized to {type}", nameof(T));
+                throw new ArgumentException(
+                    "Response could not be deserialized to {type}",
+                    nameof(T)
+                );
             }
-            var deserializedRaw = JsonSerializer.Deserialize<JsonObject>(vippsResponse);
-            if (deserializedRaw is null)
-            {
-                throw new ArgumentException("Response could not be deserialized to {type}", nameof(JsonObject));
-            }
+            var deserializedRaw = JsonSerializer.Deserialize<JsonElement>(vippsResponse);
+            //if (deserializedRaw is null)
+            //{
+            //    throw new ArgumentException(
+            //        "Response could not be deserialized to {type}",
+            //        nameof(JsonElement)
+            //    );
+            //}
             deserializedTyped.RawResponse = deserializedRaw;
             return deserializedTyped;
         }
 
         private static string Merge(string request, string extraParameters)
         {
-            var outputBuffer = new ArrayBufferWriter<byte>();
-
-            using (var parsedRequest = JsonDocument.Parse(request))
-            using (var parsedExtraParameters = JsonDocument.Parse(extraParameters))
+            using (JsonDocument parsedRequest = JsonDocument.Parse(request))
+            using (JsonDocument parsedExtraParameters = JsonDocument.Parse(extraParameters))
+            using (MemoryStream memstream = new MemoryStream())
             using (
-                var jsonWriter = new Utf8JsonWriter(
-                    outputBuffer,
+                Utf8JsonWriter jsonWriter = new Utf8JsonWriter(
+                    memstream,
                     new JsonWriterOptions { Indented = true }
                 )
             )
@@ -77,9 +86,8 @@ namespace Vipps.net.Helpers
                 {
                     MergeObjects(jsonWriter, requestRoot, extraParametersRoot);
                 }
+                return Encoding.UTF8.GetString(memstream.ToArray());
             }
-
-            return Encoding.UTF8.GetString(outputBuffer.WrittenSpan);
         }
 
         private static void MergeObjects(

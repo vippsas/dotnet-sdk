@@ -1,4 +1,8 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using System;
+using System.Collections.Generic;
+using System.Threading;
+using System.Threading.Tasks;
+using Microsoft.Extensions.Logging;
 using Vipps.net.Helpers;
 using Vipps.Services;
 
@@ -9,10 +13,10 @@ namespace Vipps.net.Infrastructure
         internal EpaymentServiceClient(IVippsHttpClient vippsHttpClient)
             : base(vippsHttpClient)
         {
-            Logger = VippsLogging.LoggerFactory.CreateLogger<EpaymentServiceClient>();
+            _logger = VippsLogging.LoggerFactory.CreateLogger<EpaymentServiceClient>();
         }
 
-        protected override async Task<Dictionary<string, string>?> GetHeaders(
+        protected override async Task<Dictionary<string, string>> GetHeaders(
             CancellationToken cancellationToken
         )
         {

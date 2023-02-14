@@ -1,4 +1,8 @@
-﻿using Vipps.Models.Checkout.GetSession;
+﻿using System;
+using System.Net.Http;
+using System.Threading;
+using System.Threading.Tasks;
+using Vipps.Models.Checkout.GetSession;
 using Vipps.Models.Checkout.InitiateSession;
 using Vipps.net.Infrastructure;
 

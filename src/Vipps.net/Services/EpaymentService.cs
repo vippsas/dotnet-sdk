@@ -1,4 +1,8 @@
-﻿using Vipps.Models.Epayment.CancelPayment;
+﻿using System.Collections.Generic;
+using System.Net.Http;
+using System.Threading;
+using System.Threading.Tasks;
+using Vipps.Models.Epayment.CancelPayment;
 using Vipps.Models.Epayment.CapturePayment;
 using Vipps.Models.Epayment.CreatePayment;
 using Vipps.Models.Epayment.CreatePaymentRequest;
@@ -99,14 +103,14 @@ namespace Vipps.Services
             );
         }
 
-        private static string GetRequestPath(string? reference, string? path)
+        private static string GetRequestPath(string reference, string path)
         {
             var requestPath = $"{VippsConfiguration.BaseUrl}/epayment/v1/payments";
-            if (reference is not null)
+            if (reference != null)
             {
                 requestPath += $"/{reference}";
             }
-            if (path is not null)
+            if (path != null)
             {
                 requestPath += $"/{path}";
             }

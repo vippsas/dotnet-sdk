@@ -11,13 +11,19 @@ namespace Vipps.net.Tests
         public void Can_Serialize_With_Nested_Extra_Parameters()
         {
             InitiateSessionRequest initiateSessionRequest =
-                new()
+                new(
+                    new PaymentMerchantInfo(
+                        "https://somewhere.com",
+                        "https://somewhere.com",
+                        "token",
+                        "https://somewhere.com"
+                    ),
+                    new PaymentTransaction(new Amount(49000, "NOK"), "Hei", null, null),
+                    null,
+                    null,
+                    null
+                )
                 {
-                    Transaction = new PaymentTransaction()
-                    {
-                        Amount = new Amount() { Currency = "NOK", Value = 49000 },
-                        PaymentDescription = "Hei"
-                    },
                     ExtraParameters = new
                     {
                         Transaction = new { Metadata = new { KID = "100001" } }
@@ -45,19 +51,31 @@ namespace Vipps.net.Tests
         public void Can_Serialize_With_Extra_Parameters_Array()
         {
             InitiateSessionRequest initiateSessionRequest =
-                new()
+                new(
+                    new PaymentMerchantInfo(
+                        "https://somewhere.com",
+                        "https://somewhere.com",
+                        "token",
+                        "https://somewhere.com"
+                    ),
+                    new PaymentTransaction(new Amount(49000, "NOK"), "Hei", null, null),
+                    null,
+                    null,
+                    new CheckoutConfig(
+                        CustomerInteraction.CUSTOMER_NOT_PRESENT,
+                        Elements.PaymentOnly,
+                        null,
+                        UserFlow.WEB_REDIRECT,
+                        null
+                    )
+                )
                 {
-                    Transaction = new PaymentTransaction()
-                    {
-                        Amount = new Amount() { Currency = "NOK", Value = 49000 },
-                        PaymentDescription = "Hei"
-                    },
-                    Configuration = new CheckoutConfig() { Elements = Elements.PaymentOnly },
                     ExtraParameters = new
                     {
-                        Configuration = new { AcceptedPaymentMethods = new[] { "WALLET", "CARD" } }
+                        Transaction = new { Metadata = new { KID = "100001" } }
                     }
                 };
+
             var serializedRequest = VippsRequestSerializer.SerializeVippsRequest(
                 initiateSessionRequest
             );
@@ -79,14 +97,18 @@ namespace Vipps.net.Tests
         public void Can_Serialize_Without_Extra_Parameters()
         {
             InitiateSessionRequest initiateSessionRequest =
-                new()
-                {
-                    Transaction = new PaymentTransaction()
-                    {
-                        Amount = new Amount() { Currency = "NOK", Value = 49000 },
-                        PaymentDescription = "Hei"
-                    }
-                };
+                new(
+                    new PaymentMerchantInfo(
+                        "https://somewhere.com",
+                        "https://somewhere.com",
+                        "token",
+                        "https://somewhere.com"
+                    ),
+                    new PaymentTransaction(new Amount(49000, "NOK"), "Hei", null, null),
+                    null,
+                    null,
+                    null
+                );
             var serializedRequest = VippsRequestSerializer.SerializeVippsRequest(
                 initiateSessionRequest
             );
@@ -103,12 +125,11 @@ namespace Vipps.net.Tests
         public void Can_Deserialize_Response_Without_Extra_Properties()
         {
             InitiateSessionResponse initiateSessionResponse =
-                new()
-                {
-                    CheckoutFrontendUrl = "https://vipps.no/checkout-frontend",
-                    PollingUrl = "https://api.vipps.no/checkout/v3/session/reference101",
-                    Token = "eynghsvdsjhkfgasf"
-                };
+                new(
+                    "eynghsvdsjhkfgasf",
+                    "https://vipps.no/checkout-frontend",
+                    "https://api.vipps.no/checkout/v3/session/reference101"
+                );
             var serializedResponse = JsonSerializer.Serialize(initiateSessionResponse);
             var deserializedResponse =
                 VippsRequestSerializer.DeserializeVippsResponse<InitiateSessionResponse>(
@@ -136,7 +157,10 @@ namespace Vipps.net.Tests
             Assert.IsNotNull(deserializedResponse.RawResponse);
             Assert.AreEqual(
                 initiateSessionResponse.cancellationUrl,
-                deserializedResponse.RawResponse.First(property => property.Key == "cancellationUrl").Value?.GetValue<string>()
+                deserializedResponse.RawResponse
+                    .EnumerateObject()
+                    .First(property => property.Name == "cancellationUrl")
+                    .Value.GetString()
             );
         }
 
@@ -161,14 +185,21 @@ namespace Vipps.net.Tests
                 );
             Assert.IsNotNull(deserializedResponse);
             Assert.IsNotNull(deserializedResponse.RawResponse);
-            var epaymentObject = deserializedResponse.RawResponse.First(property => property.Key == "epayment").Value?.AsObject();
+
             Assert.AreEqual(
                 initiateSessionResponse.epayment.pollingUrl,
-                epaymentObject?.First(property => property.Key == "pollingUrl").Value?.GetValue<string>()
+                deserializedResponse.RawResponse
+                    .EnumerateObject()
+                    .First(property => property.Name == "pollingUrl")
+                    .Value.GetString()
             );
+
             Assert.AreEqual(
                 initiateSessionResponse.epayment.captureUrl,
-                epaymentObject?.First(property => property.Key == "captureUrl").Value?.GetValue<string>()
+                deserializedResponse.RawResponse
+                    .EnumerateObject()
+                    .First(property => property.Name == "captureUrl")
+                    .Value.GetString()
             );
         }
     }
