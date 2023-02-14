@@ -26,7 +26,7 @@ namespace Vipps.net.Infrastructure
                 {
                     _httpClient = CreateDefaultHttpClient();
                 }
-                //_httpClient ??= CreateDefaultHttpClient();
+
                 return _httpClient;
             }
         }
