@@ -3,6 +3,9 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
+using Vipps.Infrastructure;
+using Vipps.net.Infrastructure;
 
 namespace Vipps.net.AspCore31Demo
 {
@@ -22,7 +25,11 @@ namespace Vipps.net.AspCore31Demo
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public void Configure(
+            IApplicationBuilder app,
+            IWebHostEnvironment env,
+            IConfiguration configuration
+        )
         {
             if (env.IsDevelopment())
             {
@@ -34,6 +41,21 @@ namespace Vipps.net.AspCore31Demo
             app.UseRouting();
 
             app.UseAuthorization();
+
+            var vippsConfigurationOptions = new VippsConfigurationOptions
+            {
+                ClientId = configuration.GetValue<string>("CLIENT-ID")!,
+                ClientSecret = configuration.GetValue<string>("CLIENT-SECRET")!,
+                MerchantSerialNumber = configuration.GetValue<string>("MERCHANT-SERIAL-NUMBER")!,
+                SubscriptionKey = configuration.GetValue<string>("SUBSCRIPTION-KEY")!,
+                UseTestMode = true
+            };
+
+            // The following line configures vipps with custom settings
+            DependencyInjection.ConfigureVipps(
+                vippsConfigurationOptions,
+                app.ApplicationServices.GetService<ILoggerFactory>()
+            );
 
             app.UseEndpoints(endpoints =>
             {

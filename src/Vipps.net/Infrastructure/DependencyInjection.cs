@@ -1,11 +1,20 @@
-﻿using Vipps.Infrastructure;
+﻿using Microsoft.Extensions.Logging;
+using Vipps.Infrastructure;
 
 namespace Vipps.net.Infrastructure
 {
     public static class DependencyInjection
     {
-        public static void ConfigureVipps(VippsConfigurationOptions vippsConfigurationOptions)
+        public static void ConfigureVipps(
+            VippsConfigurationOptions vippsConfigurationOptions,
+            ILoggerFactory loggerFactory = null
+        )
         {
+            if (loggerFactory != null)
+            {
+                VippsLogging.LoggerFactory = loggerFactory;
+            }
+
             VippsConfiguration.ClientId = vippsConfigurationOptions.ClientId;
             VippsConfiguration.ClientSecret = vippsConfigurationOptions.ClientSecret;
             VippsConfiguration.MerchantSerialNumber =

@@ -3,8 +3,6 @@ using Azure.Identity;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
-using Vipps.Infrastructure;
-using Vipps.net.Infrastructure;
 
 namespace Vipps.net.AspCore31Demo
 {
@@ -27,21 +25,6 @@ namespace Vipps.net.AspCore31Demo
                             new Uri($"https://{host}.vault.azure.net/"),
                             new DefaultAzureCredential()
                         );
-
-                        config = builder.Build();
-                        var vippsConfigurationOptions = new VippsConfigurationOptions
-                        {
-                            ClientId = config.GetValue<string>("CLIENT-ID")!,
-                            ClientSecret = config.GetValue<string>("CLIENT-SECRET")!,
-                            MerchantSerialNumber = config.GetValue<string>(
-                                "MERCHANT-SERIAL-NUMBER"
-                            )!,
-                            SubscriptionKey = config.GetValue<string>("SUBSCRIPTION-KEY")!,
-                            UseTestMode = true
-                        };
-
-                        // The following line configures vipps with custom settings
-                        DependencyInjection.ConfigureVipps(vippsConfigurationOptions);
                     }
                 )
                 .ConfigureWebHostDefaults(webBuilder =>
