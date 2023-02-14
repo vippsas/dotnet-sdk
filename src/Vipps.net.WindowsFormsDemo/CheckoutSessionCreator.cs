@@ -9,23 +9,21 @@ namespace Vipps.net.WindowsFormsDemo
     {
         internal static async Task<string> CreateSession()
         {
-            var request = new InitiateSessionRequest(
-                new PaymentMerchantInfo(
-                    "https://your-url-here.com:3000",
-                    "https://your-url-here.com:3000",
-                    Guid.NewGuid().ToString(),
-                    "https://your-url-here.com:3000"
-                ),
-                new PaymentTransaction(
-                    new Amount(10000, "NOK"),
-                    Guid.NewGuid().ToString(),
-                    "test",
-                    null
-                ),
-                null,
-                null,
-                null
-            );
+            var request = new InitiateSessionRequest
+            {
+                MerchantInfo = new PaymentMerchantInfo
+                {
+                    CallbackAuthorizationToken = Guid.NewGuid().ToString(),
+                    CallbackUrl = "https://your-url-here.com:3000",
+                    ReturnUrl = "https://your-url-here.com:3000",
+                },
+                Transaction = new PaymentTransaction
+                {
+                    Amount = new Amount { Currency = "NOK", Value = 10000 },
+                    PaymentDescription = "test",
+                    Reference = Guid.NewGuid().ToString()
+                }
+            };
 
             var result = await CheckoutService.InitiateSession(request);
             return result.PollingUrl;

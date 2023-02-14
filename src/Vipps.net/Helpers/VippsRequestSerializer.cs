@@ -86,6 +86,7 @@ namespace Vipps.net.Helpers
                 {
                     MergeObjects(jsonWriter, requestRoot, extraParametersRoot);
                 }
+                jsonWriter.Flush();
                 return Encoding.UTF8.GetString(memstream.ToArray());
             }
         }

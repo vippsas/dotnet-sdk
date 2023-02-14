@@ -19,46 +19,46 @@ namespace Vipps.Models.Checkout.GetSession
     public class GetSessionInfoResponse : VippsResponse
     {
         [Required]
-        public string SessionId { get; private set; }
-        public string MerchantSerialNumber { get; private set; }
+        public string SessionId { get; set; }
+        public string MerchantSerialNumber { get; set; }
 
         [Required]
-        public string Reference { get; private set; }
+        public string Reference { get; set; }
 
         [Required]
-        public ExternalSessionState SessionState { get; private set; }
-        public PaymentMethod? PaymentMethod { get; private set; }
-        public ResponsePaymentDetails PaymentDetails { get; private set; }
-        public UserInfo UserInfo { get; private set; }
-        public ShippingDetails ShippingDetails { get; private set; }
-        public BillingDetails BillingDetails { get; private set; }
+        public ExternalSessionState SessionState { get; set; }
+        public PaymentMethod? PaymentMethod { get; set; }
+        public ResponsePaymentDetails PaymentDetails { get; set; }
+        public UserInfo UserInfo { get; set; }
+        public ShippingDetails ShippingDetails { get; set; }
+        public BillingDetails BillingDetails { get; set; }
     }
 
     public class BillingDetails
     {
         [property: JsonPropertyName("firstName")]
-        public string FirstName { get; private set; }
+        public string FirstName { get; set; }
 
         [property: JsonPropertyName("lastName")]
-        public string LastName { get; private set; }
+        public string LastName { get; set; }
 
         [property: JsonPropertyName("email")]
-        public string Email { get; private set; }
+        public string Email { get; set; }
 
         [property: JsonPropertyName("phoneNumber")]
-        public string PhoneNumber { get; private set; }
+        public string PhoneNumber { get; set; }
 
         [property: JsonPropertyName("streetAddress")]
-        public string StreetAddress { get; private set; }
+        public string StreetAddress { get; set; }
 
         [property: JsonPropertyName("postalCode")]
-        public string PostalCode { get; private set; }
+        public string PostalCode { get; set; }
 
         [property: JsonPropertyName("region")]
-        public string Region { get; private set; }
+        public string Region { get; set; }
 
         [property: JsonPropertyName("country")]
-        public string Country { get; private set; }
+        public string Country { get; set; }
     }
 
     public enum PaymentState
@@ -71,52 +71,52 @@ namespace Vipps.Models.Checkout.GetSession
     public class PickupPoint
     {
         [property: JsonPropertyName("id")]
-        public string Id { get; private set; }
+        public string Id { get; set; }
 
         [property: JsonPropertyName("name")]
-        public string Name { get; private set; }
+        public string Name { get; set; }
 
         [property: JsonPropertyName("postalCode")]
-        public string PostalCode { get; private set; }
+        public string PostalCode { get; set; }
 
         [property: JsonPropertyName("city")]
-        public string City { get; private set; }
+        public string City { get; set; }
 
         [property: JsonPropertyName("country")]
-        public string Country { get; private set; }
+        public string Country { get; set; }
     }
 
     public class ShippingDetails
     {
         [property: JsonPropertyName("firstName")]
-        public string FirstName { get; private set; }
+        public string FirstName { get; set; }
 
         [property: JsonPropertyName("lastName")]
-        public string LastName { get; private set; }
+        public string LastName { get; set; }
 
         [property: JsonPropertyName("email")]
-        public string Email { get; private set; }
+        public string Email { get; set; }
 
         [property: JsonPropertyName("phoneNumber")]
-        public string PhoneNumber { get; private set; }
+        public string PhoneNumber { get; set; }
 
         [property: JsonPropertyName("streetAddress")]
-        public string StreetAddress { get; private set; }
+        public string StreetAddress { get; set; }
 
         [property: JsonPropertyName("postalCode")]
-        public string PostalCode { get; private set; }
+        public string PostalCode { get; set; }
 
         [property: JsonPropertyName("region")]
-        public string Region { get; private set; }
+        public string Region { get; set; }
 
         [property: JsonPropertyName("country")]
-        public string Country { get; private set; }
+        public string Country { get; set; }
 
         [property: JsonPropertyName("shippingMethodId")]
-        public string ShippingMethodId { get; private set; }
+        public string ShippingMethodId { get; set; }
 
         [property: JsonPropertyName("pickupPoint")]
-        public PickupPoint PickupPoint { get; private set; }
+        public PickupPoint PickupPoint { get; set; }
     }
 
     public enum ExternalSessionState
@@ -143,8 +143,8 @@ namespace Vipps.Models.Checkout.GetSession
     public class UserInfo
     {
         [Required]
-        public string Sub { get; private set; }
-        public string Email { get; private set; }
+        public string Sub { get; set; }
+        public string Email { get; set; }
     }
 
     /// <summary>
@@ -156,11 +156,11 @@ namespace Vipps.Models.Checkout.GetSession
     public class ResponsePaymentDetails
     {
         [Required]
-        public Amount Amount { get; private set; }
+        public Amount Amount { get; set; }
 
         [Required]
-        public PaymentState State { get; private set; }
-        public TransactionAggregate Aggregate { get; private set; }
+        public PaymentState State { get; set; }
+        public TransactionAggregate Aggregate { get; set; }
     }
 
     /// <summary>
@@ -172,9 +172,9 @@ namespace Vipps.Models.Checkout.GetSession
     /// <param name="AuthorizedAmount"></param>
     public class TransactionAggregate
     {
-        public Amount CancelledAmount { get; private set; }
-        public Amount CapturedAmount { get; private set; }
-        public Amount RefundedAmount { get; private set; }
-        public Amount AuthorizedAmount { get; private set; }
+        public Amount CancelledAmount { get; set; }
+        public Amount CapturedAmount { get; set; }
+        public Amount RefundedAmount { get; set; }
+        public Amount AuthorizedAmount { get; set; }
     }
 }

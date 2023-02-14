@@ -56,11 +56,11 @@ namespace Vipps.Models.Checkout.InitiateSession
         [Required]
         public string Id;
 
-        public int Priority { get; private set; }
+        public int Priority { get; set; }
 
-        public bool IsDefault { get; private set; }
+        public bool IsDefault { get; set; }
 
-        public string Description { get; private set; }
+        public string Description { get; set; }
     }
 
     public class PostenLogisticsOption : LogisticsOptionBase
@@ -68,8 +68,8 @@ namespace Vipps.Models.Checkout.InitiateSession
         public PostenLogisticsOption(Amount amount, string id)
             : base(amount, id) { }
 
-        public PostenLogisticsType Type { get; private set; }
-        public string CustomType { get; private set; }
+        public PostenLogisticsType Type { get; set; }
+        public string CustomType { get; set; }
     }
 
     public class PostnordLogisticsOption : LogisticsOptionBase
@@ -77,8 +77,8 @@ namespace Vipps.Models.Checkout.InitiateSession
         public PostnordLogisticsOption(Amount amount, string id)
             : base(amount, id) { }
 
-        public PostnordLogisticsType Type { get; private set; }
-        public string CustomType { get; private set; }
+        public PostnordLogisticsType Type { get; set; }
+        public string CustomType { get; set; }
     }
 
     public class PorterbuddyLogisticsOption : LogisticsOptionBase
@@ -86,8 +86,8 @@ namespace Vipps.Models.Checkout.InitiateSession
         public PorterbuddyLogisticsOption(Amount amount, string id)
             : base(amount, id) { }
 
-        public PorterbuddyLogisticsType Type { get; private set; }
-        public string CustomType { get; private set; }
+        public PorterbuddyLogisticsType Type { get; set; }
+        public string CustomType { get; set; }
     }
 
     public class InstaboxLogisticsOption : LogisticsOptionBase
@@ -95,8 +95,8 @@ namespace Vipps.Models.Checkout.InitiateSession
         public InstaboxLogisticsOption(Amount amount, string id)
             : base(amount, id) { }
 
-        public InstaboxLogisticsType Type { get; private set; }
-        public string CustomType { get; private set; }
+        public InstaboxLogisticsType Type { get; set; }
+        public string CustomType { get; set; }
     }
 
     public class HelthjemLogisticsOption : LogisticsOptionBase
@@ -104,8 +104,8 @@ namespace Vipps.Models.Checkout.InitiateSession
         public HelthjemLogisticsOption(Amount amount, string id)
             : base(amount, id) { }
 
-        public HelthjemLogisticsType Type { get; private set; }
-        public string CustomType { get; private set; }
+        public HelthjemLogisticsType Type { get; set; }
+        public string CustomType { get; set; }
     }
 
     public class OtherLogisticsOption : LogisticsOptionBase
@@ -114,6 +114,6 @@ namespace Vipps.Models.Checkout.InitiateSession
             : base(amount, id) { }
 
         [Required]
-        public string Title { get; private set; }
+        public string Title { get; set; }
     }
 }

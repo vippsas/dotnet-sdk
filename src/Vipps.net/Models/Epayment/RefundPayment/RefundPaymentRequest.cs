@@ -5,15 +5,15 @@ namespace Vipps.Models.Epayment.RefundPayment
     public class RefundPaymentRequest : VippsRequest
     {
         [property: JsonPropertyName("modificationAmount")]
-        public ModificationAmount ModificationAmount { get; private set; }
+        public ModificationAmount ModificationAmount { get; set; }
     }
 
     public class ModificationAmount
     {
         [property: JsonPropertyName("currency")]
-        public string Currency { get; private set; }
+        public string Currency { get; set; }
 
         [property: JsonPropertyName("value")]
-        public int Value { get; private set; }
+        public int Value { get; set; }
     }
 }

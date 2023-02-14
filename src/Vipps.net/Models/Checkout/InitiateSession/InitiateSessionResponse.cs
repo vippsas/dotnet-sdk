@@ -4,20 +4,13 @@ namespace Vipps.Models.Checkout.InitiateSession
 {
     public class InitiateSessionResponse : VippsResponse
     {
-        public InitiateSessionResponse(string token, string checkoutFrontendUrl, string pollingUrl)
-        {
-            Token = token;
-            CheckoutFrontendUrl = checkoutFrontendUrl;
-            PollingUrl = pollingUrl;
-        }
-
         [property: JsonPropertyName("token")]
-        public string Token { get; private set; }
+        public string Token { get; set; }
 
         [property: JsonPropertyName("checkoutFrontendUrl")]
-        public string CheckoutFrontendUrl { get; private set; }
+        public string CheckoutFrontendUrl { get; set; }
 
         [property: JsonPropertyName("pollingUrl")]
-        public string PollingUrl { get; private set; }
+        public string PollingUrl { get; set; }
     }
 }

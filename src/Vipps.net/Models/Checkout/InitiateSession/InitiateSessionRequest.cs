@@ -13,29 +13,14 @@ namespace Vipps.Models.Checkout.InitiateSession
     /// <param name="Configuration"></param>
     public class InitiateSessionRequest : VippsRequest
     {
-        public InitiateSessionRequest(
-            PaymentMerchantInfo merchantInfo,
-            PaymentTransaction transaction,
-            Logistics logistics,
-            PrefillCustomer prefillcustomer,
-            CheckoutConfig checkoutConfig
-        )
-        {
-            MerchantInfo = merchantInfo;
-            Transaction = transaction;
-            Logistics = logistics;
-            PrefillCustomer = prefillcustomer;
-            Configuration = checkoutConfig;
-        }
+        [Required]
+        public PaymentMerchantInfo MerchantInfo { get; set; }
 
         [Required]
-        public PaymentMerchantInfo MerchantInfo { get; private set; }
-
-        [Required]
-        public PaymentTransaction Transaction { get; private set; }
-        public Logistics Logistics { get; private set; }
-        public PrefillCustomer PrefillCustomer { get; private set; }
-        public CheckoutConfig Configuration { get; private set; }
+        public PaymentTransaction Transaction { get; set; }
+        public Logistics Logistics { get; set; }
+        public PrefillCustomer PrefillCustomer { get; set; }
+        public CheckoutConfig Configuration { get; set; }
     }
 
     /// <summary>
@@ -48,26 +33,11 @@ namespace Vipps.Models.Checkout.InitiateSession
     /// <param name="RequireUserInfo">Requires the customer to consent to share their email and openid sub with the merchant to be able to make a wallet payment {default: false).</param>
     public class CheckoutConfig
     {
-        public CheckoutConfig(
-            CustomerInteraction customerInteraction,
-            Elements elements,
-            Countries countries,
-            UserFlow userFlow,
-            bool? requireUserInfo
-        )
-        {
-            CustomerInteraction = customerInteraction;
-            Elements = elements;
-            Countries = countries;
-            UserFlow = userFlow;
-            RequireUserInfo = requireUserInfo;
-        }
-
-        public CustomerInteraction CustomerInteraction { get; private set; }
-        public Elements Elements { get; private set; }
-        public Countries Countries { get; private set; }
-        public UserFlow UserFlow { get; private set; }
-        public bool? RequireUserInfo { get; private set; }
+        public CustomerInteraction CustomerInteraction { get; set; }
+        public Elements Elements { get; set; }
+        public Countries Countries { get; set; }
+        public UserFlow UserFlow { get; set; }
+        public bool? RequireUserInfo { get; set; }
     }
 
     public enum UserFlow
@@ -88,7 +58,7 @@ namespace Vipps.Models.Checkout.InitiateSession
     /// <param name="Supported">List of allowed countries in ISO-3166 Alpha 2. If specified, the customer will only be able to select these countries. Example ["NO", "SE", "DK"]</param>
     public class Countries
     {
-        public List<string> Supported { get; private set; }
+        public List<string> Supported { get; set; }
     }
 
     public enum Elements
@@ -104,28 +74,15 @@ namespace Vipps.Models.Checkout.InitiateSession
     /// <param name="TermsAndConditionsUrl">Complete URL to the merchant's terms and conditions. Example: "https://example.com/vipps/termsAndConditions".</param>
     public class PaymentMerchantInfo
     {
-        public PaymentMerchantInfo(
-            string callbackUrl,
-            string returnUrl,
-            string callbackAuthorizationToken,
-            string termsAndConditionsUrl
-        )
-        {
-            CallbackUrl = callbackUrl;
-            ReturnUrl = returnUrl;
-            CallbackAuthorizationToken = callbackAuthorizationToken;
-            TermsAndConditionsUrl = termsAndConditionsUrl;
-        }
+        [Required]
+        public string CallbackUrl { get; set; }
 
         [Required]
-        public string CallbackUrl { get; private set; }
+        public string ReturnUrl { get; set; }
 
         [Required]
-        public string ReturnUrl { get; private set; }
-
-        [Required]
-        public string CallbackAuthorizationToken { get; private set; }
-        public string TermsAndConditionsUrl { get; private set; }
+        public string CallbackAuthorizationToken { get; set; }
+        public string TermsAndConditionsUrl { get; set; }
     }
 
     /// <param name="Amount"></param>
@@ -134,28 +91,15 @@ namespace Vipps.Models.Checkout.InitiateSession
     /// <param name="OrderSummary">Contain descriptions of each item present in the order, and an order bottom line for information regarding the order as a whole.</param>
     public class PaymentTransaction
     {
-        public PaymentTransaction(
-            Amount amount,
-            string reference,
-            string paymentDescription,
-            OrderSummary orderSummary
-        )
-        {
-            Amount = amount;
-            Reference = reference;
-            PaymentDescription = paymentDescription;
-            OrderSummary = orderSummary;
-        }
+        [Required]
+        public Amount Amount { get; set; }
 
         [Required]
-        public Amount Amount { get; private set; }
+        public string Reference { get; set; }
 
         [Required]
-        public string Reference { get; private set; }
-
-        [Required]
-        public string PaymentDescription { get; private set; }
-        public OrderSummary OrderSummary { get; private set; }
+        public string PaymentDescription { get; set; }
+        public OrderSummary OrderSummary { get; set; }
     }
 
     /// <summary>
@@ -165,14 +109,8 @@ namespace Vipps.Models.Checkout.InitiateSession
     /// <param name="Value">Must be in Minor Units. The smallest unit of a currency. Example 100 NOK = 10000.</param>
     public class Amount
     {
-        public Amount(int value, string currency)
-        {
-            Value = value;
-            Currency = currency;
-        }
-
-        public int Value { get; private set; }
-        public string Currency { get; private set; }
+        public int Value { get; set; }
+        public string Currency { get; set; }
     }
 
     /// <param name="OrderLines">The order lines contain descriptions of each item present in the order.</param>
@@ -185,8 +123,8 @@ namespace Vipps.Models.Checkout.InitiateSession
             OrderBottomLine = orderBottomLine;
         }
 
-        public OrderLine[] OrderLines { get; private set; }
-        public OrderBottomLine OrderBottomLine { get; private set; }
+        public OrderLine[] OrderLines { get; set; }
+        public OrderBottomLine OrderBottomLine { get; set; }
     }
 
     /// <param name="Name">The name of the product in the order line.</param>
@@ -202,55 +140,28 @@ namespace Vipps.Models.Checkout.InitiateSession
     /// <param name="IsShipping">Flag for marking the orderline as a shipping line. This will be shown differently in the app.</param>
     public class OrderLine
     {
-        public OrderLine(
-            string name,
-            string id,
-            long totalAmount,
-            long totalAmountExcludingTax,
-            long totalTaxAmount,
-            int taxPercentage,
-            OrderUnitInfo unitInfo,
-            long? discount,
-            string productUrl,
-            bool? isReturn,
-            bool? isShipping
-        )
-        {
-            Name = name;
-            Id = id;
-            TotalAmount = totalAmount;
-            TotalAmountExcludingTax = totalAmountExcludingTax;
-            TotalTaxAmount = totalTaxAmount;
-            TaxPercentage = taxPercentage;
-            UnitInfo = unitInfo;
-            Discount = discount;
-            ProductUrl = productUrl;
-            IsReturn = isReturn;
-            IsShipping = isShipping;
-        }
+        [Required]
+        public string Name { get; set; }
 
         [Required]
-        public string Name { get; private set; }
+        public string Id { get; set; }
 
         [Required]
-        public string Id { get; private set; }
+        public long TotalAmount { get; set; }
 
         [Required]
-        public long TotalAmount { get; private set; }
+        public long TotalAmountExcludingTax { get; set; }
 
         [Required]
-        public long TotalAmountExcludingTax { get; private set; }
+        public long TotalTaxAmount { get; set; }
 
         [Required]
-        public long TotalTaxAmount { get; private set; }
-
-        [Required]
-        public int TaxPercentage { get; private set; }
-        public OrderUnitInfo UnitInfo { get; private set; }
-        public long? Discount { get; private set; }
-        public string ProductUrl { get; private set; }
-        public bool? IsReturn { get; private set; }
-        public bool? IsShipping { get; private set; }
+        public int TaxPercentage { get; set; }
+        public OrderUnitInfo UnitInfo { get; set; }
+        public long? Discount { get; set; }
+        public string ProductUrl { get; set; }
+        public bool? IsReturn { get; set; }
+        public bool? IsShipping { get; set; }
     }
 
     /// <param name="Currency">The currency identifier according to ISO 4217. Example: "NOK".</param>
@@ -259,24 +170,11 @@ namespace Vipps.Models.Checkout.InitiateSession
     /// <param name="TerminalId">Identifier of the terminal / popublic int of sale.</param>
     public class OrderBottomLine
     {
-        public OrderBottomLine(
-            string currency,
-            long? tipAmount,
-            long? giftCardAmount,
-            string terminalId
-        )
-        {
-            Currency = currency;
-            TipAmount = tipAmount;
-            GiftCardAmount = giftCardAmount;
-            TerminalId = terminalId;
-        }
-
         [Required]
-        public string Currency { get; private set; }
-        public long? TipAmount { get; private set; }
-        public long? GiftCardAmount { get; private set; }
-        public string TerminalId { get; private set; }
+        public string Currency { get; set; }
+        public long? TipAmount { get; set; }
+        public long? GiftCardAmount { get; set; }
+        public string TerminalId { get; set; }
     }
 
     /// <param name="UnitPrice">Total price per unit, including tax and excluding discount. Must be in Minor Units. The smallest unit of a currency. Example 100 NOK = 10000.</param>
@@ -291,9 +189,9 @@ namespace Vipps.Models.Checkout.InitiateSession
             QuantityUnit = quantityUnit;
         }
 
-        public long UnitPrice { get; private set; }
-        public string Quantity { get; private set; }
-        public QuantityUnit QuantityUnit { get; private set; }
+        public long UnitPrice { get; set; }
+        public string Quantity { get; set; }
+        public QuantityUnit QuantityUnit { get; set; }
     }
 
     public enum QuantityUnit
@@ -317,9 +215,9 @@ namespace Vipps.Models.Checkout.InitiateSession
     /// <param name="Integrations">Some optional checkout features require carrier-specific configuration. Can not be used with AddressFields set to false.</param>
     public class Logistics
     {
-        public string DynamicOptionsCallback { get; private set; }
-        public List<LogisticsOptionBase> FixedOptions { get; private set; }
-        public Integrations Integrations { get; private set; }
+        public string DynamicOptionsCallback { get; set; }
+        public List<LogisticsOptionBase> FixedOptions { get; set; }
+        public Integrations Integrations { get; set; }
     }
 
     /// <summary>
@@ -338,49 +236,21 @@ namespace Vipps.Models.Checkout.InitiateSession
     /// <param name="Country">The ISO-3166-1 Alpha-2 representation of the country. Example: "NO"</param>
     public class PrefillCustomer
     {
-        public PrefillCustomer(
-            string firstName,
-            string lastName,
-            string email,
-            string phoneNumber,
-            string streetAddress,
-            string city,
-            string postalCode,
-            string country
-        )
-        {
-            FirstName = firstName;
-            LastName = lastName;
-            Email = email;
-            PhoneNumber = phoneNumber;
-            StreetAddress = streetAddress;
-            City = city;
-            PostalCode = postalCode;
-            Country = country;
-        }
-
-        public string FirstName { get; private set; }
-        public string LastName { get; private set; }
-        public string Email { get; private set; }
-        public string PhoneNumber { get; private set; }
-        public string StreetAddress { get; private set; }
-        public string City { get; private set; }
-        public string PostalCode { get; private set; }
-        public string Country { get; private set; }
+        public string FirstName { get; set; }
+        public string LastName { get; set; }
+        public string Email { get; set; }
+        public string PhoneNumber { get; set; }
+        public string StreetAddress { get; set; }
+        public string City { get; set; }
+        public string PostalCode { get; set; }
+        public string Country { get; set; }
     }
 
     public class Integrations
     {
-        public Integrations(Porterbuddy porterbuddy, Instabox instabox, Helthjem helthjem)
-        {
-            Porterbuddy = porterbuddy;
-            Instabox = instabox;
-            Helthjem = helthjem;
-        }
-
-        public Porterbuddy Porterbuddy { get; private set; }
-        public Instabox Instabox { get; private set; }
-        public Helthjem Helthjem { get; private set; }
+        public Porterbuddy Porterbuddy { get; set; }
+        public Instabox Instabox { get; set; }
+        public Helthjem Helthjem { get; set; }
     }
 
     /// <summary>
@@ -398,9 +268,9 @@ namespace Vipps.Models.Checkout.InitiateSession
             Origin = origin;
         }
 
-        public string PublicToken { get; private set; }
-        public string ApiKey { get; private set; }
-        public PorterbuddyOrigin Origin { get; private set; }
+        public string PublicToken { get; set; }
+        public string ApiKey { get; set; }
+        public PorterbuddyOrigin Origin { get; set; }
     }
 
     /// <summary>
@@ -412,23 +282,10 @@ namespace Vipps.Models.Checkout.InitiateSession
     /// <param name="Address">Your address where Porterbuddy will pick up the parcels</param>
     public class PorterbuddyOrigin
     {
-        public PorterbuddyOrigin(
-            string name,
-            string email,
-            string phoneNumber,
-            PorterbuddyOriginAddress address
-        )
-        {
-            Name = name;
-            Email = email;
-            PhoneNumber = phoneNumber;
-            Address = address;
-        }
-
-        public string Name { get; private set; }
-        public string Email { get; private set; }
-        public string PhoneNumber { get; private set; }
-        public PorterbuddyOriginAddress Address { get; private set; }
+        public string Name { get; set; }
+        public string Email { get; set; }
+        public string PhoneNumber { get; set; }
+        public PorterbuddyOriginAddress Address { get; set; }
     }
 
     /// <param name="StreetAddress">Example: "Robert Levins gate 5"</param>
@@ -437,23 +294,10 @@ namespace Vipps.Models.Checkout.InitiateSession
     /// <param name="Country">The ISO-3166-1 Alpha-2 representation of the country. Example: "NO"</param>
     public class PorterbuddyOriginAddress
     {
-        public PorterbuddyOriginAddress(
-            string streetAddress,
-            string postalCode,
-            string city,
-            string country
-        )
-        {
-            StreetAddress = streetAddress;
-            PostalCode = postalCode;
-            City = city;
-            Country = country;
-        }
-
-        public string StreetAddress { get; private set; }
-        public string PostalCode { get; private set; }
-        public string City { get; private set; }
-        public string Country { get; private set; }
+        public string StreetAddress { get; set; }
+        public string PostalCode { get; set; }
+        public string City { get; set; }
+        public string Country { get; set; }
     }
 
     /// <summary>
@@ -463,14 +307,8 @@ namespace Vipps.Models.Checkout.InitiateSession
     /// <param name="ClientSecret">The client secret provided to you by Instabox</param>
     public class Instabox
     {
-        public Instabox(string clientId, string clientSecret)
-        {
-            ClientId = clientId;
-            ClientSecret = clientSecret;
-        }
-
-        public string ClientId { get; private set; }
-        public string ClientSecret { get; private set; }
+        public string ClientId { get; set; }
+        public string ClientSecret { get; set; }
     }
 
     /// <summary>
@@ -481,15 +319,8 @@ namespace Vipps.Models.Checkout.InitiateSession
     /// <param name="ShopId">The ShopId provided to you by Helthjem</param>
     public class Helthjem
     {
-        public Helthjem(string username, string password, int shopId)
-        {
-            Username = username;
-            Password = password;
-            ShopId = shopId;
-        }
-
-        public string Username { get; private set; }
-        public string Password { get; private set; }
-        public int ShopId { get; private set; }
+        public string Username { get; set; }
+        public string Password { get; set; }
+        public int ShopId { get; set; }
     }
 }

@@ -12,15 +12,15 @@ namespace Vipps.Models.Checkout
     public class MerchantAuthInfoHeaders
     {
         [property: JsonPropertyName("client_id")]
-        public string ClientId { get; private set; }
+        public string ClientId { get; set; }
 
         [property: JsonPropertyName("client_secret")]
-        public string ClientSecret { get; private set; }
+        public string ClientSecret { get; set; }
 
         [property: JsonPropertyName("Ocp-Apim-Subscription-Key")]
-        public string OcpApimSubscriptionKey { get; private set; }
+        public string OcpApimSubscriptionKey { get; set; }
 
         [property: JsonPropertyName("Merchant-Serial-Number")]
-        public string MerchantSerialNumber { get; private set; }
+        public string MerchantSerialNumber { get; set; }
     }
 }

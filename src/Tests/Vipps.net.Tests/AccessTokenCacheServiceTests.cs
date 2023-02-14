@@ -52,15 +52,16 @@ namespace Vipps.net.Tests
                 )
             );
             var jwtString = new JwtSecurityTokenHandler().WriteToken(jwt);
-            var accessToken = new AccessToken(
-                "Bearer",
-                "3600",
-                "3600",
-                "99675777281",
-                "0",
-                Guid.Empty.ToString(),
-                jwtString
-            );
+            var accessToken = new AccessToken()
+            {
+                TokenType = "Bearer",
+                ExpiresIn = "3600",
+                ExtExpiresIn = "3600",
+                ExpiresOn = "99675777281",
+                NotBefore = "0",
+                Resource = Guid.Empty.ToString(),
+                Token = jwtString
+            };
             return accessToken;
         }
     }
