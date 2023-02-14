@@ -5,8 +5,7 @@ namespace Vipps.net.Infrastructure
 {
     internal sealed class AccessTokenServiceClient : BaseServiceClient
     {
-        internal AccessTokenServiceClient(IVippsHttpClient vippsHttpClient)
-            : base(vippsHttpClient)
+        internal AccessTokenServiceClient(IVippsHttpClient vippsHttpClient) : base(vippsHttpClient)
         {
             Logger = VippsLogging.LoggerFactory.CreateLogger<AccessTokenServiceClient>();
         }

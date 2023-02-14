@@ -136,7 +136,9 @@ namespace Vipps.net.Tests
             Assert.IsNotNull(deserializedResponse.RawResponse);
             Assert.AreEqual(
                 initiateSessionResponse.cancellationUrl,
-                deserializedResponse.RawResponse.First(property => property.Key == "cancellationUrl").Value?.GetValue<string>()
+                deserializedResponse.RawResponse
+                    .First(property => property.Key == "cancellationUrl")
+                    .Value?.GetValue<string>()
             );
         }
 
@@ -161,14 +163,20 @@ namespace Vipps.net.Tests
                 );
             Assert.IsNotNull(deserializedResponse);
             Assert.IsNotNull(deserializedResponse.RawResponse);
-            var epaymentObject = deserializedResponse.RawResponse.First(property => property.Key == "epayment").Value?.AsObject();
+            var epaymentObject = deserializedResponse.RawResponse
+                .First(property => property.Key == "epayment")
+                .Value?.AsObject();
             Assert.AreEqual(
                 initiateSessionResponse.epayment.pollingUrl,
-                epaymentObject?.First(property => property.Key == "pollingUrl").Value?.GetValue<string>()
+                epaymentObject
+                    ?.First(property => property.Key == "pollingUrl")
+                    .Value?.GetValue<string>()
             );
             Assert.AreEqual(
                 initiateSessionResponse.epayment.captureUrl,
-                epaymentObject?.First(property => property.Key == "captureUrl").Value?.GetValue<string>()
+                epaymentObject
+                    ?.First(property => property.Key == "captureUrl")
+                    .Value?.GetValue<string>()
             );
         }
     }
