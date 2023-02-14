@@ -2,6 +2,33 @@
 
 namespace Vipps.Models.Epayment.GetPaymentResponse;
 
+public class GetPaymentResponse : VippsResponse
+{
+    [property: JsonPropertyName("aggregate")]
+    public Aggregate Aggregate { get; init; }
+
+    [property: JsonPropertyName("amount")]
+    public Amount Amount { get; init; }
+
+    [property: JsonPropertyName("state")]
+    public string State { get; init; }
+
+    [property: JsonPropertyName("paymentMethod")]
+    public PaymentMethod PaymentMethod { get; init; }
+
+    [property: JsonPropertyName("profile")]
+    public Profile Profile { get; init; }
+
+    [property: JsonPropertyName("pspReference")]
+    public string PspReference { get; init; }
+
+    [property: JsonPropertyName("redirectUrl")]
+    public string RedirectUrl { get; init; }
+
+    [property: JsonPropertyName("reference")]
+    public string Reference { get; init; }
+}
+
 public class Aggregate
 {
     [property: JsonPropertyName("authorizedAmount")]
@@ -51,33 +78,6 @@ public class RefundedAmount
 
     [property: JsonPropertyName("value")]
     public int? Value { get; init; }
-}
-
-public class GetPaymentResponse
-{
-    [property: JsonPropertyName("aggregate")]
-    public Aggregate Aggregate { get; init; }
-
-    [property: JsonPropertyName("amount")]
-    public Amount Amount { get; init; }
-
-    [property: JsonPropertyName("state")]
-    public string State { get; init; }
-
-    [property: JsonPropertyName("paymentMethod")]
-    public PaymentMethod PaymentMethod { get; init; }
-
-    [property: JsonPropertyName("profile")]
-    public Profile Profile { get; init; }
-
-    [property: JsonPropertyName("pspReference")]
-    public string PspReference { get; init; }
-
-    [property: JsonPropertyName("redirectUrl")]
-    public string RedirectUrl { get; init; }
-
-    [property: JsonPropertyName("reference")]
-    public string Reference { get; init; }
 }
 
 public class Amount

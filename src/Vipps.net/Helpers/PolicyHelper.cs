@@ -32,7 +32,7 @@ namespace Vipps.Helpers
                         logger.LogError(
                             $"{errorMessage}{CommonErrorMessagePart}",
                             result.Result.StatusCode,
-                            await result.Result.Content.ReadAsStringAsync()
+                            await result.Result.Content.ReadAsStringAsync().ConfigureAwait(false)
                         );
                     }
                 );

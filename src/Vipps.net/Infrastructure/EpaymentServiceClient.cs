@@ -8,9 +8,7 @@ namespace Vipps.net.Infrastructure
     {
         internal EpaymentServiceClient(IVippsHttpClient vippsHttpClient) : base(vippsHttpClient)
         {
-            Logger = LoggerFactory
-                .Create((ILoggingBuilder lb) => { })
-                .CreateLogger<EpaymentServiceClient>();
+            Logger = VippsLogging.LoggerFactory.CreateLogger<EpaymentServiceClient>();
         }
 
         protected override async Task<Dictionary<string, string>?> GetHeaders(
