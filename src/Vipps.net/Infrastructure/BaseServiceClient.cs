@@ -6,7 +6,6 @@ using System.Text;
 using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
-using Microsoft.Extensions.Logging;
 using Vipps.Helpers;
 using Vipps.Models;
 using Vipps.net.Helpers;
@@ -15,11 +14,6 @@ namespace Vipps.net.Infrastructure
 {
     internal abstract class BaseServiceClient
     {
-        protected ILogger<BaseServiceClient> _logger;
-        protected virtual ILogger<BaseServiceClient> Logger
-        {
-            get { return _logger; }
-        }
         protected readonly IVippsHttpClient _vippsHttpClient;
 
         protected BaseServiceClient(IVippsHttpClient vippsHttpClient)
@@ -116,7 +110,6 @@ namespace Vipps.net.Infrastructure
         )
         {
             var retryPolicy = PolicyHelper.GetRetryPolicyWithFallback(
-                Logger,
                 $"Request for {path} failed even after retries"
             );
             var headers = await GetHeaders(cancellationToken);

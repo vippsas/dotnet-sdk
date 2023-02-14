@@ -40,7 +40,7 @@ internal sealed class Program
         };
 
         // The following line configures vipps with custom settings
-        builder.Services.ConfigureVipps(vippsConfigurationOptions);
+        DependencyInjection.ConfigureVipps(vippsConfigurationOptions);
 
         var app = builder.Build();
         if (app.Environment.IsDevelopment())

@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
-using Microsoft.Extensions.Logging;
 using Vipps.net.Helpers;
 
 namespace Vipps.net.Infrastructure
@@ -9,10 +8,7 @@ namespace Vipps.net.Infrastructure
     internal sealed class CheckoutServiceClient : BaseServiceClient
     {
         internal CheckoutServiceClient(IVippsHttpClient vippsHttpClient)
-            : base(vippsHttpClient)
-        {
-            _logger = VippsLogging.LoggerFactory.CreateLogger<CheckoutServiceClient>();
-        }
+            : base(vippsHttpClient) { }
 
         protected override async Task<Dictionary<string, string>> GetHeaders(
             CancellationToken cancellationToken

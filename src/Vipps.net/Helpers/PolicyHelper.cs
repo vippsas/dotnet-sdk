@@ -1,7 +1,7 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Net;
 using System.Net.Http;
-using Microsoft.Extensions.Logging;
 using Polly;
 using Polly.Contrib.WaitAndRetry;
 using Polly.Extensions.Http;
@@ -12,14 +12,12 @@ namespace Vipps.Helpers
 {
     internal static class PolicyHelper
     {
-        private const string CommonErrorMessagePart =
-            ". Status was {statusCode}, response body was {body}";
+        private const string CommonErrorMessagePart = ". Status was {0}, response body was {1}";
 
         private const string CommonWarningMessage =
-            "Retry #{retryCount} failed because response status was {responseStatus}. Exception was {exception}. Sleeping for {sleepDurationMs} ms.";
+            "Retry #{0} failed because response status was {1}. Exception was {2}. Sleeping for {3} ms.";
 
         internal static AsyncFallbackPolicy<HttpResponseMessage> GetFallbackPolicy(
-            ILogger logger,
             string errorMessage
         )
         {
@@ -31,7 +29,7 @@ namespace Vipps.Helpers
                     new HttpResponseMessage(HttpStatusCode.InternalServerError),
                     async (result, context) =>
                     {
-                        logger.LogError(
+                        Trace.TraceError(
                             $"{errorMessage}{CommonErrorMessagePart}",
                             result.Result.StatusCode,
                             await result.Result.Content.ReadAsStringAsync().ConfigureAwait(false)
@@ -40,7 +38,7 @@ namespace Vipps.Helpers
                 );
         }
 
-        internal static AsyncRetryPolicy<HttpResponseMessage> GetRetryPolicy(ILogger logger)
+        internal static AsyncRetryPolicy<HttpResponseMessage> GetRetryPolicy()
         {
             var delay = Backoff.DecorrelatedJitterBackoffV2(
                 medianFirstRetryDelay: TimeSpan.FromMilliseconds(300),
@@ -57,7 +55,7 @@ namespace Vipps.Helpers
                         int retryCount,
                         Context ctx
                     ) =>
-                        logger.LogWarning(
+                        Trace.TraceWarning(
                             CommonWarningMessage,
                             retryCount,
                             response?.Result?.StatusCode,
@@ -68,11 +66,10 @@ namespace Vipps.Helpers
         }
 
         internal static AsyncPolicy<HttpResponseMessage> GetRetryPolicyWithFallback(
-            ILogger logger,
             string errorMessage
         )
         {
-            return GetFallbackPolicy(logger, errorMessage).WrapAsync(GetRetryPolicy(logger));
+            return GetFallbackPolicy(errorMessage).WrapAsync(GetRetryPolicy());
         }
     }
 }
