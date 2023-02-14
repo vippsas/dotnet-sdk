@@ -3,6 +3,31 @@ using Vipps.Models.Checkout.InitiateSession;
 
 namespace Vipps.Models.Checkout.GetSession;
 
+/// <summary>
+/// Session information
+/// </summary>
+/// <param name="SessionId">The Id of the session. Example: "v52EtjZriRmGiKiAKHByK2".</param>
+/// <param name="Reference">The merchant's unique reference for the transaction. Also known as OrderId. Example: "acme-shop-123-order123abc". See https://vippsas.github.io/vipps-developer-docs/docs/vipps-developers/common-topics/orderid</param>
+/// <param name="MerchantSerialNumber">The merchant's serial number. Example: "123456" </param>
+/// <param name="SessionState">The state of the session. Example: "SessionStarted". The state of the payment is in PaymentDetails.State.</param>
+/// <param name="PaymentMethod"></param>
+/// <param name="PaymentDetails"></param>
+/// <param name="UserInfo"></param>
+/// <param name="ShippingDetails"></param>
+/// <param name="BillingDetails"></param>
+public class GetSessionInfoResponse : VippsResponse
+{
+    public string SessionId { get; init; }
+    public string? MerchantSerialNumber { get; init; }
+    public string Reference { get; init; }
+    public ExternalSessionState SessionState { get; init; }
+    public PaymentMethod? PaymentMethod { get; init; }
+    public ResponsePaymentDetails? PaymentDetails { get; init; }
+    public UserInfo? UserInfo { get; init; }
+    public ShippingDetails? ShippingDetails { get; init; }
+    public BillingDetails? BillingDetails { get; init; }
+}
+
 public class BillingDetails
 {
     [property: JsonPropertyName("firstName")]
@@ -86,31 +111,6 @@ public class ShippingDetails
 
     [property: JsonPropertyName("pickupPoint")]
     public PickupPoint PickupPoint { get; init; }
-}
-
-/// <summary>
-/// Session information
-/// </summary>
-/// <param name="SessionId">The Id of the session. Example: "v52EtjZriRmGiKiAKHByK2".</param>
-/// <param name="Reference">The merchant's unique reference for the transaction. Also known as OrderId. Example: "acme-shop-123-order123abc". See https://vippsas.github.io/vipps-developer-docs/docs/vipps-developers/common-topics/orderid</param>
-/// <param name="MerchantSerialNumber">The merchant's serial number. Example: "123456" </param>
-/// <param name="SessionState">The state of the session. Example: "SessionStarted". The state of the payment is in PaymentDetails.State.</param>
-/// <param name="PaymentMethod"></param>
-/// <param name="PaymentDetails"></param>
-/// <param name="UserInfo"></param>
-/// <param name="ShippingDetails"></param>
-/// <param name="BillingDetails"></param>
-public class GetSessionInfoResponse
-{
-    public string SessionId { get; init; }
-    public string? MerchantSerialNumber { get; init; }
-    public string Reference { get; init; }
-    public ExternalSessionState SessionState { get; init; }
-    public PaymentMethod? PaymentMethod { get; init; }
-    public ResponsePaymentDetails? PaymentDetails { get; init; }
-    public UserInfo? UserInfo { get; init; }
-    public ShippingDetails? ShippingDetails { get; init; }
-    public BillingDetails? BillingDetails { get; init; }
 }
 
 public enum ExternalSessionState

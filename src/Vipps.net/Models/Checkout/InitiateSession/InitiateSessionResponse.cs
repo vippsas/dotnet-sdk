@@ -2,7 +2,7 @@
 
 namespace Vipps.Models.Checkout.InitiateSession;
 
-public class InitiateSessionResponse
+public class InitiateSessionResponse : VippsResponse
 {
     [property: JsonPropertyName("token")]
     public string Token { get; init; }

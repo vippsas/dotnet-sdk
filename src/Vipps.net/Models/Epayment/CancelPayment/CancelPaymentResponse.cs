@@ -2,7 +2,7 @@
 
 namespace Vipps.Models.Epayment.CancelPayment;
 
-public class CancelPaymentResponse
+public class CancelPaymentResponse : VippsResponse
 {
     [property: JsonPropertyName("amount")]
     public Amount Amount { get; init; }
