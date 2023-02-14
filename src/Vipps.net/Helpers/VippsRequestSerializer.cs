@@ -10,12 +10,11 @@ namespace Vipps.net.Helpers
     {
         public static string SerializeVippsRequest(VippsRequest vippsRequest)
         {
-            dynamic extraParameters = vippsRequest.ExtraParameters;
             string serializedRequest = JsonSerializer.Serialize(
                 vippsRequest,
                 vippsRequest.GetType()
             );
-            if (extraParameters != null)
+            if (vippsRequest.ExtraParameters != null)
             {
                 dynamic serializedExtraParameters = JsonSerializer.Serialize(
                     vippsRequest.ExtraParameters,
