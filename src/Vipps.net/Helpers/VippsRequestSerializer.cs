@@ -38,13 +38,6 @@ namespace Vipps.net.Helpers
                 );
             }
             var deserializedRaw = JsonSerializer.Deserialize<JsonElement>(vippsResponse);
-            //if (deserializedRaw is null)
-            //{
-            //    throw new ArgumentException(
-            //        "Response could not be deserialized to {type}",
-            //        nameof(JsonElement)
-            //    );
-            //}
             deserializedTyped.RawResponse = deserializedRaw;
             return deserializedTyped;
         }
