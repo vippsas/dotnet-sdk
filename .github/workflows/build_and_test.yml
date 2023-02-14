@@ -33,4 +33,5 @@ jobs:
         run: |
           dotnet tool restore --tool-manifest src/.config/dotnet-tools.json
           cd src
-          dotnet-csharpier --check
+          dotnet csharpier --check
+          echo "CSharpier finished"
