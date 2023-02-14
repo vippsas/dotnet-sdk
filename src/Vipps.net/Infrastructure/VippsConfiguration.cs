@@ -78,9 +78,7 @@ namespace Vipps.net.Infrastructure
         }
 
         internal static string BaseUrl =>
-            TestMode == true
-                ? "https://ece46ec4-6f9c-489b-8fe5-146a89e11635.tech-02.net"
-                : "https://api.vipps.no";
+            TestMode == true ? "https://api-test.vipps.no" : "https://api.vipps.no";
 
         private static IVippsHttpClient _vippsHttpClient;
         public static IVippsHttpClient VippsHttpClient
