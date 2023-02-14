@@ -1,0 +1,36 @@
+name: Build and Test
+
+env:
+  solution_file: 'src/Vipps.net.sln'
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+    paths-ignore:
+      - 'docs/**'
+
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        dotnet-version: [ '7.0.x' ]
+    steps:
+      - uses: actions/checkout@v3
+      - name: Setup .NET Core SDK ${{ matrix.dotnet-version }}
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: ${{ matrix.dotnet-version }}
+      - name: Install dependencies
+        run: dotnet restore src/
+      - name: Build
+        run: dotnet build src/ --no-restore
+      - name: Test
+        run: dotnet test src/ --no-restore --verbosity normal
+      - name: CSharpier check
+        run: |
+          dotnet tool restore --tool-manifest src/.config/dotnet-tools.json
+          cd src
+          dotnet csharpier . --check

@@ -3,7 +3,6 @@ using Vipps.Models.Checkout.InitiateSession;
 
 namespace Vipps.Models.Checkout.GetSession;
 
-
 /// <summary>
 /// Session information
 /// </summary>

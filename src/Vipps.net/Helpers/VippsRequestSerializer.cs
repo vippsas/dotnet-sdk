@@ -28,12 +28,18 @@ namespace Vipps.net.Helpers
             var deserializedTyped = JsonSerializer.Deserialize<T>(vippsResponse);
             if (deserializedTyped is null)
             {
-                throw new ArgumentException("Response could not be deserialized to {type}", nameof(T));
+                throw new ArgumentException(
+                    "Response could not be deserialized to {type}",
+                    nameof(T)
+                );
             }
             var deserializedRaw = JsonSerializer.Deserialize<JsonObject>(vippsResponse);
             if (deserializedRaw is null)
             {
-                throw new ArgumentException("Response could not be deserialized to {type}", nameof(JsonObject));
+                throw new ArgumentException(
+                    "Response could not be deserialized to {type}",
+                    nameof(JsonObject)
+                );
             }
             deserializedTyped.RawResponse = deserializedRaw;
             return deserializedTyped;
