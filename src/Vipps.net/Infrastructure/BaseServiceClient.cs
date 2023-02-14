@@ -23,8 +23,7 @@ namespace Vipps.net.Infrastructure
             HttpMethod httpMethod,
             TRequest? data,
             CancellationToken cancellationToken = default
-        )
-            where TRequest : VippsRequest
+        ) where TRequest : VippsRequest
         {
             return await ExecuteRequestBaseAndParse<TResponse>(
                 path,
@@ -39,8 +38,7 @@ namespace Vipps.net.Infrastructure
             HttpMethod httpMethod,
             TRequest? data,
             CancellationToken cancellationToken = default
-        )
-            where TRequest : VippsRequest
+        ) where TRequest : VippsRequest
         {
             await ExecuteRequestBase(
                 path,
