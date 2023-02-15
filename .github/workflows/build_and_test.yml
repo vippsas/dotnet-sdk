@@ -23,12 +23,20 @@ jobs:
         uses: actions/setup-dotnet@v3
         with:
           dotnet-version: ${{ matrix.dotnet-version }}
-      - name: Install dependencies
-        run: dotnet restore src/
-      - name: Build
-        run: dotnet build src/ --no-restore
+      - name: Install dependencies vipps.net
+        run: dotnet restore src/vipps.net
+      - name: Build vipps.net
+        run: dotnet build src/vipps.net --no-restore
+      - name: Install dependencies vipps.net.demo
+        run: dotnet restore src/vipps.net.demo
+      - name: Build vipps.net.demo
+        run: dotnet build src/vipps.net.demo --no-restore
+      - name: Install dependencies vipps.net.AspCoreDemo
+        run: dotnet restore src/vipps.net.AspCoreDemo
+      - name: Build vipps.net.AspCoreDemo
+        run: dotnet build src/vipps.net.AspCoreDemo --no-restore
       - name: Test
-        run: dotnet test src/ --no-restore --verbosity normal
+        run: dotnet test --verbosity normal
       - name: CSharpier check
         run: |
           dotnet tool restore --tool-manifest src/.config/dotnet-tools.json
