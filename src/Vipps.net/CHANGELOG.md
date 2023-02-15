@@ -2,6 +2,9 @@
 
 All notable changes to this project will be documented in this file. See [versionize](https://github.com/versionize/versionize) for commit guidelines.
 
+<a name="0.8.3"></a>
+## [0.8.3](https://www.github.com/vippsas/vipps-dotnet/releases/tag/v0.8.3) (2023-2-15)
+
 <a name="0.8.2"></a>
 ## [0.8.2](https://www.github.com/vippsas/vipps-dotnet/releases/tag/v0.8.2) (2023-2-15)
 
