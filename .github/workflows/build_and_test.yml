@@ -24,17 +24,17 @@ jobs:
         with:
           dotnet-version: ${{ matrix.dotnet-version }}
       - name: Install dependencies vipps.net
-        run: dotnet restore src/vipps.net
+        run: dotnet restore src/vipps.net/vipps.net.csproj
       - name: Build vipps.net
-        run: dotnet build src/vipps.net --no-restore
+        run: dotnet build src/vipps.net/vipps.net.csproj --no-restore
       - name: Install dependencies vipps.net.demo
-        run: dotnet restore src/vipps.net.demo
+        run: dotnet restore src/vipps.net.demo/vipps.net.demo.csproj
       - name: Build vipps.net.demo
-        run: dotnet build src/vipps.net.demo --no-restore
+        run: dotnet build src/vipps.net.demo/vipps.net.demo.csproj --no-restore
       - name: Install dependencies vipps.net.AspCoreDemo
-        run: dotnet restore src/vipps.net.AspCoreDemo
+        run: dotnet restore src/vipps.net.AspCoreDemo/vipps.net.AspCoreDemo.csproj
       - name: Build vipps.net.AspCoreDemo
-        run: dotnet build src/vipps.net.AspCoreDemo --no-restore
+        run: dotnet build src/vipps.net.AspCoreDemo/vipps.net.AspCoreDemo.csproj --no-restore
       - name: Test
         run: dotnet test --verbosity normal
       - name: CSharpier check
