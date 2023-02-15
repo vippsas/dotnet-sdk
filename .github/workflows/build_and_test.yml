@@ -23,11 +23,6 @@ jobs:
         uses: actions/setup-dotnet@v3
         with:
           dotnet-version: ${{ matrix.dotnet-version }}
-      - name: Get Build Version BEFORE conventional commit
-        run: 
-            Write-Host $Env:GITHUB_REF
-        shell: pwsh
-     
       - name: Install dependencies
         run: dotnet restore src/
       - name: Build
@@ -39,15 +34,3 @@ jobs:
           dotnet tool restore --tool-manifest src/.config/dotnet-tools.json
           cd src
           dotnet csharpier . --check
-      - name: Install Versionize
-        run: dotnet tool install --global Versionize
-      - name: Versionize Release
-        id: versionize
-        run: versionize --changelog-all --exit-insignificant-commits
-        continue-on-error: true
-      - name: Push changes to GitHub
-        if: steps.versionize.outcome == 'success'
-        run: 
-            Write-Host $steps.versionize
-        shell: pwsh
-     
