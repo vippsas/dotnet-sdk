@@ -23,6 +23,16 @@ jobs:
         uses: actions/setup-dotnet@v3
         with:
           dotnet-version: ${{ matrix.dotnet-version }}
+      - name: Get Build Version BEFORE conventional commit
+        run: 
+            Write-Host $Env:GITHUB_REF
+        shell: pwsh
+      - name: Conventional Changelog Action
+        uses: TriPSs/conventional-changelog-action@v3.18.0
+      - name: Get Build Version AFTER conventional commit
+        run: 
+            Write-Host $Env:GITHUB_REF
+        shell: pwsh
       - name: Install dependencies
         run: dotnet restore src/
       - name: Build
