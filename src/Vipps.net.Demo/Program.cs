@@ -23,9 +23,15 @@ internal sealed class Program
         // The following line sets up dependency injection of an http Client to be used for CheckoutController.
         builder.Services.AddScoped<CheckoutController>().AddHttpClient();
 
+        var app = builder.Build();
+        if (app.Environment.IsDevelopment())
+        {
+            app.UseSwagger();
+            app.UseSwaggerUI();
+        }
+
         // The following (commented out) line configures vipps from a configuration section named "Vipps".
         //builder.Services.ConfigureVipps(builder.Configuration, "Vipps");
-
 
         // The following lines initialises VippConfigurationOptions with values fetched from key vault.
         var vippsConfigurationOptions = new VippsConfigurationOptions
@@ -40,14 +46,10 @@ internal sealed class Program
         };
 
         // The following line configures vipps with custom settings
-        builder.Services.ConfigureVipps(vippsConfigurationOptions);
-
-        var app = builder.Build();
-        if (app.Environment.IsDevelopment())
-        {
-            app.UseSwagger();
-            app.UseSwaggerUI();
-        }
+        DependencyInjection.ConfigureVipps(
+            vippsConfigurationOptions,
+            app.Services.GetService<ILoggerFactory>()
+        );
 
         app.UseAuthorization();
 

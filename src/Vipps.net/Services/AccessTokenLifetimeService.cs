@@ -1,10 +1,11 @@
-﻿using System.IdentityModel.Tokens.Jwt;
+﻿using System;
+using System.IdentityModel.Tokens.Jwt;
 
 namespace Vipps.Services
 {
     internal sealed class AccessTokenLifetimeService
     {
-        private readonly JwtSecurityTokenHandler _handler = new();
+        private readonly JwtSecurityTokenHandler _handler = new JwtSecurityTokenHandler();
 
         public AccessTokenLifetimeService() { }
 
