@@ -55,7 +55,7 @@ InitiateSessionRequest initiateSessionRequest = new()
 
 #### Response
 
-All response objects have a property called RawResponse that contains the RawResponse in the form of a JsonObject.
+All response objects have a property called RawResponse that contains the response in the form of a JsonObject.
 
 ##### RawResponse example
 
