@@ -31,10 +31,10 @@ jobs:
       - name: Setup Nerdbank.GitVersioning
         run: dotnet tool install --tool-path some/where nbgv
       - name: Set Cloud Version using Nerdbank.Gitversioning
-        run: nbgv cloud
+        run: some/where/nbgv cloud
       - name: Get Version
-        run: $version = .\nbgv.exe get-version -f json | ConvertFrom-Json | echo $version
+        run: $version = some/where/nbgv.exe get-version -f json | ConvertFrom-Json | echo $version
       #- name: Build Nuget
       #  run: dotnet build /src/Vipps.net/Vipps.net.csproj
       - name: Pack Nuget
-        run: dotnet pack /src/Vipps.net/Vipps.net.csproj --no-build --no-restore --include-source /p:NuspecProperties="version=$($version.NuGetPackageVersion)"
+        run: dotnet pack /src/Vipps.net/Vipps.net.csproj --no-build --no-restore --include-source --version $($version.NuGetPackageVersion)
