@@ -4,11 +4,11 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("Vipps.net.WindowsFormsDemo")]
+[assembly: AssemblyTitle("Vipps.net.AspDemo")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Vipps")]
-[assembly: AssemblyProduct("Vipps.net.WindowsFormsDemo")]
+[assembly: AssemblyProduct("Vipps.net.AspDemo")]
 [assembly: AssemblyCopyright("Copyright © Vipps 2023")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
@@ -19,7 +19,7 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid("8c10598f-5d12-40ff-987e-e248996cfb62")]
+[assembly: Guid("dd0486ad-11d7-4794-b553-be899213d413")]
 
 // Version information for an assembly consists of the following four values:
 //
@@ -28,8 +28,7 @@ using System.Runtime.InteropServices;
 //      Build Number
 //      Revision
 //
-// You can specify all the values or you can default the Build and Revision Numbers
+// You can specify all the values or you can default the Revision and Build Numbers
 // by using the '*' as shown below:
-// [assembly: AssemblyVersion("1.0.*")]
 [assembly: AssemblyVersion("1.0.0.0")]
 [assembly: AssemblyFileVersion("1.0.0.0")]

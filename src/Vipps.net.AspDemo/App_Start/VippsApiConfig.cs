@@ -1,22 +1,12 @@
-﻿using System;
-using System.Configuration;
-using System.Windows.Forms;
+﻿using System.Configuration;
 using Vipps.net.Infrastructure;
 
-namespace Vipps.net.WindowsFormsDemo
+namespace Vipps.net.AspDemo
 {
-    internal static class Program
+    public static class VippsApiConfig
     {
-        /// <summary>
-        /// The main entry point for the application.
-        /// </summary>
-        [STAThread]
-        static void Main()
+        public static void Configure()
         {
-            Application.EnableVisualStyles();
-            Application.SetCompatibleTextRenderingDefault(false);
-
-            // These settings are saved in a secrets.xml file, which must not be checked in
             VippsConfiguration.ClientId = ConfigurationManager.AppSettings["ClientId"];
             VippsConfiguration.ClientSecret = ConfigurationManager.AppSettings["ClientSecret"];
             VippsConfiguration.MerchantSerialNumber = ConfigurationManager.AppSettings[
@@ -28,8 +18,6 @@ namespace Vipps.net.WindowsFormsDemo
             VippsConfiguration.TestMode = bool.Parse(
                 ConfigurationManager.AppSettings["UseTestMode"]
             );
-
-            Application.Run(new Form1());
         }
     }
 }

@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 using Vipps.Models.Checkout.InitiateSession;
 using Vipps.Services;
 
-namespace Vipps.net.WindowsFormsDemo
+namespace Vipps.net.AspDemo.Services
 {
     internal static class CheckoutSessionService
     {
