@@ -20,6 +20,9 @@ jobs:
         dotnet-version: [ '7.0.x' ]
     steps:
       - uses: actions/checkout@v3
+        with: 
+          path: main
+          fetch-depth: 0
       - name: Setup .NET Core SDK ${{ matrix.dotnet-version }}
         uses: actions/setup-dotnet@v3
         with:
@@ -34,4 +37,4 @@ jobs:
       #- name: Build Nuget
       #  run: dotnet build /src/Vipps.net/Vipps.net.csproj
       - name: Pack Nuget
-        run: dotnet pack /src/Vipps.net/Vipps.net.csproj --no-build --no-restore --include-source /p:NuspecProperties="version=$($version.NuGetPackageVersion)
+        run: dotnet pack /src/Vipps.net/Vipps.net.csproj --no-build --no-restore --include-source /p:NuspecProperties="version=$($version.NuGetPackageVersion)"
