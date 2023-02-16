@@ -24,7 +24,7 @@ The Vipps SDK offer typed request and response classes. These classes may not be
 
 #### Request
 
-All request objects also have a property called "ExtraParameters". This is a dynamic object that if set will merge with the request object.
+All request objects have a property called "ExtraParameters". This is a dynamic object that if set will merge with the request object.
 
 ##### ExtraParameters example
 
