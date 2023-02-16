@@ -3,7 +3,19 @@
     <TargetFramework>net7.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
+    <PackageId>Vipps.net</PackageId>
     <Version>0.8.3</Version>
+    <PackageVersion>0.0.1</PackageVersion>
+    <Authors>Vipps Mobilepay AS</Authors>
+    <Company>Vipps Mobilepay AS</Company>
+    <Description>Vipps SDK for .Net</Description>
+    <Title>Vipps SDK .Net</Title>
+    <PackageProjectUrl>https://vippsas.github.io/vipps-developer-docs/docs/APIs/checkout-api</PackageProjectUrl>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
+    <RepositoryUrl>https://github.com/vippsas/vipps-dotnet</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <GenerateDocumentationFile>True</GenerateDocumentationFile>
   </PropertyGroup>
   <ItemGroup>
     <None Include="..\.editorconfig" Link=".editorconfig" />

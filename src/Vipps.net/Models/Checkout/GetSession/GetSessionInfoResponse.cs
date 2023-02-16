@@ -6,20 +6,26 @@ namespace Vipps.Models.Checkout.GetSession;
 /// <summary>
 /// Session information
 /// </summary>
-/// <param name="SessionId">The Id of the session. Example: "v52EtjZriRmGiKiAKHByK2".</param>
-/// <param name="Reference">The merchant's unique reference for the transaction. Also known as OrderId. Example: "acme-shop-123-order123abc". See https://vippsas.github.io/vipps-developer-docs/docs/vipps-developers/common-topics/orderid</param>
-/// <param name="MerchantSerialNumber">The merchant's serial number. Example: "123456" </param>
-/// <param name="SessionState">The state of the session. Example: "SessionStarted". The state of the payment is in PaymentDetails.State.</param>
-/// <param name="PaymentMethod"></param>
-/// <param name="PaymentDetails"></param>
-/// <param name="UserInfo"></param>
-/// <param name="ShippingDetails"></param>
-/// <param name="BillingDetails"></param>
 public class GetSessionInfoResponse : VippsResponse
 {
+    /// <summary>
+    /// The Id of the session. Example: "v52EtjZriRmGiKiAKHByK2".
+    /// </summary>
     public string SessionId { get; init; }
+
+    /// <summary>
+    /// The merchant's serial number. Example: "123456"
+    /// </summary>
     public string? MerchantSerialNumber { get; init; }
+
+    /// <summary>
+    /// The merchant's unique reference for the transaction. Also known as OrderId. Example: "acme-shop-123-order123abc". See https://vippsas.github.io/vipps-developer-docs/docs/vipps-developers/common-topics/orderid
+    /// </summary>
     public string Reference { get; init; }
+
+    /// <summary>
+    /// The state of the session. Example: "SessionStarted". The state of the payment is in PaymentDetails.State.
+    /// </summary>
     public ExternalSessionState SessionState { get; init; }
     public PaymentMethod? PaymentMethod { get; init; }
     public ResponsePaymentDetails? PaymentDetails { get; init; }
@@ -130,22 +136,23 @@ public enum PaymentMethod
 
 /// <summary>
 /// Data from the UserInfo endpoint. Will only be present if UserInfo flow is used.
-///
 /// </summary>
-/// <param name="Sub">The openid sub that uniquely identifies a Vipps user.</param>
-/// <param name="Email">Example: "user@example.com"</param>
 public class UserInfo
 {
+    /// <summary>
+    /// The openid sub that uniquely identifies a Vipps user.
+    /// </summary>
     public string Sub { get; init; }
+
+    /// <summary>
+    /// Example: "user@example.com"
+    /// </summary>
     public string? Email { get; init; }
 }
 
 /// <summary>
 /// Defines the details of the payment.
 /// </summary>
-/// <param name="Amount"></param>
-/// <param name="State"></param>
-/// <param name="Aggregate"></param>
 public class ResponsePaymentDetails
 {
     public Amount Amount { get; init; }
@@ -156,10 +163,6 @@ public class ResponsePaymentDetails
 /// <summary>
 /// Defines the details of the transaction
 /// </summary>
-/// <param name="CancelledAmount"></param>
-/// <param name="CapturedAmount"></param>
-/// <param name="RefundedAmount"></param>
-/// <param name="AuthorizedAmount"></param>
 public class TransactionAggregate
 {
     public Amount? CancelledAmount { get; init; }
