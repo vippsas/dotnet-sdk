@@ -20,7 +20,7 @@ Todo
 
 ### Unimplemented parameters and properties
 
-The Vipps SDK offer typed request and response classes. These classes may not be updated if you are on the bleeding edge of our API's, or if you use features that are not generally available.
+The Vipps SDK offer typed request and response classes. These classes might not be up to date if you are on the bleeding edge of our APIs, or if you use features that are not generally available.
 
 #### Request
 
