@@ -5,6 +5,6 @@ namespace Vipps.Models
     public class VippsRequest
     {
         [JsonIgnore]
-        public dynamic? ExtraParameters { get; set; }
+        public dynamic ExtraParameters { get; set; }
     }
 }

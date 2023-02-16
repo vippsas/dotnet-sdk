@@ -1,4 +1,6 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using System.Collections.Generic;
+using System.Threading;
+using System.Threading.Tasks;
 using Vipps.net.Helpers;
 
 namespace Vipps.net.Infrastructure
@@ -6,12 +8,9 @@ namespace Vipps.net.Infrastructure
     internal sealed class AccessTokenServiceClient : BaseServiceClient
     {
         internal AccessTokenServiceClient(IVippsHttpClient vippsHttpClient)
-            : base(vippsHttpClient)
-        {
-            Logger = VippsLogging.LoggerFactory.CreateLogger<AccessTokenServiceClient>();
-        }
+            : base(vippsHttpClient) { }
 
-        protected override async Task<Dictionary<string, string>?> GetHeaders(
+        protected override async Task<Dictionary<string, string>> GetHeaders(
             CancellationToken cancellationToken
         )
         {

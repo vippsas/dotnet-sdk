@@ -1,4 +1,8 @@
-﻿namespace Vipps.net.Infrastructure
+﻿using System.Net.Http;
+using System.Threading;
+using System.Threading.Tasks;
+
+namespace Vipps.net.Infrastructure
 {
     public interface IVippsHttpClient
     {
