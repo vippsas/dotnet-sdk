@@ -1,34 +1,36 @@
-﻿namespace Vipps.net.Infrastructure
+﻿using System;
+
+namespace Vipps.net.Infrastructure
 {
     public static class VippsConfiguration
     {
-        private static string? _clientId;
+        private static string _clientId;
         public static string ClientId
         {
             get { return _clientId ?? throw new ArgumentNullException(nameof(ClientId)); }
             set
             {
-                if (_clientId is not null)
+                if (_clientId != null)
                 {
                     throw new ArgumentException($"{nameof(ClientId)} is already set");
                 }
                 _clientId = value;
             }
         }
-        private static string? _clientSecret;
+        private static string _clientSecret;
         public static string ClientSecret
         {
             get { return _clientSecret ?? throw new ArgumentNullException(nameof(ClientSecret)); }
             set
             {
-                if (_clientSecret is not null)
+                if (_clientSecret != null)
                 {
                     throw new ArgumentException($"{nameof(ClientSecret)} is already set");
                 }
                 _clientSecret = value;
             }
         }
-        private static string? _subscriptionKey;
+        private static string _subscriptionKey;
         public static string SubscriptionKey
         {
             get
@@ -37,14 +39,14 @@
             }
             set
             {
-                if (_subscriptionKey is not null)
+                if (_subscriptionKey != null)
                 {
                     throw new ArgumentException($"{nameof(SubscriptionKey)} is already set");
                 }
                 _subscriptionKey = value;
             }
         }
-        private static string? _merchantSerialNumber;
+        private static string _merchantSerialNumber;
         public static string MerchantSerialNumber
         {
             get
@@ -54,7 +56,7 @@
             }
             set
             {
-                if (_merchantSerialNumber is not null)
+                if (_merchantSerialNumber != null)
                 {
                     throw new ArgumentException($"{nameof(MerchantSerialNumber)} is already set");
                 }
@@ -67,7 +69,7 @@
             get { return _testMode ?? throw new ArgumentNullException(nameof(TestMode)); }
             set
             {
-                if (_testMode is not null)
+                if (_testMode != null)
                 {
                     throw new ArgumentException($"{nameof(TestMode)} is already set");
                 }
@@ -78,7 +80,7 @@
         internal static string BaseUrl =>
             TestMode == true ? "https://api-test.vipps.no" : "https://api.vipps.no";
 
-        private static IVippsHttpClient? _vippsHttpClient;
+        private static IVippsHttpClient _vippsHttpClient;
         public static IVippsHttpClient VippsHttpClient
         {
             internal get
@@ -92,7 +94,7 @@
             }
             set
             {
-                if (_vippsHttpClient is not null)
+                if (_vippsHttpClient != null)
                 {
                     throw new InvalidOperationException(
                         "Once created, VippsHttpClient cannot be modified"

@@ -1,8 +1,13 @@
-﻿namespace Vipps.net.Infrastructure
+﻿using System;
+using System.Net.Http;
+using System.Threading;
+using System.Threading.Tasks;
+
+namespace Vipps.net.Infrastructure
 {
     public class VippsHttpClient : IVippsHttpClient
     {
-        private HttpClient? _httpClient;
+        private HttpClient _httpClient;
         private readonly TimeSpan DefaultTimeOut = TimeSpan.FromSeconds(100);
 
         public VippsHttpClient() { }
@@ -17,7 +22,11 @@
         {
             get
             {
-                _httpClient ??= CreateDefaultHttpClient();
+                if (_httpClient == null)
+                {
+                    _httpClient = CreateDefaultHttpClient();
+                }
+
                 return _httpClient;
             }
         }

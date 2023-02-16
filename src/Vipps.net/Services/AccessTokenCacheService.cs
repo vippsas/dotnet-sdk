@@ -1,4 +1,6 @@
-﻿using System.Runtime.Caching;
+﻿using System;
+using System.Collections.Concurrent;
+using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
 using Vipps.Models.Epayment.AccessToken;
@@ -7,9 +9,17 @@ namespace Vipps.Services
 {
     public static class AccessTokenCacheService
     {
-        private static readonly AccessTokenLifetimeService _lifetimeService = new();
-        private static readonly MemoryCache _memoryCache = new(nameof(AccessTokenCacheService));
+#pragma warning disable IDE0090 // Use 'new(...)'
+        private static readonly AccessTokenLifetimeService _lifetimeService =
+            new AccessTokenLifetimeService();
+
         private static readonly TimeSpan _backoffTimespan = TimeSpan.FromMinutes(2);
+        private static readonly ConcurrentDictionary<
+            string,
+            (AccessToken token, DateTimeOffset validTo)
+        > _dictionary =
+            new ConcurrentDictionary<string, (AccessToken token, DateTimeOffset validTo)>();
+#pragma warning restore IDE0090 // Use 'new(...)'
         private const string KeyPrefix = "access-token-";
 
         public static void Add(string key, AccessToken token)
@@ -23,13 +33,27 @@ namespace Vipps.Services
                 && tokenValidToWithBackoff.Value > DateTimeOffset.Now
             )
             {
-                _memoryCache.Set(GetPrefixedHashedKey(key), token, tokenValidToWithBackoff.Value);
+                _dictionary.AddOrUpdate(
+                    GetPrefixedHashedKey(key),
+                    (token, tokenValidToWithBackoff.Value),
+                    (oldToken, oldValidTo) => (token, tokenValidToWithBackoff.Value)
+                );
             }
         }
 
-        public static AccessToken? Get(string key)
+        public static AccessToken Get(string key)
         {
-            return _memoryCache.Get(GetPrefixedHashedKey(key)) as AccessToken;
+            if (_dictionary.TryGetValue(GetPrefixedHashedKey(key), out var values))
+            {
+                if (values.validTo < DateTimeOffset.Now)
+                {
+                    _dictionary.TryRemove(key, out _);
+                    return null;
+                }
+                return values.token;
+            }
+
+            return null;
         }
 
         private static string GetPrefixedHashedKey(string key)
@@ -39,8 +63,15 @@ namespace Vipps.Services
 
         private static string GetHashedKey(string key)
         {
-            var hash = SHA256.HashData(Encoding.UTF8.GetBytes(key));
-            return Convert.ToHexString(hash);
+#pragma warning disable CA1850 // Prefer static 'System.Security.Cryptography.SHA256.HashData' method over 'ComputeHash'
+            byte[] hash = null;
+            using (var sha256 = SHA256.Create())
+            {
+                hash = sha256.ComputeHash(Encoding.UTF8.GetBytes(key));
+            }
+#pragma warning restore CA1850 // Prefer static 'System.Security.Cryptography.SHA256.HashData' method over 'ComputeHash'
+
+            return string.Join(string.Empty, hash.Select(x => x.ToString("X2")));
         }
     }
 }

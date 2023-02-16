@@ -1,4 +1,7 @@
-﻿using Vipps.Models.Epayment.AccessToken;
+﻿using System.Net.Http;
+using System.Threading;
+using System.Threading.Tasks;
+using Vipps.Models.Epayment.AccessToken;
 using Vipps.net.Infrastructure;
 
 namespace Vipps.Services
@@ -11,7 +14,7 @@ namespace Vipps.Services
         {
             var key = $"{VippsConfiguration.ClientId}{VippsConfiguration.ClientSecret}";
             var cachedToken = AccessTokenCacheService.Get(key);
-            if (cachedToken is not null)
+            if (cachedToken != null)
             {
                 return cachedToken;
             }

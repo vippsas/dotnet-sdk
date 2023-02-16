@@ -1,4 +1,7 @@
-﻿using System.Net;
+﻿using System;
+using System.Diagnostics;
+using System.Net;
+using System.Net.Http;
 using Microsoft.Extensions.Logging;
 using Polly;
 using Polly.Contrib.WaitAndRetry;
@@ -16,6 +19,12 @@ namespace Vipps.Helpers
         private const string CommonWarningMessage =
             "Retry #{retryCount} failed because response status was {responseStatus}. Exception was {exception}. Sleeping for {sleepDurationMs} ms.";
 
+        private const string TraceCommonErrorMessagePart =
+            ". Status was {0}, response body was {1}";
+
+        private const string TraceCommonWarningMessage =
+            "Retry #{0} failed because response status was {1}. Exception was {2}. Sleeping for {3} ms.";
+
         internal static AsyncFallbackPolicy<HttpResponseMessage> GetFallbackPolicy(
             ILogger logger,
             string errorMessage
@@ -29,10 +38,18 @@ namespace Vipps.Helpers
                     new HttpResponseMessage(HttpStatusCode.InternalServerError),
                     async (result, context) =>
                     {
-                        logger.LogError(
+                        var responseString = await result.Result.Content
+                            .ReadAsStringAsync()
+                            .ConfigureAwait(false);
+                        logger?.LogError(
                             $"{errorMessage}{CommonErrorMessagePart}",
                             result.Result.StatusCode,
-                            await result.Result.Content.ReadAsStringAsync().ConfigureAwait(false)
+                            responseString
+                        );
+                        Trace.TraceError(
+                            $"{errorMessage}{TraceCommonErrorMessagePart}",
+                            result.Result.StatusCode,
+                            responseString
                         );
                     }
                 );
@@ -55,13 +72,23 @@ namespace Vipps.Helpers
                         int retryCount,
                         Context ctx
                     ) =>
-                        logger.LogWarning(
+                    {
+                        logger?.LogWarning(
                             CommonWarningMessage,
                             retryCount,
                             response?.Result?.StatusCode,
                             response?.Exception,
                             Convert.ToInt32(sleepDuration.Milliseconds)
-                        )
+                        );
+
+                        Trace.TraceWarning(
+                            TraceCommonWarningMessage,
+                            retryCount,
+                            response?.Result?.StatusCode,
+                            response?.Exception,
+                            Convert.ToInt32(sleepDuration.Milliseconds)
+                        );
+                    }
                 );
         }
 
