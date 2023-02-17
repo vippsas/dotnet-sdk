@@ -15,10 +15,9 @@ namespace Vipps.net.Infrastructure
         public VippsHttpClient(HttpClient httpClient)
         {
             _httpClient = httpClient;
-            SetupHttpClientHeaders(httpClient);
         }
 
-        public HttpClient HttpClient
+        internal HttpClient HttpClient
         {
             get
             {
@@ -36,6 +35,7 @@ namespace Vipps.net.Infrastructure
             CancellationToken cancellationToken
         )
         {
+            SetupHeaders(request.Headers);
             var response = await HttpClient
                 .SendAsync(request, cancellationToken)
                 .ConfigureAwait(false);
@@ -50,48 +50,47 @@ namespace Vipps.net.Infrastructure
                 BaseAddress = new Uri($"{VippsConfiguration.BaseUrl}")
             };
 
-            SetupHttpClientHeaders(httpClient);
             return httpClient;
         }
 
-        private static void SetupHttpClientHeaders(HttpClient httpClient)
+        private static void SetupHeaders(System.Net.Http.Headers.HttpRequestHeaders headers)
         {
             AddOrUpdateHeader(
-                httpClient,
+                headers,
                 "Ocp-Apim-Subscription-Key",
                 VippsConfiguration.SubscriptionKey
             );
             AddOrUpdateHeader(
-                httpClient,
+                headers,
                 "Merchant-Serial-Number",
                 VippsConfiguration.MerchantSerialNumber
             );
-            AddOrUpdateHeader(httpClient, "Vipps-System-Name", ThisAssembly.AssemblyName);
+            AddOrUpdateHeader(headers, "Vipps-System-Name", ThisAssembly.AssemblyName);
             AddOrUpdateHeader(
-                httpClient,
+                headers,
                 "Vipps-System-Version",
                 ThisAssembly.AssemblyInformationalVersion
             );
+            AddOrUpdateHeader(headers, "Vipps-System-Plugin-Name", VippsConfiguration.PluginName);
             AddOrUpdateHeader(
-                httpClient,
-                "Vipps-System-Plugin-Name",
-                VippsConfiguration.PluginName
-            );
-            AddOrUpdateHeader(
-                httpClient,
+                headers,
                 "Vipps-System-Plugin-Version",
                 VippsConfiguration.PluginVersion
             );
         }
 
-        private static void AddOrUpdateHeader(HttpClient httpClient, string key, string value)
+        private static void AddOrUpdateHeader(
+            System.Net.Http.Headers.HttpRequestHeaders headers,
+            string key,
+            string value
+        )
         {
-            if (httpClient.DefaultRequestHeaders.Contains(key))
+            if (headers.Contains(key))
             {
-                httpClient.DefaultRequestHeaders.Remove(key);
+                headers.Remove(key);
             }
 
-            httpClient.DefaultRequestHeaders.Add(key, value);
+            headers.Add(key, value);
         }
     }
 }

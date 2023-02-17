@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Builder;
+﻿using System.Reflection;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -48,11 +49,14 @@ namespace Vipps.net.AspCore31Demo
                 ClientSecret = configuration.GetValue<string>("CLIENT-SECRET")!,
                 MerchantSerialNumber = configuration.GetValue<string>("MERCHANT-SERIAL-NUMBER")!,
                 SubscriptionKey = configuration.GetValue<string>("SUBSCRIPTION-KEY")!,
-                UseTestMode = true
+                UseTestMode = true,
+                PluginName = Assembly.GetExecutingAssembly().GetName().Name,
+                PluginVersion =
+                    Assembly.GetExecutingAssembly().GetName().Version?.ToString() ?? "1.0.0"
             };
 
             // The following line configures vipps with custom settings
-            DependencyInjection.ConfigureVipps(
+            VippsConfiguration.ConfigureVipps(
                 vippsConfigurationOptions,
                 app.ApplicationServices.GetService<ILoggerFactory>()
             );

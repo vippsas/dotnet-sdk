@@ -1,51 +1,64 @@
 ﻿using System;
+using Microsoft.Extensions.Logging;
+using Vipps.Infrastructure;
 
 namespace Vipps.net.Infrastructure
 {
     public static class VippsConfiguration
     {
+        public static void ConfigureVipps(
+            VippsConfigurationOptions vippsConfigurationOptions,
+            ILoggerFactory loggerFactory = null,
+            VippsHttpClient vippsHttpClient = null
+        )
+        {
+            if (loggerFactory != null)
+            {
+                VippsLogging.LoggerFactory = loggerFactory;
+            }
+
+            if (vippsHttpClient != null)
+            {
+                VippsHttpClient = vippsHttpClient;
+            }
+
+            PluginName = vippsConfigurationOptions.PluginName;
+            PluginVersion = vippsConfigurationOptions.PluginVersion;
+            ClientId = vippsConfigurationOptions.ClientId;
+            ClientSecret = vippsConfigurationOptions.ClientSecret;
+            MerchantSerialNumber = vippsConfigurationOptions.MerchantSerialNumber;
+            SubscriptionKey = vippsConfigurationOptions.SubscriptionKey;
+            TestMode = vippsConfigurationOptions.UseTestMode;
+        }
+
         private static string _pluginName = "checkout-sandbox";
-        public static string PluginName
+        internal static string PluginName
         {
             get { return _pluginName; }
             set { _pluginName = value; }
         }
 
         private static string _pluginVersion = "1.0";
-        public static string PluginVersion
+        internal static string PluginVersion
         {
             get { return _pluginVersion; }
             set { _pluginVersion = value; }
         }
 
         private static string _clientId;
-        public static string ClientId
+        internal static string ClientId
         {
             get { return _clientId ?? throw new ArgumentNullException(nameof(ClientId)); }
-            set
-            {
-                if (_clientId != null)
-                {
-                    throw new ArgumentException($"{nameof(ClientId)} is already set");
-                }
-                _clientId = value;
-            }
+            set { _clientId = value; }
         }
         private static string _clientSecret;
-        public static string ClientSecret
+        internal static string ClientSecret
         {
             get { return _clientSecret ?? throw new ArgumentNullException(nameof(ClientSecret)); }
-            set
-            {
-                if (_clientSecret != null)
-                {
-                    throw new ArgumentException($"{nameof(ClientSecret)} is already set");
-                }
-                _clientSecret = value;
-            }
+            set { _clientSecret = value; }
         }
         private static string _subscriptionKey;
-        public static string SubscriptionKey
+        internal static string SubscriptionKey
         {
             get
             {
@@ -61,7 +74,7 @@ namespace Vipps.net.Infrastructure
             }
         }
         private static string _merchantSerialNumber;
-        public static string MerchantSerialNumber
+        internal static string MerchantSerialNumber
         {
             get
             {
@@ -78,7 +91,7 @@ namespace Vipps.net.Infrastructure
             }
         }
         private static bool? _testMode;
-        public static bool TestMode
+        internal static bool TestMode
         {
             get { return _testMode ?? throw new ArgumentNullException(nameof(TestMode)); }
             set
@@ -95,9 +108,9 @@ namespace Vipps.net.Infrastructure
             TestMode == true ? "https://api-test.vipps.no" : "https://api.vipps.no";
 
         private static IVippsHttpClient _vippsHttpClient;
-        public static IVippsHttpClient VippsHttpClient
+        internal static IVippsHttpClient VippsHttpClient
         {
-            internal get
+            get
             {
                 if (_vippsHttpClient is null)
                 {
