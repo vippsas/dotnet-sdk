@@ -35,6 +35,6 @@ jobs:
       - name: Set Version variable
         id: set_version
         run: |
-            "{version}='{$(nbgv get-version -p ./src/Vipps.net/Vipps.net.csproj -v AssemblyInformationalVersion)}" >> $GITHUB_ENV
+            "{version}='{$(nbgv get-version -p ./src/Vipps.net -v AssemblyInformationalVersion)}" >> $GITHUB_ENV
       - name: Pack Nuget
         run: dotnet pack /src/Vipps.net/Vipps.net.csproj --no-build --no-restore --include-source --version ${{ env.version }}
