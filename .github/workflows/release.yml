@@ -39,4 +39,4 @@ jobs:
       - name: Build vipps.net
         run: dotnet build src/Vipps.net/Vipps.net.csproj --no-restore
       - name: Pack Nuget
-        run: dotnet pack "./src/Vipps.net/Vipps.net.csproj" --no-build --no-restore --include-source --version ${{ env.version }}
+        run: dotnet pack "./src/Vipps.net/Vipps.net.csproj" --no-build --no-restore --include-source
