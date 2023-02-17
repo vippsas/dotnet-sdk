@@ -24,10 +24,10 @@ dotnet add package vipps.net
 ```C#
 var vippsConfigurationOptions = new VippsConfigurationOptions
 {
-    ClientId = configuration.GetValue<string>("CLIENT-ID")!,
-    ClientSecret = configuration.GetValue<string>("CLIENT-SECRET")!,
-    MerchantSerialNumber = configuration.GetValue<string>("MERCHANT-SERIAL-NUMBER")!,
-    SubscriptionKey = configuration.GetValue<string>("SUBSCRIPTION-KEY")!,
+    ClientId = "CLIENT-ID",
+    ClientSecret = "CLIENT-SECRET",
+    MerchantSerialNumber = "MERCHANT-SERIAL-NUMBER",
+    SubscriptionKey = "SUBSCRIPTION-KEY",
     UseTestMode = true
 };
 
