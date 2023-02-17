@@ -1,0 +1,37 @@
+name: Build and Test
+
+env:
+  solution_file: 'src/Vipps.net.sln'
+on:
+  push:
+    tags:
+    - "v[0-9]+.[0-9]+.[0-9]"
+
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        dotnet-version: [ '7.0.x' ]
+    steps:
+      - uses: actions/checkout@v3
+        with: 
+          fetch-depth: 0
+      - name: Setup .NET Core SDK ${{ matrix.dotnet-version }}
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: ${{ matrix.dotnet-version }}
+      - name: Setup Nerdbank.GitVersioning
+        run: dotnet tool install --tool-path some/where nbgv
+      - name: Set VERSION variable from tag
+        run: echo "VERSION=${GITHUB_REF/refs\/tags\/v/}" >> $GITHUB_ENV
+      - name: Set Nerdbank.Gitversioning version
+        run: nbgv set-version ${VERSION}
+      - name: Pack Nuget
+        run: dotnet pack "./src/Vipps.net/Vipps.net.csproj" --include-source /p:Version=${VERSION} --output .
+      - name: Upload packed as artifact #replace with nuget
+        uses: actions/upload-artifact@v3
+        with: 
+          name: Nuget package
+          path: Vipps.net.${VERSION}*.nupkg
