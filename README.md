@@ -1,26 +1,61 @@
 # Vipps.net
 
-The official Vipps .NET SDK.
+The official Vipps .NET SDK for the Checkout and Epayment APIs.
 
-## Features
+Supports .NET Standard 2.0+, .NET Core 2.0+ and .NET Framework 4.8+
+
+**Features**
 
 - Serialization/deserialization
 - Authentication
-- Retries
+- Network retries
 - Idempotency
-- Support for API not-yet implemented in SDK
-- Caching of Access Token
-- Other ideas?
 
 ## Installation
 
-Todo
+.NET Core CLI:
 
-## Documentation
+```sh
+dotnet add package vipps.net
+```
+
+## Usage
+
+```C#
+var vippsConfigurationOptions = new VippsConfigurationOptions
+{
+    ClientId = "CLIENT-ID",
+    ClientSecret = "CLIENT-SECRET",
+    MerchantSerialNumber = "MERCHANT-SERIAL-NUMBER",
+    SubscriptionKey = "SUBSCRIPTION-KEY",
+    UseTestMode = true
+};
+
+VippsConfiguration.ConfigureVipps(vippsConfigurationOptions);
+
+var request = new InitiateSessionRequest
+{
+    MerchantInfo = new PaymentMerchantInfo
+    {
+        CallbackAuthorizationToken = Guid.NewGuid().ToString(),
+        CallbackUrl = "https://your-url-here.com:3000",
+        ReturnUrl = "https://your-url-here.com:3000",
+    },
+    Transaction = new PaymentTransaction
+    {
+        Amount = new Amount { Currency = "NOK", Value = 10000 },
+        PaymentDescription = "test",
+        Reference = Guid.NewGuid().ToString()
+    }
+};
+
+var result = await CheckoutService.InitiateSession(request);
+
+```
 
 ### Unimplemented parameters and properties
 
-The Vipps SDK offer typed request and response classes. These classes may not be updated if you are on the bleeding edge of our API's, or if you use features that are not generally available.
+The Vipps SDK offer typed request and response classes. These classes might not be up to date if you are on the bleeding edge of our APIs, or if you use features that are not generally available.
 
 #### Request
 
@@ -55,7 +90,7 @@ InitiateSessionRequest initiateSessionRequest = new()
 
 #### Response
 
-All response objects have a property called RawResponse that contains the RawResponse in the form of a JsonObject.
+All response objects have a property called RawResponse that contains the response in the form of a JsonObject.
 
 ##### RawResponse example
 
@@ -65,7 +100,3 @@ response.RawResponse
     .First(property => property.Key == "cancellationUrl")
     .Value?.GetValue<string>()
 ```
-
-## Usage
-
-Todo
