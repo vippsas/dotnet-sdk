@@ -50,10 +50,10 @@ jobs:
           dotnet tool restore --tool-manifest src/.config/dotnet-tools.json
           cd src
           dotnet csharpier . --check
-    # Should only run if main, not PR
       - name: Pack Nuget
         run: dotnet pack "./src/Vipps.net/Vipps.net.csproj" --no-build --no-restore --include-source
-      - name: Upload packed as artifact
+      - name: Upload packed as artifact #replace with nuget
+        if: github.ref == 'refs/heads/main'
         uses: actions/upload-artifact@v3
         with: 
           name: Nuget package
