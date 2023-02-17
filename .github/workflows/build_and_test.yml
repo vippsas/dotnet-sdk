@@ -62,7 +62,7 @@ jobs:
         if: ${{ github.event.head_commit.message }}
         run: "echo \"RELEASE_TAG=${{ github.event.head_commit.message }} | sed '(v(\\d+)\\.(\\d+)\\.(\\d+)(.*?))'\" >> $GITHUB_ENV"
       - name: Create Tag #SHOULD BE Only on main
-        if: ${{ RELEASE_TAG }}
+        if: "${{ RELEASE_TAG }}"
         id: create_tag
         uses: actions/github-script@v4
         env:
