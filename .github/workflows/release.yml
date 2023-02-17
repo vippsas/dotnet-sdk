@@ -33,7 +33,7 @@ jobs:
         run: nbgv cloud
       - name: Set Version variable
         id: set_version
-        run: echo "version='$(nbgv get-version -p ./src/Vipps.net -v AssemblyFileVersion)'" >> $GITHUB_ENV
+        run: echo "version='$(nbgv get-version -p ./src/Vipps.net -v NuGetPackageVersion)'" >> $GITHUB_ENV
       - name: Install dependencies Vipps.net
         run: dotnet restore src/Vipps.net/Vipps.net.csproj
       - name: Build vipps.net
