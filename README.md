@@ -1,22 +1,57 @@
 # Vipps.net
 
-The official Vipps .NET SDK.
+The official Vipps .NET SDK for the Checkout and Epayment APIs.
+
+Supports .NET Standard 2.0+, .NET Core 2.0+ and .NET Framework 4.8+
 
 ## Features
 
 - Serialization/deserialization
 - Authentication
-- Retries
+- Network retries
 - Idempotency
-- Support for API not-yet implemented in SDK
-- Caching of Access Token
-- Other ideas?
 
-## Installation
+## Usage
 
-Todo
+### Installation
 
-## Documentation
+.NET Core CLI:
+
+```sh
+dotnet add package vipps.net
+```
+
+### Usage
+
+```C#
+var vippsConfigurationOptions = new VippsConfigurationOptions
+{
+    ClientId = configuration.GetValue<string>("CLIENT-ID")!,
+    ClientSecret = configuration.GetValue<string>("CLIENT-SECRET")!,
+    MerchantSerialNumber = configuration.GetValue<string>("MERCHANT-SERIAL-NUMBER")!,
+    SubscriptionKey = configuration.GetValue<string>("SUBSCRIPTION-KEY")!,
+    UseTestMode = true
+};
+
+var request = new InitiateSessionRequest
+{
+    MerchantInfo = new PaymentMerchantInfo
+    {
+        CallbackAuthorizationToken = Guid.NewGuid().ToString(),
+        CallbackUrl = "https://your-url-here.com:3000",
+        ReturnUrl = "https://your-url-here.com:3000",
+    },
+    Transaction = new PaymentTransaction
+    {
+        Amount = new Amount { Currency = "NOK", Value = 10000 },
+        PaymentDescription = "test",
+        Reference = Guid.NewGuid().ToString()
+    }
+};
+
+var result = await CheckoutService.InitiateSession(request);
+
+```
 
 ### Unimplemented parameters and properties
 
@@ -65,7 +100,3 @@ response.RawResponse
     .First(property => property.Key == "cancellationUrl")
     .Value?.GetValue<string>()
 ```
-
-## Usage
-
-Todo
