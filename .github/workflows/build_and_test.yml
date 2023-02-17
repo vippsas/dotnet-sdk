@@ -19,12 +19,18 @@ jobs:
         dotnet-version: [ '7.0.x' ]
     steps:
       - uses: actions/checkout@v3
+        with: 
+          fetch-depth: 0
       - name: Setup .NET Core SDK ${{ matrix.dotnet-version }}
         uses: actions/setup-dotnet@v3
         with:
           dotnet-version: ${{ matrix.dotnet-version }}
       - name: Install dependencies Vipps.net
         run: dotnet restore src/Vipps.net/Vipps.net.csproj
+      - name: Setup Nerdbank.GitVersioning
+        run: dotnet tool install --tool-path some/where nbgv
+      - name: Set Cloud Version using Nerdbank.Gitversioning
+        run: nbgv cloud
       - name: Build vipps.net
         run: dotnet build src/Vipps.net/Vipps.net.csproj --no-restore
       - name: Install dependencies Vipps.net.Demo
@@ -44,3 +50,11 @@ jobs:
           dotnet tool restore --tool-manifest src/.config/dotnet-tools.json
           cd src
           dotnet csharpier . --check
+      - name: Pack Nuget
+        run: dotnet pack "./src/Vipps.net/Vipps.net.csproj" --no-build --no-restore --include-source
+      - name: Upload packed as artifact #replace with nuget
+        if: github.ref == 'refs/heads/main'
+        uses: actions/upload-artifact@v3
+        with: 
+          name: Nuget package
+          path: src/**/*.nupkg

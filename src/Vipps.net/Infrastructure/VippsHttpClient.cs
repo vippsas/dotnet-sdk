@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
@@ -15,10 +16,9 @@ namespace Vipps.net.Infrastructure
         public VippsHttpClient(HttpClient httpClient)
         {
             _httpClient = httpClient;
-            SetupHttpClientHeaders(httpClient);
         }
 
-        private HttpClient HttpClient
+        internal HttpClient HttpClient
         {
             get
             {
@@ -36,6 +36,17 @@ namespace Vipps.net.Infrastructure
             CancellationToken cancellationToken
         )
         {
+            var headers = GetHeaders();
+            foreach (var header in headers)
+            {
+                if (request.Headers.Contains(header.Key))
+                {
+                    request.Headers.Remove(header.Key);
+                }
+
+                request.Headers.Add(header.Key, header.Value);
+            }
+
             var response = await HttpClient
                 .SendAsync(request, cancellationToken)
                 .ConfigureAwait(false);
@@ -50,36 +61,20 @@ namespace Vipps.net.Infrastructure
                 BaseAddress = new Uri($"{VippsConfiguration.BaseUrl}")
             };
 
-            SetupHttpClientHeaders(httpClient);
             return httpClient;
         }
 
-        private static void SetupHttpClientHeaders(HttpClient httpClient)
+        private static Dictionary<string, string> GetHeaders()
         {
-            AddOrUpdateHeader(
-                httpClient,
-                "Ocp-Apim-Subscription-Key",
-                VippsConfiguration.SubscriptionKey
-            );
-            AddOrUpdateHeader(
-                httpClient,
-                "Merchant-Serial-Number",
-                VippsConfiguration.MerchantSerialNumber
-            );
-            AddOrUpdateHeader(httpClient, "Vipps-System-Name", "checkout-sandbox");
-            AddOrUpdateHeader(httpClient, "Vipps-System-Version", "0.9");
-            AddOrUpdateHeader(httpClient, "Vipps-System-Plugin-Name", "checkout-sandbox");
-            AddOrUpdateHeader(httpClient, "Vipps-System-Plugin-Version", "0.9");
-        }
-
-        private static void AddOrUpdateHeader(HttpClient httpClient, string key, string value)
-        {
-            if (httpClient.DefaultRequestHeaders.Contains(key))
+            return new Dictionary<string, string>
             {
-                httpClient.DefaultRequestHeaders.Remove(key);
-            }
-
-            httpClient.DefaultRequestHeaders.Add(key, value);
+                { "Ocp-Apim-Subscription-Key", VippsConfiguration.SubscriptionKey },
+                { "Merchant-Serial-Number", VippsConfiguration.MerchantSerialNumber },
+                { "Vipps-System-Name", ThisAssembly.AssemblyName },
+                { "Vipps-System-Version", ThisAssembly.AssemblyInformationalVersion },
+                { "Vipps-System-Plugin-Name", VippsConfiguration.PluginName },
+                { "Vipps-System-Plugin-Version", VippsConfiguration.PluginVersion }
+            };
         }
     }
 }

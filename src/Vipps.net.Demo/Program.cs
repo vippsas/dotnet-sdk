@@ -1,4 +1,5 @@
-﻿using Azure.Identity;
+﻿using System.Reflection;
+using Azure.Identity;
 using Vipps.Infrastructure;
 using Vipps.net.Demo.Controllers;
 using Vipps.net.Infrastructure;
@@ -42,11 +43,13 @@ internal sealed class Program
                 "MERCHANT-SERIAL-NUMBER"
             )!,
             SubscriptionKey = builder.Configuration.GetValue<string>("SUBSCRIPTION-KEY")!,
-            UseTestMode = true
+            UseTestMode = true,
+            PluginName = Assembly.GetExecutingAssembly().GetName().Name,
+            PluginVersion = Assembly.GetExecutingAssembly().GetName().Version?.ToString() ?? "1.0.0"
         };
 
         // The following line configures vipps with custom settings
-        DependencyInjection.ConfigureVipps(
+        VippsConfiguration.ConfigureVipps(
             vippsConfigurationOptions,
             app.Services.GetService<ILoggerFactory>()
         );

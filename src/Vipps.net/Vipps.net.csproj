@@ -4,10 +4,19 @@
     <ImplicitUsings>disable</ImplicitUsings>
     <Nullable>disable</Nullable>
     <PackageId>Vipps.net</PackageId>
-    <Version>0.9.5</Version>
-    <Authors>Vipps</Authors>
-    <Company>Vipps Mobilepay</Company>
+    <Version>1.0.0</Version>
+    <PackageVersion>1.0.1</PackageVersion>
+    <Authors>Vipps Mobilepay AS</Authors>
+    <Company>Vipps Mobilepay AS</Company>
     <Description>Vipps SDK for .Net</Description>
+    <Title>Vipps SDK .Net</Title>
+    <PackageProjectUrl>https://vippsas.github.io/vipps-developer-docs/docs/APIs/checkout-api</PackageProjectUrl>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
+    <PackageTags>SDK, sample, library</PackageTags>
+    <RepositoryUrl>https://github.com/vippsas/vipps-dotnet</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <GenerateDocumentationFile>True</GenerateDocumentationFile>
   </PropertyGroup>
   <ItemGroup>
     <None Include="..\.editorconfig" Link=".editorconfig" />

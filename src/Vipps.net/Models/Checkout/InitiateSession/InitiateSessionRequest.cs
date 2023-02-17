@@ -6,11 +6,6 @@ namespace Vipps.Models.Checkout.InitiateSession
     /// <summary>
     /// Request to set up a Checkout session
     /// </summary>
-    /// <param name="MerchantInfo"></param>
-    /// <param name="Transaction"></param>
-    /// <param name="Logistics"></param>
-    /// <param name="PrefillCustomer">If customer information is known, it can be prefilled.</param>
-    /// <param name="Configuration"></param>
     public class InitiateSessionRequest : VippsRequest
     {
         [Required]
@@ -19,24 +14,39 @@ namespace Vipps.Models.Checkout.InitiateSession
         [Required]
         public PaymentTransaction Transaction { get; set; }
         public Logistics Logistics { get; set; }
+
+        /// <summary>
+        /// If customer information is known, it can be prefilled.
+        /// </summary>
         public PrefillCustomer PrefillCustomer { get; set; }
         public CheckoutConfig Configuration { get; set; }
     }
 
-    /// <summary>
-    ///
-    /// </summary>
-    /// <param name="CustomerInteraction">If customer is physically present: "customer_present", otherwise: "customer_not_present".</param>
-    /// <param name="Elements">Adjust the fields and values present in the Checkout.</param>
-    /// <param name="Countries">Countries to allow during session</param>
-    /// <param name="UserFlow">One of the following: "WEB_REDIRECT", "NATIVE_REDIRECT". To ensure having a return URL based on an app URL, use "NATIVE_REDIRECT".</param>
-    /// <param name="RequireUserInfo">Requires the customer to consent to share their email and openid sub with the merchant to be able to make a wallet payment {default: false).</param>
     public class CheckoutConfig
     {
+        /// <summary>
+        /// If customer is physically present: "customer_present", otherwise: "customer_not_present".
+        /// </summary>
         public CustomerInteraction CustomerInteraction { get; set; }
+
+        /// <summary>
+        /// Adjust the fields and values present in the Checkout.
+        /// </summary>
         public Elements Elements { get; set; }
+
+        /// <summary>
+        /// Countries to allow during session
+        /// </summary>
         public Countries Countries { get; set; }
+
+        /// <summary>
+        /// One of the following: "WEB_REDIRECT", "NATIVE_REDIRECT". To ensure having a return URL based on an app URL, use "NATIVE_REDIRECT".
+        /// </summary>
         public UserFlow UserFlow { get; set; }
+
+        /// <summary>
+        /// Requires the customer to consent to share their email and openid sub with the merchant to be able to make a wallet payment {default: false).
+        /// </summary>
         public bool? RequireUserInfo { get; set; }
     }
 
@@ -55,9 +65,11 @@ namespace Vipps.Models.Checkout.InitiateSession
     /// <summary>
     ///
     /// </summary>
-    /// <param name="Supported">List of allowed countries in ISO-3166 Alpha 2. If specified, the customer will only be able to select these countries. Example ["NO", "SE", "DK"]</param>
     public class Countries
     {
+        /// <summary>
+        /// List of allowed countries in ISO-3166 Alpha 2. If specified, the customer will only be able to select these countries. Example ["NO", "SE", "DK"]
+        /// </summary>
         public List<string> Supported { get; set; }
     }
 
@@ -68,129 +80,187 @@ namespace Vipps.Models.Checkout.InitiateSession
         PaymentOnly
     }
 
-    /// <param name="CallbackUrl">Complete URL for receiving callbacks. Example: "https://exmaple.com/vipps/payment-callback/</param>
-    /// <param name="ReturnUrl">Complete URL for redirecting customers to when the checkout is finished. Example: "https://example.com/vipps".</param>
-    /// <param name="CallbackAuthorizationToken">The token will be supplied by the callback to the merchant as a header. Example: "iOiJKV1QiLCJhbGciOiJSUzI1NiIsIng1dCI6ImllX3FXQ1hoWHh0MXpJ".</param>
-    /// <param name="TermsAndConditionsUrl">Complete URL to the merchant's terms and conditions. Example: "https://example.com/vipps/termsAndConditions".</param>
     public class PaymentMerchantInfo
     {
+        /// <summary>
+        /// Complete URL for receiving callbacks. Example: "https://exmaple.com/vipps/payment-callback/
+        /// </summary>
         [Required]
         public string CallbackUrl { get; set; }
 
+        /// <summary>
+        /// Complete URL for redirecting customers to when the checkout is finished. Example: "https://example.com/vipps".
+        /// </summary>
         [Required]
         public string ReturnUrl { get; set; }
 
+        /// <summary>
+        /// The token will be supplied by the callback to the merchant as a header. Example: "iOiJKV1QiLCJhbGciOiJSUzI1NiIsIng1dCI6ImllX3FXQ1hoWHh0MXpJ".
+        /// </summary>
         [Required]
         public string CallbackAuthorizationToken { get; set; }
+
+        /// <summary>
+        /// Complete URL to the merchant's terms and conditions. Example: "https://example.com/vipps/termsAndConditions".
+        /// </summary>
         public string TermsAndConditionsUrl { get; set; }
     }
 
-    /// <param name="Amount"></param>
-    /// <param name="Reference">The merchant's unique reference for the transaction. Also known as OrderId. Example: "acme-shop-123-order123abc". See https://vippsas.github.io/vipps-developer-docs/docs/vipps-developers/common-topics/orderid</param>
-    /// <param name="PaymentDescription">Description visible to the customer during payment. Example: "One pair of Vipps socks".</param>
-    /// <param name="OrderSummary">Contain descriptions of each item present in the order, and an order bottom line for information regarding the order as a whole.</param>
     public class PaymentTransaction
     {
         [Required]
         public Amount Amount { get; set; }
 
+        /// <summary>
+        /// The merchant's unique reference for the transaction. Also known as OrderId. Example: "acme-shop-123-order123abc". See https://vippsas.github.io/vipps-developer-docs/docs/vipps-developers/common-topics/orderid
+        /// </summary>
         [Required]
         public string Reference { get; set; }
 
+        /// <summary>
+        /// Description visible to the customer during payment. Example: "One pair of Vipps socks".
+        /// </summary>
         [Required]
         public string PaymentDescription { get; set; }
+
+        /// <summary>
+        /// Contain descriptions of each item present in the order, and an order bottom line for information regarding the order as a whole.
+        /// </summary>
         public OrderSummary OrderSummary { get; set; }
     }
 
     /// <summary>
     /// Amounts are specified in minor units. For Norwegian kroner (NOK) that means 1 kr = 100 øre. Example: 499 kr = 49900 øre.
     /// </summary>
-    /// <param name="Currency">The currency identifier according to ISO 4217. Example: "NOK"</param>
-    /// <param name="Value">Must be in Minor Units. The smallest unit of a currency. Example 100 NOK = 10000.</param>
     public class Amount
     {
+        /// <summary>
+        /// Must be in Minor Units. The smallest unit of a currency. Example 100 NOK = 10000.
+        /// </summary>
         public int Value { get; set; }
+
+        /// <summary>
+        /// The currency identifier according to ISO 4217. Example: "NOK"
+        /// </summary>
         public string Currency { get; set; }
     }
 
-    /// <param name="OrderLines">The order lines contain descriptions of each item present in the order.</param>
-    /// <param name="OrderBottomLine">Contains information regarding the order as a whole.</param>
     public class OrderSummary
     {
-        public OrderSummary(OrderLine[] orderLines, OrderBottomLine orderBottomLine)
-        {
-            OrderLines = orderLines;
-            OrderBottomLine = orderBottomLine;
-        }
-
+        /// <summary>
+        /// The order lines contain descriptions of each item present in the order.
+        /// </summary>
         public OrderLine[] OrderLines { get; set; }
+
+        /// <summary>
+        /// Contains information regarding the order as a whole.
+        /// </summary>
         public OrderBottomLine OrderBottomLine { get; set; }
     }
 
-    /// <param name="Name">The name of the product in the order line.</param>
-    /// <param name="Id">The product ID.</param>
-    /// <param name="TotalAmount">Total amount of the order line, including tax and discount. Must be in Minor Units. The smallest unit of a currency. Example 100 NOK = 10000.</param>
-    /// <param name="TotalAmountExcludingTax">Total amount of order line with discount excluding tax. Must be in Minor Units. The smallest unit of a currency. Example 100 NOK = 10000.</param>
-    /// <param name="TotalTaxAmount">Total tax amount paid for the order line. Must be in Minor Units. The smallest unit of a currency. Example 100 NOK = 10000.</param>
-    /// <param name="TaxPercentage">Tax percentage for the order line.</param>
-    /// <param name="UnitInfo">If no quantity info is provided the order line will default to 1 pcs.</param>
-    /// <param name="Discount">Total discount for the order line. Must be in Minor Units. The smallest unit of a currency. Example 100 NOK = 10000.</param>
-    /// <param name="ProductUrl">URL linking back to the product at the merchant.</param>
-    /// <param name="IsReturn">Flag for marking the orderline as returned. This will make it count negative towards all the sums in BottomLine.</param>
-    /// <param name="IsShipping">Flag for marking the orderline as a shipping line. This will be shown differently in the app.</param>
     public class OrderLine
     {
+        /// <summary>
+        /// The name of the product in the order line.
+        /// </summary>
         [Required]
         public string Name { get; set; }
 
+        /// <summary>
+        /// The product ID.
+        /// </summary>
         [Required]
         public string Id { get; set; }
 
+        /// <summary>
+        /// Total amount of the order line, including tax and discount. Must be in Minor Units. The smallest unit of a currency. Example 100 NOK = 10000.
+        /// </summary>
         [Required]
         public long TotalAmount { get; set; }
 
+        /// <summary>
+        /// Total amount of order line with discount excluding tax. Must be in Minor Units. The smallest unit of a currency. Example 100 NOK = 10000.
+        /// </summary>
         [Required]
         public long TotalAmountExcludingTax { get; set; }
 
+        /// <summary>
+        /// Total tax amount paid for the order line. Must be in Minor Units. The smallest unit of a currency. Example 100 NOK = 10000.
+        /// </summary>
         [Required]
         public long TotalTaxAmount { get; set; }
 
+        /// <summary>
+        /// Tax percentage for the order line.
+        /// </summary>
         [Required]
         public int TaxPercentage { get; set; }
+
+        /// <summary>
+        /// If no quantity info is provided the order line will default to 1 pcs.
+        /// </summary>
         public OrderUnitInfo UnitInfo { get; set; }
+
+        /// <summary>
+        /// Total discount for the order line. Must be in Minor Units. The smallest unit of a currency. Example 100 NOK = 10000.
+        /// </summary>
         public long? Discount { get; set; }
+
+        /// <summary>
+        /// URL linking back to the product at the merchant.
+        /// </summary>
         public string ProductUrl { get; set; }
+
+        /// <summary>
+        /// Flag for marking the orderline as returned. This will make it count negative towards all the sums in BottomLine.
+        /// </summary>
         public bool? IsReturn { get; set; }
+
+        /// <summary>
+        /// Flag for marking the orderline as a shipping line. This will be shown differently in the app.
+        /// </summary>
         public bool? IsShipping { get; set; }
     }
 
-    /// <param name="Currency">The currency identifier according to ISO 4217. Example: "NOK".</param>
-    /// <param name="TipAmount">Tip amount for the order. Must be in Minor Units. The smallest unit of a currency. Example 100 NOK = 10000.</param>
-    /// <param name="GiftCardAmount">Amount paid by gift card or coupon. Must be in Minor Units. The smallest unit of a currency. Example 100 NOK = 10000.</param>
-    /// <param name="TerminalId">Identifier of the terminal / popublic int of sale.</param>
     public class OrderBottomLine
     {
+        /// <summary>
+        /// The currency identifier according to ISO 4217. Example: "NOK".
+        /// </summary>
         [Required]
         public string Currency { get; set; }
+
+        /// <summary>
+        /// Tip amount for the order. Must be in Minor Units. The smallest unit of a currency. Example 100 NOK = 10000.
+        /// </summary>
         public long? TipAmount { get; set; }
+
+        /// <summary>
+        /// Amount paid by gift card or coupon. Must be in Minor Units. The smallest unit of a currency. Example 100 NOK = 10000.
+        /// </summary>
         public long? GiftCardAmount { get; set; }
+
+        /// <summary>
+        /// Identifier of the terminal / popublic int of sale.
+        /// </summary>
         public string TerminalId { get; set; }
     }
 
-    /// <param name="UnitPrice">Total price per unit, including tax and excluding discount. Must be in Minor Units. The smallest unit of a currency. Example 100 NOK = 10000.</param>
-    /// <param name="Quantity">Quantity given as a public integer or fraction {only for cosmetics).</param>
-    /// <param name="QuantityUnit">Available units for quantity. Will default to PCS if not set.</param>
     public class OrderUnitInfo
     {
-        public OrderUnitInfo(long unitPrice, string quantity, QuantityUnit quantityUnit)
-        {
-            UnitPrice = unitPrice;
-            Quantity = quantity;
-            QuantityUnit = quantityUnit;
-        }
-
+        /// <summary>
+        /// Total price per unit, including tax and excluding discount. Must be in Minor Units. The smallest unit of a currency. Example 100 NOK = 10000.
+        /// </summary>
         public long UnitPrice { get; set; }
+
+        /// <summary>
+        /// Quantity given as a public integer or fraction {only for cosmetics).
+        /// </summary>
         public string Quantity { get; set; }
+
+        /// <summary>
+        /// Available units for quantity. Will default to PCS if not set.
+        /// </summary>
         public QuantityUnit QuantityUnit { get; set; }
     }
 
@@ -210,13 +280,21 @@ namespace Vipps.Models.Checkout.InitiateSession
     /// If the callback does not resolve successfully within 8 seconds, returns null or an empty list the system will fall back to static options.
     /// If no fallback options are provided, the user will be presented with an error and will not be able to continue with the checkout.
     /// </summary>
-    /// <param name="DynamicOptionsCallback">Merchant's Callback URL for providing dynamic logistics options based on customer address. Example: "https://example.com/vipps/dynamiclogisticsoption". Can not be used with AddressFields set to false.</param>
-    /// <param name="FixedOptions">Fixed list of logistics options.</param>
-    /// <param name="Integrations">Some optional checkout features require carrier-specific configuration. Can not be used with AddressFields set to false.</param>
     public class Logistics
     {
+        /// <summary>
+        /// Merchant's Callback URL for providing dynamic logistics options based on customer address. Example: "https://example.com/vipps/dynamiclogisticsoption". Can not be used with AddressFields set to false.
+        /// </summary>
         public string DynamicOptionsCallback { get; set; }
+
+        /// <summary>
+        /// Fixed list of logistics options.
+        /// </summary>
         public List<LogisticsOptionBase> FixedOptions { get; set; }
+
+        /// <summary>
+        /// Some optional checkout features require carrier-specific configuration. Can not be used with AddressFields set to false.
+        /// </summary>
         public Integrations Integrations { get; set; }
     }
 
@@ -226,23 +304,46 @@ namespace Vipps.Models.Checkout.InitiateSession
     /// If any of the customer information is invalid such as the phone number,
     /// the customer will be prompted to input new user information.
     /// </summary>
-    /// <param name="FirstName">Example: "Ada"</param>
-    /// <param name="LastName">Example: "Lovelace"</param>
-    /// <param name="Email">Example: "user@example.com"</param>
-    /// <param name="PhoneNumber">Format must be MSISDN (including country code). Example: "4791234567"</param>
-    /// <param name="StreetAddress">Example: "Robert Levins gate 5"</param>
-    /// <param name="PostalCode">Example: "0154"</param>
-    /// <param name="City">Example: "Oslo"</param>
-    /// <param name="Country">The ISO-3166-1 Alpha-2 representation of the country. Example: "NO"</param>
     public class PrefillCustomer
     {
+        /// <summary>
+        /// Example: "Ada"
+        /// </summary>
         public string FirstName { get; set; }
+
+        /// <summary>
+        /// Example: "Lovelace"
+        /// </summary>
         public string LastName { get; set; }
+
+        /// <summary>
+        /// Example: "user@example.com"
+        /// </summary>
         public string Email { get; set; }
+
+        /// <summary>
+        /// Format must be MSISDN (including country code). Example: "4791234567"
+        /// </summary>
         public string PhoneNumber { get; set; }
+
+        /// <summary>
+        /// Example: "Robert Levins gate 5"
+        /// </summary>
         public string StreetAddress { get; set; }
+
+        /// <summary>
+        /// Example: "Oslo"
+        /// </summary>
         public string City { get; set; }
+
+        /// <summary>
+        /// Example: "0154"
+        /// </summary>
         public string PostalCode { get; set; }
+
+        /// <summary>
+        /// The ISO-3166-1 Alpha-2 representation of the country. Example: "NO"
+        /// </summary>
         public string Country { get; set; }
     }
 
@@ -256,71 +357,107 @@ namespace Vipps.Models.Checkout.InitiateSession
     /// <summary>
     /// Configuration required to enable Porterbuddy logistics options
     /// </summary>
-    /// <param name="PublicToken">The public key provided to you by Porterbuddy</param>
-    /// <param name="ApiKey">The API key provided to you by Porterbuddy</param>
-    /// <param name="Origin">Information about the sender</param>
     public class Porterbuddy
     {
-        public Porterbuddy(string publicToken, string apiKey, PorterbuddyOrigin origin)
-        {
-            PublicToken = publicToken;
-            ApiKey = apiKey;
-            Origin = origin;
-        }
-
+        /// <summary>
+        /// The public key provided to you by Porterbuddy
+        /// </summary>
         public string PublicToken { get; set; }
+
+        /// <summary>
+        /// The API key provided to you by Porterbuddy
+        /// </summary>
         public string ApiKey { get; set; }
+
+        /// <summary>
+        /// Information about the sender
+        /// </summary>
         public PorterbuddyOrigin Origin { get; set; }
     }
 
     /// <summary>
     /// Details about the sender of the Porterbuddy parcels
     /// </summary>
-    /// <param name="Name">The name of your store</param>
-    /// <param name="Email">Your email address where Porterbuddy booking confirmation will be sent</param>
-    /// <param name="PhoneNumber">Your phone number where Porterbuddy may send you important messages. Format must be MSISDN (including country code). Example: "4791234567"</param>
-    /// <param name="Address">Your address where Porterbuddy will pick up the parcels</param>
     public class PorterbuddyOrigin
     {
+        /// <summary>
+        /// The name of your store
+        /// </summary>
         public string Name { get; set; }
+
+        /// <summary>
+        /// Your email address where Porterbuddy booking confirmation will be sent
+        /// </summary>
         public string Email { get; set; }
+
+        /// <summary>
+        /// Your phone number where Porterbuddy may send you important messages. Format must be MSISDN (including country code). Example: "4791234567"
+        /// </summary>
         public string PhoneNumber { get; set; }
+
+        /// <summary>
+        /// Your address where Porterbuddy will pick up the parcels
+        /// </summary>
         public PorterbuddyOriginAddress Address { get; set; }
     }
 
-    /// <param name="StreetAddress">Example: "Robert Levins gate 5"</param>
-    /// <param name="PostalCode">Example: "0154"</param>
-    /// <param name="City">Example: "Oslo"</param>
-    /// <param name="Country">The ISO-3166-1 Alpha-2 representation of the country. Example: "NO"</param>
     public class PorterbuddyOriginAddress
     {
+        /// <summary>
+        /// Example: "Robert Levins gate 5"
+        /// </summary>
         public string StreetAddress { get; set; }
+
+        /// <summary>
+        /// Example: "0154"
+        /// </summary>
         public string PostalCode { get; set; }
+
+        /// <summary>
+        /// Example: "Oslo"
+        /// </summary>
         public string City { get; set; }
+
+        /// <summary>
+        /// The ISO-3166-1 Alpha-2 representation of the country. Example: "NO"
+        /// </summary>
         public string Country { get; set; }
     }
 
     /// <summary>
     /// Configuration required to enable Instabox logistics options
     /// </summary>
-    /// <param name="ClientId">The client id provided to you by Instabox</param>
-    /// <param name="ClientSecret">The client secret provided to you by Instabox</param>
     public class Instabox
     {
+        /// <summary>
+        /// The client id provided to you by Instabox
+        /// </summary>
         public string ClientId { get; set; }
+
+        /// <summary>
+        /// The client secret provided to you by Instabox
+        /// </summary>
         public string ClientSecret { get; set; }
     }
 
     /// <summary>
     /// Configuration required to enable Helthjem logistics options
     /// </summary>
-    /// <param name="Username">The Username provided to you by Helthjem</param>
-    /// <param name="Password">The Password provided to you by Helthjem</param>
-    /// <param name="ShopId">The ShopId provided to you by Helthjem</param>
     public class Helthjem
     {
+        /// <summary>
+        /// The Username provided to you by Helthjem
+        /// </summary>
         public string Username { get; set; }
+
+        /// <summary>
+        /// The Password provided to you by Helthjem
+        /// </summary>
         public string Password { get; set; }
+
+        /// <summary>
+        /// The ShopId provided to you by Helthjem
+        /// </summary>
         public int ShopId { get; set; }
     }
 }
