@@ -18,7 +18,7 @@ namespace Vipps.net.Infrastructure
             SetupHttpClientHeaders(httpClient);
         }
 
-        private HttpClient HttpClient
+        public HttpClient HttpClient
         {
             get
             {
@@ -66,10 +66,22 @@ namespace Vipps.net.Infrastructure
                 "Merchant-Serial-Number",
                 VippsConfiguration.MerchantSerialNumber
             );
-            AddOrUpdateHeader(httpClient, "Vipps-System-Name", "checkout-sandbox");
-            AddOrUpdateHeader(httpClient, "Vipps-System-Version", "0.9");
-            AddOrUpdateHeader(httpClient, "Vipps-System-Plugin-Name", "checkout-sandbox");
-            AddOrUpdateHeader(httpClient, "Vipps-System-Plugin-Version", "0.9");
+            AddOrUpdateHeader(httpClient, "Vipps-System-Name", ThisAssembly.AssemblyName);
+            AddOrUpdateHeader(
+                httpClient,
+                "Vipps-System-Version",
+                ThisAssembly.AssemblyInformationalVersion
+            );
+            AddOrUpdateHeader(
+                httpClient,
+                "Vipps-System-Plugin-Name",
+                VippsConfiguration.PluginName
+            );
+            AddOrUpdateHeader(
+                httpClient,
+                "Vipps-System-Plugin-Version",
+                VippsConfiguration.PluginVersion
+            );
         }
 
         private static void AddOrUpdateHeader(HttpClient httpClient, string key, string value)

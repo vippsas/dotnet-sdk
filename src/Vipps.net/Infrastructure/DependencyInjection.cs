@@ -15,6 +15,8 @@ namespace Vipps.net.Infrastructure
                 VippsLogging.LoggerFactory = loggerFactory;
             }
 
+            VippsConfiguration.PluginName = vippsConfigurationOptions.PluginName;
+            VippsConfiguration.PluginVersion = vippsConfigurationOptions.PluginVersion;
             VippsConfiguration.ClientId = vippsConfigurationOptions.ClientId;
             VippsConfiguration.ClientSecret = vippsConfigurationOptions.ClientSecret;
             VippsConfiguration.MerchantSerialNumber =

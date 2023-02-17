@@ -4,6 +4,20 @@ namespace Vipps.net.Infrastructure
 {
     public static class VippsConfiguration
     {
+        private static string _pluginName = "checkout-sandbox";
+        public static string PluginName
+        {
+            get { return _pluginName; }
+            set { _pluginName = value; }
+        }
+
+        private static string _pluginVersion = "1.0";
+        public static string PluginVersion
+        {
+            get { return _pluginVersion; }
+            set { _pluginVersion = value; }
+        }
+
         private static string _clientId;
         public static string ClientId
         {
