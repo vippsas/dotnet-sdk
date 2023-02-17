@@ -4,7 +4,7 @@ The official Vipps .NET SDK for the Checkout and Epayment APIs.
 
 Supports .NET Standard 2.0+, .NET Core 2.0+ and .NET Framework 4.8+
 
-## Features
+**Features**
 
 - Serialization/deserialization
 - Authentication
