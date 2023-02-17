@@ -52,9 +52,25 @@ jobs:
           dotnet csharpier . --check
       - name: Pack Nuget
         run: dotnet pack "./src/Vipps.net/Vipps.net.csproj" --no-build --no-restore --include-source
-      - name: Upload packed as artifact #replace with nuget
+      - name: Upload packed as artifact #replace with nuget?
         if: github.ref == 'refs/heads/main'
         uses: actions/upload-artifact@v3
         with: 
           name: Nuget package
           path: src/**/*.nupkg
+      - name: Check commit message if tag creation
+        if: ${{ github.event.head_commit.message }}
+        run: "echo \"RELEASE_TAG=${{ github.event.head_commit.message }} | sed '\\(\\d+)\\.(\\d+)\\.(\\d+)(.*?)'\" >> $GITHUB_ENV"
+      - name: Create Tag
+        if: ${{ RELEASE_TAG }}
+        id: create_tag
+        uses: actions/github-script@v4
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # This token is provided by Actions, you do not need to create your own token
+        with:
+          script: |
+            github.git.createRef({
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            ref: "refs/tags/${{env.RELEASE_TAG}}",
+            sha: context.sha})
