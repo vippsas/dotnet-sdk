@@ -33,9 +33,8 @@ jobs:
       - name: Set Cloud Version using Nerdbank.Gitversioning
         run: some/where/nbgv cloud
       - name: Get Version
-      # convert this to linux.. or specify powershell
-        run: $version = some/where/nbgv.exe get-version --v AssemblyInformationalVersion
-      #- name: Build Nuget
-      #  run: dotnet build /src/Vipps.net/Vipps.net.csproj
+        id: set_version
+        run: | 
+          echo "::set-output name=version::$(some/where/nbgv.exe get-version --v AssemblyInformationalVersion)"
       - name: Pack Nuget
         run: dotnet pack /src/Vipps.net/Vipps.net.csproj --no-build --no-restore --include-source --version $version
