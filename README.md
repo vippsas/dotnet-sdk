@@ -31,6 +31,8 @@ var vippsConfigurationOptions = new VippsConfigurationOptions
     UseTestMode = true
 };
 
+VippsConfiguration.ConfigureVipps(vippsConfigurationOptions);
+
 var request = new InitiateSessionRequest
 {
     MerchantInfo = new PaymentMerchantInfo
