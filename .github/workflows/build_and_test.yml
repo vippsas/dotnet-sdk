@@ -52,16 +52,16 @@ jobs:
           dotnet csharpier . --check
       - name: Pack Nuget
         run: dotnet pack "./src/Vipps.net/Vipps.net.csproj" --no-build --no-restore --include-source
-      - name: Upload packed as artifact #replace with nuget?
+      - name: Upload packed as artifact #replace with nuget? Only on main
         if: github.ref == 'refs/heads/main'
         uses: actions/upload-artifact@v3
         with: 
           name: Nuget package
           path: src/**/*.nupkg
-      - name: Check commit message if tag creation
+      - name: Check commit message if tag creation #SHOULD BE Only on main
         if: ${{ github.event.head_commit.message }}
-        run: "echo \"RELEASE_TAG=${{ github.event.head_commit.message }} | sed '\\(\\d+)\\.(\\d+)\\.(\\d+)(.*?)'\" >> $GITHUB_ENV"
-      - name: Create Tag
+        run: "echo \"RELEASE_TAG=${{ github.event.head_commit.message }} | sed '(v(\\d+)\\.(\\d+)\\.(\\d+)(.*?))'\" >> $GITHUB_ENV"
+      - name: Create Tag #SHOULD BE Only on main
         if: ${{ RELEASE_TAG }}
         id: create_tag
         uses: actions/github-script@v4
