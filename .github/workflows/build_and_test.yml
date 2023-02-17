@@ -52,7 +52,7 @@ jobs:
           dotnet csharpier . --check
     # Should only run if main, not PR
       - name: Pack Nuget
-        run: dotnet pack "./src/Vipps.net/Vipps.net.csproj" --no-build --no-restore --include-source --output packed
+        run: dotnet pack "./src/Vipps.net/Vipps.net.csproj" --no-build --no-restore --include-source
       - name: Upload packed as artifact
         uses: actions/upload-artifact@v3
         with: 
