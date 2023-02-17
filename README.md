@@ -11,9 +11,7 @@ Supports .NET Standard 2.0+, .NET Core 2.0+ and .NET Framework 4.8+
 - Network retries
 - Idempotency
 
-## Usage
-
-### Installation
+## Installation
 
 .NET Core CLI:
 
@@ -21,7 +19,7 @@ Supports .NET Standard 2.0+, .NET Core 2.0+ and .NET Framework 4.8+
 dotnet add package vipps.net
 ```
 
-### Usage
+## Usage
 
 ```C#
 var vippsConfigurationOptions = new VippsConfigurationOptions
