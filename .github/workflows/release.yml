@@ -39,4 +39,9 @@ jobs:
       - name: Build vipps.net
         run: dotnet build src/Vipps.net/Vipps.net.csproj --no-restore
       - name: Pack Nuget
-        run: dotnet pack "./src/Vipps.net/Vipps.net.csproj" --no-build --no-restore --include-source
+        run: dotnet pack "./src/Vipps.net/Vipps.net.csproj" --no-build --no-restore --include-source --o packed
+      - name: Upload packed as artifact
+        uses: actions/upload-artifact@v3
+        with: 
+          name: Nuget package
+          path: packed
