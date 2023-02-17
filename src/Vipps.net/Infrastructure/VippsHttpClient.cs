@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
@@ -35,7 +36,17 @@ namespace Vipps.net.Infrastructure
             CancellationToken cancellationToken
         )
         {
-            SetupHeaders(request.Headers);
+            var headers = GetHeaders();
+            foreach (var header in headers)
+            {
+                if (request.Headers.Contains(header.Key))
+                {
+                    request.Headers.Remove(header.Key);
+                }
+
+                request.Headers.Add(header.Key, header.Value);
+            }
+
             var response = await HttpClient
                 .SendAsync(request, cancellationToken)
                 .ConfigureAwait(false);
@@ -53,44 +64,17 @@ namespace Vipps.net.Infrastructure
             return httpClient;
         }
 
-        private static void SetupHeaders(System.Net.Http.Headers.HttpRequestHeaders headers)
+        private static Dictionary<string, string> GetHeaders()
         {
-            AddOrUpdateHeader(
-                headers,
-                "Ocp-Apim-Subscription-Key",
-                VippsConfiguration.SubscriptionKey
-            );
-            AddOrUpdateHeader(
-                headers,
-                "Merchant-Serial-Number",
-                VippsConfiguration.MerchantSerialNumber
-            );
-            AddOrUpdateHeader(headers, "Vipps-System-Name", ThisAssembly.AssemblyName);
-            AddOrUpdateHeader(
-                headers,
-                "Vipps-System-Version",
-                ThisAssembly.AssemblyInformationalVersion
-            );
-            AddOrUpdateHeader(headers, "Vipps-System-Plugin-Name", VippsConfiguration.PluginName);
-            AddOrUpdateHeader(
-                headers,
-                "Vipps-System-Plugin-Version",
-                VippsConfiguration.PluginVersion
-            );
-        }
-
-        private static void AddOrUpdateHeader(
-            System.Net.Http.Headers.HttpRequestHeaders headers,
-            string key,
-            string value
-        )
-        {
-            if (headers.Contains(key))
+            return new Dictionary<string, string>
             {
-                headers.Remove(key);
-            }
-
-            headers.Add(key, value);
+                { "Ocp-Apim-Subscription-Key", VippsConfiguration.SubscriptionKey },
+                { "Merchant-Serial-Number", VippsConfiguration.MerchantSerialNumber },
+                { "Vipps-System-Name", ThisAssembly.AssemblyName },
+                { "Vipps-System-Version", ThisAssembly.AssemblyInformationalVersion },
+                { "Vipps-System-Plugin-Name", VippsConfiguration.PluginName },
+                { "Vipps-System-Plugin-Version", VippsConfiguration.PluginVersion }
+            };
         }
     }
 }
