@@ -112,7 +112,7 @@ jobs:
         run: nbgv set-version ${{ env.RELEASE_VERSION }}
       - name: Use existing version
         if: ${{ !startsWith(env.RELEASE_TAG, 'v')}}
-        run: "echo \"RELEASE_VERSION=$(echo '${{ env.NBGV_VERSION }}'\" >> $GITHUB_ENV"
+        run: "echo \"RELEASE_VERSION=$(echo '${{ env.NBGV_VERSION }}')\" >> $GITHUB_ENV"
       - name: Pack Nuget
         run: dotnet pack "./src/Vipps.net/Vipps.net.csproj" --include-source /p:Version=${{ env.RELEASE_VERSION }} --output .
       - name: Upload packed as artifact #replace with nuget 
