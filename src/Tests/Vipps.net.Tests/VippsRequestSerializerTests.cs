@@ -195,7 +195,9 @@ namespace Vipps.net.Tests
                 );
             Assert.IsNotNull(deserializedResponse);
             Assert.IsNotNull(deserializedResponse.RawResponse);
-            var epaymentObject = deserializedResponse.RawResponse.GetValue("epayment")?.ToObject<JObject>();
+            var epaymentObject = deserializedResponse.RawResponse
+                .GetValue("epayment")
+                ?.ToObject<JObject>();
             Assert.AreEqual(
                 initiateSessionResponse.epayment.pollingUrl,
                 epaymentObject?.GetValue("pollingUrl")?.ToString()

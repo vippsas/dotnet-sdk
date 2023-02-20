@@ -12,13 +12,13 @@ namespace Vipps.net.Helpers
             if (vippsRequest.ExtraParameters != null)
             {
                 var extraParameters = vippsRequest.ExtraParameters;
-                dynamic serializedExtraParameters = JsonConvert.SerializeObject(
-                    extraParameters
-                );
+                dynamic serializedExtraParameters = JsonConvert.SerializeObject(extraParameters);
 
                 vippsRequest.ExtraParameters = null;
                 string serializedRequest = JsonConvert.SerializeObject(
-                    vippsRequest, vippsRequest.GetType(), new JsonSerializerSettings()
+                    vippsRequest,
+                    vippsRequest.GetType(),
+                    new JsonSerializerSettings()
                     {
                         NullValueHandling = NullValueHandling.Ignore,
                         DefaultValueHandling = DefaultValueHandling.Ignore,
@@ -29,15 +29,13 @@ namespace Vipps.net.Helpers
 
                 return Merge(serializedRequest, serializedExtraParameters);
             }
-            else { 
-                return JsonConvert.SerializeObject(
-                    vippsRequest
-                );
+            else
+            {
+                return JsonConvert.SerializeObject(vippsRequest);
             }
         }
 
-        public static T DeserializeVippsResponse<T>(string vippsResponse)
-            where T : VippsResponse
+        public static T DeserializeVippsResponse<T>(string vippsResponse) where T : VippsResponse
         {
             var deserializedTyped = JsonConvert.DeserializeObject<T>(vippsResponse);
             if (deserializedTyped is null)
