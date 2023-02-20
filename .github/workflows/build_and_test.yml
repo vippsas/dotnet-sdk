@@ -73,7 +73,7 @@ jobs:
             } catch (error) {
               core.setFailed(error.message);
             }
-        #end of area that should be moved down
+        #end of area that should be moved down 
       - name: Install dependencies Vipps.net
         run: dotnet restore src/Vipps.net/Vipps.net.csproj
       - name: Setup Nerdbank.GitVersioning
