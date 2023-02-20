@@ -48,6 +48,7 @@ jobs:
         if: ${{ startsWith(env.RELEASE_TAG, 'v')}}
         run: git push --tags 
       - name: "Create GitHub release"
+        if: ${{ startsWith(env.RELEASE_TAG, 'v')}}
         uses: "actions/github-script@v6"
         with:
           github-token: "${{ secrets.GITHUB_TOKEN }}"
