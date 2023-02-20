@@ -68,7 +68,7 @@ jobs:
       matrix:
         dotnet-version: [ '7.0.x' ]
     steps:
-        # these are just to get commit messages of PRs. Should be deleted.
+        # these are just to get commit messages of PRs. Should be deleted. 
       - name: Get repo
         uses: actions/checkout@v3
         with:
