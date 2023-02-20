@@ -33,9 +33,4 @@
     <Exec Command="dotnet tool restore" StandardOutputImportance="Low" StandardErrorImportance="High" />
     <Exec Command="dotnet husky install" StandardOutputImportance="Low" StandardErrorImportance="High" WorkingDirectory="../.." />
   </Target>
-  <Target Name="PrepareReleaseNotes" BeforeTargets="GenerateNuspec">
-    <PropertyGroup>
-      <PackageDescription>$([System.IO.File]::ReadAllText("$(MSBuildProjectDirectory)/../RELEASE-NOTES.txt"))</PackageDescription>
-    </PropertyGroup>
-  </Target>
 </Project>

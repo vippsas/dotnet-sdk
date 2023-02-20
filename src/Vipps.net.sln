@@ -8,7 +8,6 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{23D0FF62-54B1-4BD9-9437-9EB8F5413463}"
 	ProjectSection(SolutionItems) = preProject
 		.editorconfig = .editorconfig
-		RELEASE-NOTES.txt = RELEASE-NOTES.txt
 	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Vipps.net.Tests", "Tests\Vipps.net.Tests\Vipps.net.Tests.csproj", "{AF69864C-6DFE-49A7-857C-36D8FC09833E}"
