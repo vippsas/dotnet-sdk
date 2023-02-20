@@ -1,4 +1,5 @@
 ﻿using System.Text.Json;
+using Newtonsoft.Json.Linq;
 using Vipps.Models.Checkout.InitiateSession;
 using Vipps.net.Helpers;
 
@@ -30,7 +31,7 @@ namespace Vipps.net.Tests
             Assert.AreNotEqual("", serializedRequest);
             var deserialized = JsonSerializer.Deserialize<JsonElement>(serializedRequest);
             deserialized.TryGetProperty("ExtraParameters", out var deserializedExtraParameters);
-            Assert.AreEqual(JsonValueKind.Undefined, deserializedExtraParameters.ValueKind);
+            Assert.AreEqual(JsonValueKind.Null, deserializedExtraParameters.ValueKind);
             Assert.AreEqual(
                 initiateSessionRequest.ExtraParameters.Transaction.Metadata.KID,
                 deserialized
@@ -65,7 +66,40 @@ namespace Vipps.net.Tests
             Assert.AreNotEqual("", serializedRequest);
             var deserialized = JsonSerializer.Deserialize<JsonElement>(serializedRequest);
             deserialized.TryGetProperty("ExtraParameters", out var deserializedExtraParameters);
-            Assert.AreEqual(JsonValueKind.Undefined, deserializedExtraParameters.ValueKind);
+            Assert.AreEqual(JsonValueKind.Null, deserializedExtraParameters.ValueKind);
+            Assert.AreEqual(
+                JsonValueKind.Array,
+                deserialized
+                    .GetProperty("Configuration")
+                    .GetProperty("AcceptedPaymentMethods")
+                    .ValueKind
+            );
+        }
+
+        [TestMethod]
+        public void Can_Serialize_With_Extra_Parameters_On_Undefined_Receiver()
+        {
+            InitiateSessionRequest initiateSessionRequest =
+                new()
+                {
+                    Transaction = new PaymentTransaction()
+                    {
+                        Amount = new Amount() { Currency = "NOK", Value = 49000 },
+                        PaymentDescription = "Hei"
+                    },
+                    ExtraParameters = new
+                    {
+                        Configuration = new { AcceptedPaymentMethods = new[] { "WALLET", "CARD" } }
+                    }
+                };
+            var serializedRequest = VippsRequestSerializer.SerializeVippsRequest(
+                initiateSessionRequest
+            );
+            Assert.IsNotNull(serializedRequest);
+            Assert.AreNotEqual("", serializedRequest);
+            var deserialized = JsonSerializer.Deserialize<JsonElement>(serializedRequest);
+            deserialized.TryGetProperty("ExtraParameters", out var deserializedExtraParameters);
+            Assert.AreEqual(JsonValueKind.Null, deserializedExtraParameters.ValueKind);
             Assert.AreEqual(
                 JsonValueKind.Array,
                 deserialized
@@ -136,7 +170,7 @@ namespace Vipps.net.Tests
             Assert.IsNotNull(deserializedResponse.RawResponse);
             Assert.AreEqual(
                 initiateSessionResponse.cancellationUrl,
-                deserializedResponse.RawResponse.GetProperty("cancellationUrl").GetString()
+                deserializedResponse.RawResponse.GetValue("cancellationUrl")?.ToString()
             );
         }
 
@@ -161,14 +195,14 @@ namespace Vipps.net.Tests
                 );
             Assert.IsNotNull(deserializedResponse);
             Assert.IsNotNull(deserializedResponse.RawResponse);
-            var epaymentObject = deserializedResponse.RawResponse.GetProperty("epayment");
+            var epaymentObject = deserializedResponse.RawResponse.GetValue("epayment")?.ToObject<JObject>();
             Assert.AreEqual(
                 initiateSessionResponse.epayment.pollingUrl,
-                epaymentObject.GetProperty("pollingUrl").GetString()
+                epaymentObject?.GetValue("pollingUrl")?.ToString()
             );
             Assert.AreEqual(
                 initiateSessionResponse.epayment.captureUrl,
-                epaymentObject.GetProperty("captureUrl").GetString()
+                epaymentObject?.GetValue("captureUrl")?.ToString()
             );
         }
     }
