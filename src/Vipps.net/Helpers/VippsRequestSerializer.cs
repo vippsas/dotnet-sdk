@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IdentityModel.Tokens.Jwt;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Vipps.Models;
@@ -16,8 +17,14 @@ namespace Vipps.net.Helpers
                     extraParameters
                 );
                 vippsRequest.ExtraParameters = null;
+
                 string serializedRequest = JsonConvert.SerializeObject(
-                    vippsRequest
+                    vippsRequest, vippsRequest.GetType(), new JsonSerializerSettings()
+                    {
+                        NullValueHandling = NullValueHandling.Ignore,
+                        DefaultValueHandling = DefaultValueHandling.Ignore,
+                        Converters = new[] { new Newtonsoft.Json.Converters.StringEnumConverter() }
+                    }
                 );
                 vippsRequest.ExtraParameters = extraParameters;
                 return Merge(serializedRequest, serializedExtraParameters);
