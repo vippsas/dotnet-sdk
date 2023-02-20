@@ -15,8 +15,8 @@ namespace Vipps.net.Helpers
                 dynamic serializedExtraParameters = JsonConvert.SerializeObject(
                     extraParameters
                 );
-                vippsRequest.ExtraParameters = null;
 
+                vippsRequest.ExtraParameters = null;
                 string serializedRequest = JsonConvert.SerializeObject(
                     vippsRequest, vippsRequest.GetType(), new JsonSerializerSettings()
                     {
@@ -26,6 +26,7 @@ namespace Vipps.net.Helpers
                     }
                 );
                 vippsRequest.ExtraParameters = extraParameters;
+
                 return Merge(serializedRequest, serializedExtraParameters);
             }
             else { 
