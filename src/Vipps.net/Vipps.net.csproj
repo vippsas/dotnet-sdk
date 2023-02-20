@@ -8,9 +8,9 @@
     <PackageVersion>1.0.1</PackageVersion>
     <Authors>Vipps Mobilepay AS</Authors>
     <Company>Vipps Mobilepay AS</Company>
-    <Description>Vipps SDK for .Net</Description>
+    <Description>https://github.com/vippsas/vipps-dotnet#readme</Description>
     <Title>Vipps SDK .Net</Title>
-    <PackageProjectUrl>https://vippsas.github.io/vipps-developer-docs/docs/APIs/checkout-api</PackageProjectUrl>
+    <PackageProjectUrl>https://github.com/vippsas/vipps-dotnet</PackageProjectUrl>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
     <PackageTags>SDK, sample, library</PackageTags>
