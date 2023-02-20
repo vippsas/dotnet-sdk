@@ -18,14 +18,6 @@ jobs:
       matrix:
         dotnet-version: [ '7.0.x' ]
     steps:
-        # these are just to get commit messages of PRs. Should be deleted.
-      - name: Get repo
-        uses: actions/checkout@v3
-        with:
-          ref: ${{ github.event.pull_request.head.sha }}
-      - name: Print head git commit message
-        run: "echo \"COMMIT_MESSAGE=$(git show -s --format=%s)\"  >> $GITHUB_ENV"
-        #end of area to be deleted
       - name: Get repo with depth
         uses: actions/checkout@v3
         with: 
@@ -34,46 +26,6 @@ jobs:
         uses: actions/setup-dotnet@v3
         with:
           dotnet-version: ${{ matrix.dotnet-version }}
-      - name: Echo github commit message
-        run: "echo ${{env.COMMIT_MESSAGE}}" #${{ github.event.head_commit.message }}"
-      - name: Check commit message if tag creation #SHOULD BE Only on main, also moved to the bottom.
-        #if: ${{ github.event.head_commit.message }} != ''
-        run: "echo \"RELEASE_TAG=$(echo '${{ env.COMMIT_MESSAGE }}' | grep -oP '(v(\\d+)\\.(\\d+)\\.(\\d+)(.*?))')\" >> $GITHUB_ENV"
-      - name: Print release tag
-        run: "echo ${{ env.RELEASE_TAG }}"
-      - name: Configure git username
-        run: git config user.name github-actions-bot
-      - name: Configure git user email
-        run: git config user.email noreply@vipps.no
-      - name: Create Tag
-        if: ${{ startsWith(env.RELEASE_TAG, 'v')}}
-        run: git tag ${{ env.RELEASE_TAG }} -m ${{ env.RELEASE_TAG }}
-      - name: Publish tags
-        if: ${{ startsWith(env.RELEASE_TAG, 'v')}}
-        run: git push --tags 
-      - name: "Create GitHub release"
-        if: ${{ startsWith(env.RELEASE_TAG, 'v')}}
-        uses: "actions/github-script@v6"
-        with:
-          github-token: "${{ secrets.GITHUB_TOKEN }}"
-          script: |
-            try {
-              const response = await github.rest.repos.createRelease({
-                draft: false,
-                generate_release_notes: true,
-                name: process.env.RELEASE_TAG,
-                owner: context.repo.owner,
-                prerelease: false,
-                repo: context.repo.repo,
-                tag_name: process.env.RELEASE_TAG,
-              });
-
-              core.exportVariable('RELEASE_ID', response.data.id);
-              core.exportVariable('RELEASE_UPLOAD_URL', response.data.upload_url);
-            } catch (error) {
-              core.setFailed(error.message);
-            }
-        #end of area that should be moved down 
       - name: Install dependencies Vipps.net
         run: dotnet restore src/Vipps.net/Vipps.net.csproj
       - name: Setup Nerdbank.GitVersioning
@@ -101,7 +53,42 @@ jobs:
           dotnet csharpier . --check
       - name: Pack Nuget
         run: dotnet pack "./src/Vipps.net/Vipps.net.csproj" --no-build --no-restore --include-source
-      - name: Upload packed as artifact #replace with nuget? Only on main
+      - name: Check commit message if main branch and commit message contains release version (v1.2.3)
+        if: github.ref == 'refs/heads/main' && ${{ github.event.head_commit.message }} != ''
+        run: "echo \"RELEASE_TAG=$(echo '${{ env.COMMIT_MESSAGE }}' | grep -oP '(v(\\d+)\\.(\\d+)\\.(\\d+)(.*?))')\" >> $GITHUB_ENV"
+      - name: Configure git username
+        run: git config user.name github-actions-bot
+      - name: Configure git user email
+        run: git config user.email noreply@vipps.no
+      - name: Create Tag
+        if: ${{ startsWith(env.RELEASE_TAG, 'v')}}
+        run: git tag ${{ env.RELEASE_TAG }} -m ${{ env.RELEASE_TAG }}
+      - name: Publish Tag
+        if: ${{ startsWith(env.RELEASE_TAG, 'v')}}
+        run: git push --tags 
+      - name: "Create GitHub Release"
+        if: ${{ startsWith(env.RELEASE_TAG, 'v')}}
+        uses: "actions/github-script@v6"
+        with:
+          github-token: "${{ secrets.GITHUB_TOKEN }}"
+          script: |
+            try {
+              const response = await github.rest.repos.createRelease({
+                draft: false,
+                generate_release_notes: true,
+                name: process.env.RELEASE_TAG,
+                owner: context.repo.owner,
+                prerelease: false,
+                repo: context.repo.repo,
+                tag_name: process.env.RELEASE_TAG,
+              });
+
+              core.exportVariable('RELEASE_ID', response.data.id);
+              core.exportVariable('RELEASE_UPLOAD_URL', response.data.upload_url);
+            } catch (error) {
+              core.setFailed(error.message);
+            }
+      - name: Upload packed as artifact  # replace with nuget
         if: github.ref == 'refs/heads/main'
         uses: actions/upload-artifact@v3
         with: 
