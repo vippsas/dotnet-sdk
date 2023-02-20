@@ -18,18 +18,26 @@ jobs:
       matrix:
         dotnet-version: [ '7.0.x' ]
     steps:
-      - uses: actions/checkout@v3
+      - name: Get repo
+        uses: actions/checkout@v3
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+      - name: Print head git commit message
+        run: "echo \"COMMIT_MESSAGE=$(git show -s --format=%s)\"  >> $GITHUB_ENV"
+      - name: Get repo with depth
+        uses: actions/checkout@v3
         with: 
           fetch-depth: 0
       - name: Setup .NET Core SDK ${{ matrix.dotnet-version }}
         uses: actions/setup-dotnet@v3
         with:
           dotnet-version: ${{ matrix.dotnet-version }}
+     
       - name: Echo github commit message
-        run: "echo ${{ github.event.head_commit.message }}"
+        run: "echo ${{env.COMMIT_MESSAGE}}" #${{ github.event.head_commit.message }}"
       - name: Check commit message if tag creation #SHOULD BE Only on main, also moved to the bottom.
         #if: ${{ github.event.head_commit.message }} != ''
-        run: "echo \"RELEASE_TAG=${{ github.event.head_commit.message }} | grep -P '(v(\\d+)\\.(\\d+)\\.(\\d+)(.*?))' -o\" >> $GITHUB_ENV"
+        run: "echo \"RELEASE_TAG=${{ env.COMMIT_MESSAGE }} | grep -P '(v(\\d+)\\.(\\d+)\\.(\\d+)(.*?))' -o\" >> $GITHUB_ENV"
       - name: Create Tag #SHOULD BE Only on main
         if: ${{ env.RELEASE_TAG }}
         id: create_tag
