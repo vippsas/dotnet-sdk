@@ -95,7 +95,7 @@ jobs:
               core.setFailed(error.message);
             }
       - name: Set Nerdbank.Gitversioning version from version, if given
-        if: ${{ env.RELEASE_VERSION }} != ''
+        if: ${{ contains(env.RELEASE_VERSION, '.')}} # To ensure not empty
         run: nbgv set-version ${{ env.RELEASE_VERSION }}
         # Create Nuget pack.
       - name: Pack Nuget
