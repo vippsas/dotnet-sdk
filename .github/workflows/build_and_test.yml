@@ -39,6 +39,8 @@ jobs:
       - name: Check commit message if tag creation #SHOULD BE Only on main, also moved to the bottom.
         #if: ${{ github.event.head_commit.message }} != ''
         run: "echo \"RELEASE_TAG='${{ env.COMMIT_MESSAGE }}'| sed '(v(\\d+)\\.(\\d+)\\.(\\d+)(.*?))')\" >> $GITHUB_ENV"
+      - name: Print release tag
+        run: "echo ${{ env.COMMIT_MESSAGE }}"
       - name: Create Tag
         if: ${{ startsWith(env.RELEASE_TAG, 'v')}}
         run: git tag ${{ env.RELEASE_TAG }}
