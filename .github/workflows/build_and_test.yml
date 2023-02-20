@@ -4,7 +4,7 @@ env:
   solution_file: 'src/Vipps.net.sln'
 on:
   push:
-    branches: [ "main", "vico-878" ] #remove this
+    branches: [ "main", "vico-878-tags" ] #remove this
   #pull_request: #enable this again
   #  branches: [ "main" ]
   #  paths-ignore:
