@@ -1,13 +1,13 @@
-﻿using System.Text.Json.Serialization;
+﻿using Newtonsoft.Json;
 
 namespace Vipps.Models.Epayment.CreatePayment
 {
     public class CreatePaymentResponse : VippsResponse
     {
-        [property: JsonPropertyName("redirectUrl")]
+        [property: JsonProperty("redirectUrl")]
         public string RedirectUrl { get; set; }
 
-        [property: JsonPropertyName("reference")]
+        [property: JsonProperty("reference")]
         public string Reference { get; set; }
     }
 }

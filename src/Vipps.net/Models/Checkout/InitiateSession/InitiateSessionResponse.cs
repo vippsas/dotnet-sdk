@@ -1,16 +1,16 @@
-﻿using System.Text.Json.Serialization;
+﻿using Newtonsoft.Json;
 
 namespace Vipps.Models.Checkout.InitiateSession
 {
     public class InitiateSessionResponse : VippsResponse
     {
-        [property: JsonPropertyName("token")]
+        [property: JsonProperty("token")]
         public string Token { get; set; }
 
-        [property: JsonPropertyName("checkoutFrontendUrl")]
+        [property: JsonProperty("checkoutFrontendUrl")]
         public string CheckoutFrontendUrl { get; set; }
 
-        [property: JsonPropertyName("pollingUrl")]
+        [property: JsonProperty("pollingUrl")]
         public string PollingUrl { get; set; }
     }
 }
