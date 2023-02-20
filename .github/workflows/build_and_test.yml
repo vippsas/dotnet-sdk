@@ -106,7 +106,10 @@ jobs:
       - name: Setup Nerdbank.GitVersioning
         run: dotnet tool install --tool-path some/where nbgv
       - name: Set Nerdbank.Gitversioning version
+        if: ${{ startsWith(env.RELEASE_TAG, 'v')}}
         run: nbgv set-version ${{ env.RELEASE_VERSION }}
+      - name: Get Nerdbank.Gitversioning NugetPackageVersion
+        run: "echo \"RELEASE_VERSION=$(nbgv get-version -v NugetPackageVersion)\" >> $GITHUB_ENV"
       - name: Pack Nuget
         run: dotnet pack "./src/Vipps.net/Vipps.net.csproj" --include-source /p:Version=${{ env.RELEASE_VERSION }} --output .
       - name: Upload packed as artifact #replace with nuget 
