@@ -52,21 +52,7 @@ jobs:
           dotnet tool restore --tool-manifest src/.config/dotnet-tools.json
           cd src
           dotnet csharpier . --check
-
-  release:
-    runs-on: ubuntu-latest
-    #needs: build
-    #if: 
-    #    |
-    #    always() && 
-    #    needs.build.result == 'success' &&
-    #    github.ref == 'refs/heads/main' && github.event_name != 'pull_request' && ${{ github.event.head_commit.message }} != ''
-    strategy:
-      matrix:
-        dotnet-version: [ '7.0.x' ]
-    steps:
-      - name: Get repo
-        uses: actions/checkout@v3
+      # Tag
       - name: Check commit message if main branch and commit message contains release version (v1.2.3)
         run: "echo \"RELEASE_TAG=$(echo '${{ github.event.head_commit.message }}' | grep -oP '(v(\\d+)\\.(\\d+)\\.(\\d+)(.*?))')\" >> $GITHUB_ENV"
       - name: Set version variable without v (1.2.3)
@@ -84,6 +70,7 @@ jobs:
       - name: Publish Tag
         if: ${{ startsWith(env.RELEASE_TAG, 'v')}}
         run: git push --tags 
+        #Release
       - name: "Create GitHub Release"
         if: ${{ startsWith(env.RELEASE_TAG, 'v')}}
         uses: "actions/github-script@v6"
@@ -106,16 +93,11 @@ jobs:
             } catch (error) {
               core.setFailed(error.message);
             }
-      - name: Setup Nerdbank.GitVersioning
-        run: dotnet tool install --tool-path some/where nbgv
-      - name: Set Nerdbank.Gitversioning version from version
+      - name: Set Nerdbank.Gitversioning version from version, if given
         if: ${{ startsWith(env.RELEASE_TAG, 'v')}}
         run: nbgv set-version ${{ env.RELEASE_VERSION }}
-      - name: Use existing version
-        if: ${{ !startsWith(env.RELEASE_TAG, 'v')}}
-        run: "echo \"RELEASE_VERSION=$(echo '${{ env.NBGV_VERSION }}')\" >> $GITHUB_ENV"
       - name: Pack Nuget
-        run: dotnet pack "./src/Vipps.net/Vipps.net.csproj" --no-restore --no-build --include-source /p:Version=${{ env.RELEASE_VERSION }} --output .
+        run: dotnet pack "./src/Vipps.net/Vipps.net.csproj" --include-source --output .
       - name: Upload packed as artifact #replace with nuget 
         uses: actions/upload-artifact@v3
         with: 
