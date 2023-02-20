@@ -1,106 +1,106 @@
-﻿using System.Text.Json.Serialization;
+﻿using Newtonsoft.Json;
 
 namespace Vipps.Models.Epayment.GetPaymentResponse
 {
     public class GetPaymentResponse : VippsResponse
     {
-        [property: JsonPropertyName("aggregate")]
+        [property: JsonProperty("aggregate")]
         public Aggregate Aggregate { get; set; }
 
-        [property: JsonPropertyName("amount")]
+        [property: JsonProperty("amount")]
         public Amount Amount { get; set; }
 
-        [property: JsonPropertyName("state")]
+        [property: JsonProperty("state")]
         public string State { get; set; }
 
-        [property: JsonPropertyName("paymentMethod")]
+        [property: JsonProperty("paymentMethod")]
         public PaymentMethod PaymentMethod { get; set; }
 
-        [property: JsonPropertyName("profile")]
+        [property: JsonProperty("profile")]
         public Profile Profile { get; set; }
 
-        [property: JsonPropertyName("pspReference")]
+        [property: JsonProperty("pspReference")]
         public string PspReference { get; set; }
 
-        [property: JsonPropertyName("redirectUrl")]
+        [property: JsonProperty("redirectUrl")]
         public string RedirectUrl { get; set; }
 
-        [property: JsonPropertyName("reference")]
+        [property: JsonProperty("reference")]
         public string Reference { get; set; }
     }
 
     public class Aggregate
     {
-        [property: JsonPropertyName("authorizedAmount")]
+        [property: JsonProperty("authorizedAmount")]
         public AuthorizedAmount AuthorizedAmount { get; set; }
 
-        [property: JsonPropertyName("cancelledAmount")]
+        [property: JsonProperty("cancelledAmount")]
         public CancelledAmount CancelledAmount { get; set; }
 
-        [property: JsonPropertyName("capturedAmount")]
+        [property: JsonProperty("capturedAmount")]
         public CapturedAmount CapturedAmount { get; set; }
 
-        [property: JsonPropertyName("refundedAmount")]
+        [property: JsonProperty("refundedAmount")]
         public RefundedAmount RefundedAmount { get; set; }
     }
 
     public class AuthorizedAmount
     {
-        [property: JsonPropertyName("currency")]
+        [property: JsonProperty("currency")]
         public string Currency { get; set; }
 
-        [property: JsonPropertyName("value")]
+        [property: JsonProperty("value")]
         public int? Value { get; set; }
     }
 
     public class CancelledAmount
     {
-        [property: JsonPropertyName("currency")]
+        [property: JsonProperty("currency")]
         public string Currency { get; set; }
 
-        [property: JsonPropertyName("value")]
+        [property: JsonProperty("value")]
         public int? Value { get; set; }
     }
 
     public class CapturedAmount
     {
-        [property: JsonPropertyName("currency")]
+        [property: JsonProperty("currency")]
         public string Currency { get; set; }
 
-        [property: JsonPropertyName("value")]
+        [property: JsonProperty("value")]
         public int? Value { get; set; }
     }
 
     public class RefundedAmount
     {
-        [property: JsonPropertyName("currency")]
+        [property: JsonProperty("currency")]
         public string Currency { get; set; }
 
-        [property: JsonPropertyName("value")]
+        [property: JsonProperty("value")]
         public int? Value { get; set; }
     }
 
     public class Amount
     {
-        [property: JsonPropertyName("currency")]
+        [property: JsonProperty("currency")]
         public string Currency { get; set; }
 
-        [property: JsonPropertyName("value")]
+        [property: JsonProperty("value")]
         public int? Value { get; set; }
     }
 
     public class PaymentMethod
     {
-        [property: JsonPropertyName("type")]
+        [property: JsonProperty("type")]
         public string Type { get; set; }
 
-        [property: JsonPropertyName("cardBin")]
+        [property: JsonProperty("cardBin")]
         public string CardBin { get; set; }
     }
 
     public class Profile
     {
-        [property: JsonPropertyName("sub")]
+        [property: JsonProperty("sub")]
         public string Sub { get; set; }
     }
 }
