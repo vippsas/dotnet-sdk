@@ -31,6 +31,8 @@ jobs:
         run: dotnet tool install --tool-path some/where nbgv
       - name: Set Cloud Version using Nerdbank.Gitversioning
         run: nbgv cloud
+      - name: Get Nerdbank.Gitversioning NugetPackageVersion
+        run: "echo \"NBGV_VERSION=$(nbgv get-version -v NugetPackageVersion)\" >> $GITHUB_ENV"
       - name: Build vipps.net
         run: dotnet build src/Vipps.net/Vipps.net.csproj --no-restore
       - name: Install dependencies Vipps.net.Demo
@@ -105,11 +107,12 @@ jobs:
             }
       - name: Setup Nerdbank.GitVersioning
         run: dotnet tool install --tool-path some/where nbgv
-      - name: Set Nerdbank.Gitversioning version
+      - name: Set Nerdbank.Gitversioning version from version
         if: ${{ startsWith(env.RELEASE_TAG, 'v')}}
         run: nbgv set-version ${{ env.RELEASE_VERSION }}
-      - name: Get Nerdbank.Gitversioning NugetPackageVersion
-        run: "echo \"RELEASE_VERSION=$(nbgv get-version -v NugetPackageVersion)\" >> $GITHUB_ENV"
+      - name: Use existing version
+        if: ${{ !startsWith(env.RELEASE_TAG, 'v')}}
+        run: "echo \"RELEASE_VERSION=$(echo '${{ env.NBGV_VERSION }}'\" >> $GITHUB_ENV"
       - name: Pack Nuget
         run: dotnet pack "./src/Vipps.net/Vipps.net.csproj" --include-source /p:Version=${{ env.RELEASE_VERSION }} --output .
       - name: Upload packed as artifact #replace with nuget 
