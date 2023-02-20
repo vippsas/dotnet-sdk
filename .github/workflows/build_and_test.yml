@@ -4,11 +4,11 @@ env:
   solution_file: 'src/Vipps.net.sln'
 on:
   push:
-    branches: [ "main", "vico-878-tags" ] #remove this
-  #pull_request: #enable this again
-  #  branches: [ "main" ]
-  #  paths-ignore:
-  #    - 'docs/**'
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+    paths-ignore:
+      - 'docs/**'
 
 jobs:
   build:
@@ -52,8 +52,8 @@ jobs:
           dotnet tool restore --tool-manifest src/.config/dotnet-tools.json
           cd src
           dotnet csharpier . --check
-      # Tag
-      - name: Check commit message if main branch and commit message contains release version (v1.2.3)
+      # Create tag only if main, not PR, and a version is found in a commit message
+      - name: Check commit message for version
         if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request' && ${{ github.event.head_commit.message }} != ''
         run: "echo \"RELEASE_TAG=$(echo '${{ github.event.head_commit.message }}' | grep -oP '(v(\\d+)\\.(\\d+)\\.(\\d+)(.*?))')\" >> $GITHUB_ENV"
       - name: Set version variable without v (1.2.3)
@@ -71,7 +71,7 @@ jobs:
       - name: Publish Tag
         if: ${{ startsWith(env.RELEASE_TAG, 'v')}}
         run: git push --tags 
-        #Release
+        # Create release only if main, not PR, and a version is found in a commit message
       - name: "Create GitHub Release"
         if: ${{ startsWith(env.RELEASE_TAG, 'v')}}
         uses: "actions/github-script@v6"
@@ -97,10 +97,12 @@ jobs:
       - name: Set Nerdbank.Gitversioning version from version, if given
         if: ${{ env.RELEASE_VERSION }} != ''
         run: nbgv set-version ${{ env.RELEASE_VERSION }}
-        #Nuget 
+        # Create Nuget pack.
       - name: Pack Nuget
         run: dotnet pack "./src/Vipps.net/Vipps.net.csproj" --include-source --output .
       - name: Upload packed as artifact #replace with nuget 
+        #Publish artifact if main and not PR
+        if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
         uses: actions/upload-artifact@v3
         with: 
           name: Nuget package
