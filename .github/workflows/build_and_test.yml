@@ -59,7 +59,7 @@ jobs:
           name: Nuget package
           path: src/**/*.nupkg
       - name: Check commit message if tag creation #SHOULD BE Only on main
-        if: ${{ github.event.head_commit.message }}
+        #if: ${{ github.event.head_commit.message }}
         run: "echo \"RELEASE_TAG=${{ github.event.head_commit.message }} | sed '(v(\\d+)\\.(\\d+)\\.(\\d+)(.*?))'\" >> $GITHUB_ENV"
       - name: Create Tag #SHOULD BE Only on main
         if: ${{ env.RELEASE_TAG }}
