@@ -54,6 +54,7 @@ jobs:
           dotnet csharpier . --check
       # Tag
       - name: Check commit message if main branch and commit message contains release version (v1.2.3)
+        if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request' && ${{ github.event.head_commit.message }} != ''
         run: "echo \"RELEASE_TAG=$(echo '${{ github.event.head_commit.message }}' | grep -oP '(v(\\d+)\\.(\\d+)\\.(\\d+)(.*?))')\" >> $GITHUB_ENV"
       - name: Set version variable without v (1.2.3)
         if: ${{ startsWith(env.RELEASE_TAG, 'v')}}
@@ -94,12 +95,13 @@ jobs:
               core.setFailed(error.message);
             }
       - name: Set Nerdbank.Gitversioning version from version, if given
-        if: ${{ startsWith(env.RELEASE_TAG, 'v')}}
+        if: ${{ (env.RELEASE_VERSION }} != ''
         run: nbgv set-version ${{ env.RELEASE_VERSION }}
+        #Nuget 
       - name: Pack Nuget
         run: dotnet pack "./src/Vipps.net/Vipps.net.csproj" --include-source --output .
       - name: Upload packed as artifact #replace with nuget 
         uses: actions/upload-artifact@v3
         with: 
           name: Nuget package
-          path: Vipps.net.${VERSION}*.nupkg
+          path: Vipps.net.*.nupkg
