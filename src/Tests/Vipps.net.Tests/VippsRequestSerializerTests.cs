@@ -31,7 +31,7 @@ namespace Vipps.net.Tests
             Assert.AreNotEqual("", serializedRequest);
             var deserialized = JsonSerializer.Deserialize<JsonElement>(serializedRequest);
             deserialized.TryGetProperty("ExtraParameters", out var deserializedExtraParameters);
-            Assert.AreEqual(JsonValueKind.Null, deserializedExtraParameters.ValueKind);
+            Assert.AreEqual(JsonValueKind.Undefined, deserializedExtraParameters.ValueKind);
             Assert.AreEqual(
                 initiateSessionRequest.ExtraParameters.Transaction.Metadata.KID,
                 deserialized
@@ -66,7 +66,7 @@ namespace Vipps.net.Tests
             Assert.AreNotEqual("", serializedRequest);
             var deserialized = JsonSerializer.Deserialize<JsonElement>(serializedRequest);
             deserialized.TryGetProperty("ExtraParameters", out var deserializedExtraParameters);
-            Assert.AreEqual(JsonValueKind.Null, deserializedExtraParameters.ValueKind);
+            Assert.AreEqual(JsonValueKind.Undefined, deserializedExtraParameters.ValueKind);
             Assert.AreEqual(
                 JsonValueKind.Array,
                 deserialized
@@ -99,7 +99,7 @@ namespace Vipps.net.Tests
             Assert.AreNotEqual("", serializedRequest);
             var deserialized = JsonSerializer.Deserialize<JsonElement>(serializedRequest);
             deserialized.TryGetProperty("ExtraParameters", out var deserializedExtraParameters);
-            Assert.AreEqual(JsonValueKind.Null, deserializedExtraParameters.ValueKind);
+            Assert.AreEqual(JsonValueKind.Undefined, deserializedExtraParameters.ValueKind);
             Assert.AreEqual(
                 JsonValueKind.Array,
                 deserialized

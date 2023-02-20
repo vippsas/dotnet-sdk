@@ -57,24 +57,6 @@ namespace Vipps.net.Helpers
             var parsedRequest = JsonConvert.DeserializeObject<JObject>(request);
             var parsedExtraParameters = JsonConvert.DeserializeObject<JObject>(extraParameters);
 
-            if (
-                parsedRequest.Type != JTokenType.Array
-                && parsedExtraParameters.Type != JTokenType.Object
-            )
-            {
-                return request;
-            }
-
-            if (parsedExtraParameters.Type == JTokenType.Null)
-            {
-                return request;
-            }
-
-            if (parsedExtraParameters.Type != JTokenType.Object)
-            {
-                throw new ArgumentException("ExtraParameters must be an object");
-            }
-
             var mergeSettings = new JsonMergeSettings
             {
                 MergeArrayHandling = MergeArrayHandling.Union
