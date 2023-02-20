@@ -35,7 +35,8 @@ namespace Vipps.net.Helpers
             }
         }
 
-        public static T DeserializeVippsResponse<T>(string vippsResponse) where T : VippsResponse
+        public static T DeserializeVippsResponse<T>(string vippsResponse)
+            where T : VippsResponse
         {
             var deserializedTyped = JsonConvert.DeserializeObject<T>(vippsResponse);
             if (deserializedTyped is null)
