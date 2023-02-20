@@ -47,6 +47,27 @@ jobs:
       - name: Publish tags
         if: ${{ startsWith(env.RELEASE_TAG, 'v')}}
         run: git push --tags 
+      - name: "Create GitHub release"
+        uses: "actions/github-script@v6"
+        with:
+          github-token: "${{ secrets.GITHUB_TOKEN }}"
+          script: |
+            try {
+              const response = await github.rest.repos.createRelease({
+                draft: false,
+                generate_release_notes: true,
+                name: process.env.RELEASE_TAG,
+                owner: context.repo.owner,
+                prerelease: false,
+                repo: context.repo.repo,
+                tag_name: process.env.RELEASE_TAG,
+              });
+
+              core.exportVariable('RELEASE_ID', response.data.id);
+              core.exportVariable('RELEASE_UPLOAD_URL', response.data.upload_url);
+            } catch (error) {
+              core.setFailed(error.message);
+            }
         #end of area that should be moved down
       - name: Install dependencies Vipps.net
         run: dotnet restore src/Vipps.net/Vipps.net.csproj
