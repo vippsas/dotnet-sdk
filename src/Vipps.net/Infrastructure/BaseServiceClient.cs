@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using Vipps.Helpers;
 using Vipps.Models;
+using Vipps.net.Exceptions;
 using Vipps.net.Helpers;
 
 namespace Vipps.net.Infrastructure
@@ -96,13 +97,22 @@ namespace Vipps.net.Infrastructure
 #pragma warning disable CA2016 // Forward the 'CancellationToken' parameter to methods
             var contentString = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
 #pragma warning restore CA2016 // Forward the 'CancellationToken' parameter to methods
-            var responseObject = JsonSerializer.Deserialize<TResponse>(contentString);
-            if (responseObject is null)
+            try
             {
-                throw new Exception("Failed deserializing response");
+                var responseObject = JsonSerializer.Deserialize<TResponse>(contentString);
+                if (responseObject is null)
+                {
+                    throw new Exception("Deserialization returned null");
+                }
+                return responseObject;
             }
-
-            return responseObject;
+            catch (Exception ex)
+            {
+                throw new VippsTechnicalException(
+                    $"Error deserializing response of type {nameof(TResponse)}",
+                    ex
+                );
+            }
         }
 
         private async Task<HttpResponseMessage> ExecuteRequestBase(
@@ -144,7 +154,7 @@ namespace Vipps.net.Infrastructure
                     .ReadAsStringAsync()
                     .ConfigureAwait(false);
 #pragma warning restore CA2016 // Forward the 'CancellationToken' parameter to methods
-                throw new Exception(
+                throw new VippsTechnicalException(
                     $"Request failed with status code {response.StatusCode}, content: '{responseContent}'"
                 );
             }

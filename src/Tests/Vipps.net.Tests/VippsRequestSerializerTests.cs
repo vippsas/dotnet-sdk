@@ -195,5 +195,16 @@ namespace Vipps.net.Tests
                 epaymentObject?.GetValue("captureUrl")?.ToString()
             );
         }
+
+        [TestMethod]
+        public void Deserialization_Given_InvalidData_Throws_Exception()
+        {
+            Assert.ThrowsException<Exceptions.VippsTechnicalException>(
+                () =>
+                    VippsRequestSerializer.DeserializeVippsResponse<InitiateSessionResponse>(
+                        Guid.NewGuid().ToString()
+                    )
+            );
+        }
     }
 }
