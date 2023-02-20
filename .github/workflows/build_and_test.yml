@@ -43,7 +43,7 @@ jobs:
         run: "echo ${{ env.RELEASE_TAG }}"
       - name: Create Tag
         if: ${{ startsWith(env.RELEASE_TAG, 'v')}}
-        run: git tag ${{ env.RELEASE_TAG }}
+        run: git tag ${{ env.RELEASE_TAG }} -m ${{ env.RELEASE_TAG }}
       - name: Publish tags
         if: ${{ startsWith(env.RELEASE_TAG, 'v')}}
         run: git push --tags 
