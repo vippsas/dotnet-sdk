@@ -3,12 +3,13 @@
     <TargetFrameworks>net6.0;net7.0;netcoreapp3.1;netstandard2.0;net48</TargetFrameworks>
     <ImplicitUsings>disable</ImplicitUsings>
     <Nullable>disable</Nullable>
+    <Product>Vipps.net</Product>
+    <Description>Vipps.net SDK</Description>
     <PackageId>Vipps.net</PackageId>
     <Version>1.0.0</Version>
     <PackageVersion>1.0.1</PackageVersion>
     <Authors>Vipps Mobilepay AS</Authors>
     <Company>Vipps Mobilepay AS</Company>
-    <Description>https://github.com/vippsas/vipps-dotnet#readme</Description>
     <Title>Vipps SDK .Net</Title>
     <PackageProjectUrl>https://github.com/vippsas/vipps-dotnet</PackageProjectUrl>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
