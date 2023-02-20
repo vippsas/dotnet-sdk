@@ -62,7 +62,7 @@ jobs:
             tag_name: ${{ env.RELEASE_TAG }}
             body_path: CHANGELOG.md
         env:
-          github-token: "${{ secrets.GITHUB_TOKEN }}"
+          github-token: "${{ github.token }}"
         #end of area that should be moved down 
       - name: Install dependencies Vipps.net
         run: dotnet restore src/Vipps.net/Vipps.net.csproj
