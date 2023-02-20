@@ -1,11 +1,9 @@
-﻿using System.Text.Json;
-using System.Text.Json.Serialization;
+﻿using Newtonsoft.Json.Linq;
 
 namespace Vipps.Models
 {
     public class VippsResponse
     {
-        [JsonIgnore]
-        public JsonElement RawResponse { get; set; }
+        public JObject RawResponse { get; set; }
     }
 }

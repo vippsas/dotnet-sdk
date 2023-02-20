@@ -1,44 +1,44 @@
 ﻿using System;
-using System.Text.Json.Serialization;
+using Newtonsoft.Json;
 
 namespace Vipps.Models.Epayment.GetPaymentEventLog
 {
     public class Amount
     {
-        [property: JsonPropertyName("currency")]
+        [property: JsonProperty("currency")]
         public string Currency { get; set; }
 
-        [property: JsonPropertyName("value")]
+        [property: JsonProperty("value")]
         public int Value { get; set; }
     }
 
     public class GetPaymentEventLog
     {
-        [property: JsonPropertyName("reference")]
+        [property: JsonProperty("reference")]
         public string Reference { get; set; }
 
-        [property: JsonPropertyName("pspReference")]
+        [property: JsonProperty("pspReference")]
         public string PspReference { get; set; }
 
-        [property: JsonPropertyName("name")]
+        [property: JsonProperty("name")]
         public string Name { get; set; }
 
-        [property: JsonPropertyName("paymentAction")]
+        [property: JsonProperty("paymentAction")]
         public string PaymentAction { get; set; }
 
-        [property: JsonPropertyName("amount")]
+        [property: JsonProperty("amount")]
         public Amount Amount { get; set; }
 
-        [property: JsonPropertyName("timestamp")]
+        [property: JsonProperty("timestamp")]
         public DateTime Timestamp { get; set; }
 
-        [property: JsonPropertyName("processedAt")]
+        [property: JsonProperty("processedAt")]
         public DateTime ProcessedAt { get; set; }
 
-        [property: JsonPropertyName("idempotencyKey")]
+        [property: JsonProperty("idempotencyKey")]
         public string IdempotencyKey { get; set; }
 
-        [property: JsonPropertyName("success")]
+        [property: JsonProperty("success")]
         public bool Success { get; set; }
     }
 }
