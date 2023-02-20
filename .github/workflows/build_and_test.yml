@@ -18,12 +18,14 @@ jobs:
       matrix:
         dotnet-version: [ '7.0.x' ]
     steps:
+        # these are just to get commit messages of PRs. Should be deleted.
       - name: Get repo
         uses: actions/checkout@v3
         with:
           ref: ${{ github.event.pull_request.head.sha }}
       - name: Print head git commit message
         run: "echo \"COMMIT_MESSAGE=$(git show -s --format=%s)\"  >> $GITHUB_ENV"
+        #end of area to be deleted
       - name: Get repo with depth
         uses: actions/checkout@v3
         with: 
@@ -32,25 +34,18 @@ jobs:
         uses: actions/setup-dotnet@v3
         with:
           dotnet-version: ${{ matrix.dotnet-version }}
-     
       - name: Echo github commit message
         run: "echo ${{env.COMMIT_MESSAGE}}" #${{ github.event.head_commit.message }}"
       - name: Check commit message if tag creation #SHOULD BE Only on main, also moved to the bottom.
         #if: ${{ github.event.head_commit.message }} != ''
         run: "echo \"RELEASE_TAG=${{ env.COMMIT_MESSAGE }} | grep -P '(v(\\d+)\\.(\\d+)\\.(\\d+)(.*?))' -o\" >> $GITHUB_ENV"
-      - name: Create Tag #SHOULD BE Only on main
-        if: ${{ env.RELEASE_TAG }}
-        id: create_tag
-        uses: actions/github-script@v6
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # This token is provided by Actions, you do not need to create your own token
-        with:
-          script: |
-            github.git.createRef({
-            owner: context.repo.owner,
-            repo: context.repo.repo,
-            ref: "refs/tags/${{env.RELEASE_TAG}}",
-            sha: context.sha})
+      - name: Create Tag
+        if: ${{ env.RELEASE_TAG }} != ''
+        run: git tag ${{ env.RELEASE_TAG }}
+      - name: Publish tags
+        if: ${{ env.RELEASE_TAG }} != ''
+        run: git push --tags 
+        #end of area that should be moved down
       - name: Install dependencies Vipps.net
         run: dotnet restore src/Vipps.net/Vipps.net.csproj
       - name: Setup Nerdbank.GitVersioning
