@@ -29,7 +29,7 @@ jobs:
         run: nbgv set-version ${VERSION}
       - name: Pack Nuget
         run: dotnet pack "./src/Vipps.net/Vipps.net.csproj" --include-source /p:Version=${VERSION} --output .
-      - name: Upload packed as artifact #replace with nuget
+      - name: Upload packed as artifact #replace with nuget 
         uses: actions/upload-artifact@v3
         with: 
           name: Nuget package
