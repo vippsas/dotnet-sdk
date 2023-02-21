@@ -54,7 +54,7 @@ jobs:
           dotnet csharpier . --check
       # Create tag only if main, not PR, and a version is found in a commit message
       - name: Check commit message for version
-        if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request' && ${{ github.event.head_commit.message }} != ''
+        if: ${{ github.ref == 'refs/heads/main' && github.event_name != 'pull_request' && github.event.head_commit.message != '' }}
         run: "echo \"RELEASE_TAG=$(echo '${{ github.event.head_commit.message }}' | grep -oP '(v(\\d+)\\.(\\d+)\\.(\\d+)(.*?))')\" >> $GITHUB_ENV"
       - name: Set version variable without v (1.2.3)
         if: ${{ startsWith(env.RELEASE_TAG, 'v')}}
