@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
-using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
@@ -99,10 +98,12 @@ namespace Vipps.net.Infrastructure
 #pragma warning restore CA2016 // Forward the 'CancellationToken' parameter to methods
             try
             {
-                var responseObject = JsonSerializer.Deserialize<TResponse>(contentString);
+                var responseObject = VippsRequestSerializer.DeserializeVippsResponse<TResponse>(
+                    contentString
+                );
                 if (responseObject is null)
                 {
-                    throw new Exception("Deserialization returned null");
+                    throw new VippsTechnicalException("Deserialization returned null");
                 }
                 return responseObject;
             }
@@ -166,9 +167,19 @@ namespace Vipps.net.Infrastructure
                     .ReadAsStringAsync()
                     .ConfigureAwait(false);
 #pragma warning restore CA2016 // Forward the 'CancellationToken' parameter to methods
-                throw new VippsTechnicalException(
-                    $"Request to {httpMethod.Method} {path} failed with status code {response.StatusCode}, content: '{responseContent}'"
-                );
+                var errorMessage =
+                    $"Request to {httpMethod.Method} {path} failed with status code {response.StatusCode}, content: '{responseContent}'";
+                if (
+                    (int)response.StatusCode >= (int)System.Net.HttpStatusCode.BadRequest
+                    && (int)response.StatusCode < (int)System.Net.HttpStatusCode.InternalServerError
+                )
+                {
+                    throw new VippsUserException(errorMessage);
+                }
+                else
+                {
+                    throw new VippsTechnicalException(errorMessage);
+                }
             }
 
             return response;

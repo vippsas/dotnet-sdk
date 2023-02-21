@@ -1,9 +1,7 @@
-﻿using Newtonsoft.Json.Linq;
-
-namespace Vipps.Models
+﻿namespace Vipps.Models
 {
     public class VippsResponse
     {
-        public JObject RawResponse { get; set; }
+        public string RawResponse { get; set; }
     }
 }

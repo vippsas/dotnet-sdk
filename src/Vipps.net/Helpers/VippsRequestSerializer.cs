@@ -35,7 +35,7 @@ namespace Vipps.net.Helpers
         }
 
         public static T DeserializeVippsResponse<T>(string vippsResponse)
-            where T : VippsResponse
+            where T : class
         {
             try
             {
@@ -46,8 +46,10 @@ namespace Vipps.net.Helpers
                         $"Response could not be deserialized to {nameof(T)}"
                     );
                 }
-                var deserializedRaw = JsonConvert.DeserializeObject<JObject>(vippsResponse);
-                deserializedTyped.RawResponse = deserializedRaw;
+                if (deserializedTyped is VippsResponse)
+                {
+                    (deserializedTyped as VippsResponse).RawResponse = vippsResponse;
+                }
                 return deserializedTyped;
             }
             catch (Exceptions.VippsBaseException)
