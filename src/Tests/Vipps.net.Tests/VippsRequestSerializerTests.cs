@@ -30,6 +30,7 @@ namespace Vipps.net.Tests
             Assert.IsNotNull(serializedRequest);
             Assert.AreNotEqual("", serializedRequest);
             var deserialized = JsonConvert.DeserializeObject<JObject>(serializedRequest);
+            Assert.IsNotNull(deserialized);
             deserialized.TryGetValue("ExtraParameters", out var deserializedExtraParameters);
             Assert.IsNull(deserializedExtraParameters);
             Assert.AreEqual(
@@ -61,6 +62,7 @@ namespace Vipps.net.Tests
             Assert.IsNotNull(serializedRequest);
             Assert.AreNotEqual("", serializedRequest);
             var deserialized = JsonConvert.DeserializeObject<JObject>(serializedRequest);
+            Assert.IsNotNull(deserialized);
             deserialized.TryGetValue("ExtraParameters", out var deserializedExtraParameters);
             Assert.IsNull(deserializedExtraParameters);
             Assert.AreEqual(
@@ -91,6 +93,7 @@ namespace Vipps.net.Tests
             Assert.IsNotNull(serializedRequest);
             Assert.AreNotEqual("", serializedRequest);
             var deserialized = JsonConvert.DeserializeObject<JObject>(serializedRequest);
+            Assert.IsNotNull(deserialized);
             deserialized.TryGetValue("ExtraParameters", out var deserializedExtraParameters);
             Assert.IsNull(deserializedExtraParameters);
             Assert.AreEqual(
