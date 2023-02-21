@@ -159,11 +159,13 @@ namespace Vipps.net.Tests
                 );
             Assert.IsNotNull(deserializedResponse);
             Assert.IsNotNull(deserializedResponse.RawResponse);
-            var jObj = JsonConvert.DeserializeObject<JObject>(deserializedResponse.RawResponse);
-            Assert.IsNotNull(jObj);
+            var responseJObject = JsonConvert.DeserializeObject<JObject>(
+                deserializedResponse.RawResponse
+            );
+            Assert.IsNotNull(responseJObject);
             Assert.AreEqual(
                 initiateSessionResponse.cancellationUrl,
-                jObj.GetValue("cancellationUrl")?.ToString()
+                responseJObject.GetValue("cancellationUrl")?.ToString()
             );
         }
 
@@ -188,9 +190,11 @@ namespace Vipps.net.Tests
                 );
             Assert.IsNotNull(deserializedResponse);
             Assert.IsNotNull(deserializedResponse.RawResponse);
-            var jObj = JsonConvert.DeserializeObject<JObject>(deserializedResponse.RawResponse);
-            Assert.IsNotNull(jObj);
-            var epaymentObject = jObj.GetValue("epayment")?.ToObject<JObject>();
+            var responseJObject = JsonConvert.DeserializeObject<JObject>(
+                deserializedResponse.RawResponse
+            );
+            Assert.IsNotNull(responseJObject);
+            var epaymentObject = responseJObject.GetValue("epayment")?.ToObject<JObject>();
             Assert.AreEqual(
                 initiateSessionResponse.epayment.pollingUrl,
                 epaymentObject?.GetValue("pollingUrl")?.ToString()
