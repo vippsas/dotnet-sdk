@@ -106,4 +106,4 @@ jobs:
         uses: actions/upload-artifact@v3
         with: 
           name: Nuget package
-          path: Vipps.net.*.nupkg
+          path: Vipps.net.*.?nupkg
