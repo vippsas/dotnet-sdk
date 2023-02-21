@@ -99,7 +99,7 @@ jobs:
         run: nbgv set-version ${{ env.RELEASE_VERSION }}
         # Create Nuget pack.
       - name: Pack Nuget
-        run: dotnet pack "./src/Vipps.net/Vipps.net.csproj" --include-source --p:ContinuousIntegrationBuild=true --output .
+        run: dotnet pack "./src/Vipps.net/Vipps.net.csproj" --include-source --output .
       - name: Upload nuget package as artifact #replace with nuget 
         #Publish artifact if main and not PR
         #if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
