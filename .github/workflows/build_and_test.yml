@@ -102,7 +102,7 @@ jobs:
         run: dotnet pack "./src/Vipps.net/Vipps.net.csproj" --include-source --output .
       - name: Upload nuget package as artifact #replace with nuget 
         #Publish artifact if main and not PR
-        #if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
+        if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
         uses: actions/upload-artifact@v3
         with: 
           name: Nuget packages
