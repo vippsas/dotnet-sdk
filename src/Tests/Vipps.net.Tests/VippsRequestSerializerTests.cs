@@ -1,4 +1,5 @@
-﻿using System.Text.Json;
+﻿using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using Vipps.Models.Checkout.InitiateSession;
 using Vipps.net.Helpers;
 
@@ -28,16 +29,12 @@ namespace Vipps.net.Tests
             );
             Assert.IsNotNull(serializedRequest);
             Assert.AreNotEqual("", serializedRequest);
-            var deserialized = JsonSerializer.Deserialize<JsonElement>(serializedRequest);
-            deserialized.TryGetProperty("ExtraParameters", out var deserializedExtraParameters);
-            Assert.AreEqual(JsonValueKind.Undefined, deserializedExtraParameters.ValueKind);
+            var deserialized = JsonConvert.DeserializeObject<JObject>(serializedRequest);
+            deserialized.TryGetValue("ExtraParameters", out var deserializedExtraParameters);
+            Assert.IsNull(deserializedExtraParameters);
             Assert.AreEqual(
                 initiateSessionRequest.ExtraParameters.Transaction.Metadata.KID,
-                deserialized
-                    .GetProperty("Transaction")
-                    .GetProperty("Metadata")
-                    .GetProperty("KID")
-                    .GetString()
+                deserialized["Transaction"]?["Metadata"]?["KID"]?.ToString()
             );
         }
 
@@ -63,15 +60,42 @@ namespace Vipps.net.Tests
             );
             Assert.IsNotNull(serializedRequest);
             Assert.AreNotEqual("", serializedRequest);
-            var deserialized = JsonSerializer.Deserialize<JsonElement>(serializedRequest);
-            deserialized.TryGetProperty("ExtraParameters", out var deserializedExtraParameters);
-            Assert.AreEqual(JsonValueKind.Undefined, deserializedExtraParameters.ValueKind);
+            var deserialized = JsonConvert.DeserializeObject<JObject>(serializedRequest);
+            deserialized.TryGetValue("ExtraParameters", out var deserializedExtraParameters);
+            Assert.IsNull(deserializedExtraParameters);
             Assert.AreEqual(
-                JsonValueKind.Array,
-                deserialized
-                    .GetProperty("Configuration")
-                    .GetProperty("AcceptedPaymentMethods")
-                    .ValueKind
+                JTokenType.Array,
+                deserialized["Configuration"]?["AcceptedPaymentMethods"]?.Type
+            );
+        }
+
+        [TestMethod]
+        public void Can_Serialize_With_Extra_Parameters_On_Undefined_Receiver()
+        {
+            InitiateSessionRequest initiateSessionRequest =
+                new()
+                {
+                    Transaction = new PaymentTransaction()
+                    {
+                        Amount = new Amount() { Currency = "NOK", Value = 49000 },
+                        PaymentDescription = "Hei"
+                    },
+                    ExtraParameters = new
+                    {
+                        Configuration = new { AcceptedPaymentMethods = new[] { "WALLET", "CARD" } }
+                    }
+                };
+            var serializedRequest = VippsRequestSerializer.SerializeVippsRequest(
+                initiateSessionRequest
+            );
+            Assert.IsNotNull(serializedRequest);
+            Assert.AreNotEqual("", serializedRequest);
+            var deserialized = JsonConvert.DeserializeObject<JObject>(serializedRequest);
+            deserialized.TryGetValue("ExtraParameters", out var deserializedExtraParameters);
+            Assert.IsNull(deserializedExtraParameters);
+            Assert.AreEqual(
+                JTokenType.Array,
+                deserialized["Configuration"]?["AcceptedPaymentMethods"]?.Type
             );
         }
 
@@ -92,11 +116,9 @@ namespace Vipps.net.Tests
             );
             Assert.IsNotNull(serializedRequest);
             Assert.AreNotEqual("", serializedRequest);
-            var deserialized = JsonSerializer.Deserialize<InitiateSessionRequest>(
-                serializedRequest
-            );
+            var deserialized = JsonConvert.DeserializeObject<JObject>(serializedRequest);
             Assert.IsNotNull(deserialized);
-            Assert.IsNull(deserialized?.ExtraParameters);
+            Assert.IsNull(deserialized["ExtraParameters"]);
         }
 
         [TestMethod]
@@ -109,7 +131,7 @@ namespace Vipps.net.Tests
                     PollingUrl = "https://api.vipps.no/checkout/v3/session/reference101",
                     Token = "eynghsvdsjhkfgasf"
                 };
-            var serializedResponse = JsonSerializer.Serialize(initiateSessionResponse);
+            var serializedResponse = JsonConvert.SerializeObject(initiateSessionResponse);
             var deserializedResponse =
                 VippsRequestSerializer.DeserializeVippsResponse<InitiateSessionResponse>(
                     serializedResponse
@@ -127,7 +149,7 @@ namespace Vipps.net.Tests
                 token = "eynghsvdsjhkfgasf",
                 cancellationUrl = "https://api.vipps.no/checkout/v3/session/reference101/cancel"
             };
-            var serializedResponse = JsonSerializer.Serialize(initiateSessionResponse);
+            var serializedResponse = JsonConvert.SerializeObject(initiateSessionResponse);
             InitiateSessionResponse deserializedResponse =
                 VippsRequestSerializer.DeserializeVippsResponse<InitiateSessionResponse>(
                     serializedResponse
@@ -136,7 +158,7 @@ namespace Vipps.net.Tests
             Assert.IsNotNull(deserializedResponse.RawResponse);
             Assert.AreEqual(
                 initiateSessionResponse.cancellationUrl,
-                deserializedResponse.RawResponse.GetProperty("cancellationUrl").GetString()
+                deserializedResponse.RawResponse.GetValue("cancellationUrl")?.ToString()
             );
         }
 
@@ -154,21 +176,23 @@ namespace Vipps.net.Tests
                     captureUrl = "https://api.vipps.no/epayment/v1/payment/reference101/capture"
                 }
             };
-            var serializedResponse = JsonSerializer.Serialize(initiateSessionResponse);
+            var serializedResponse = JsonConvert.SerializeObject(initiateSessionResponse);
             InitiateSessionResponse deserializedResponse =
                 VippsRequestSerializer.DeserializeVippsResponse<InitiateSessionResponse>(
                     serializedResponse
                 );
             Assert.IsNotNull(deserializedResponse);
             Assert.IsNotNull(deserializedResponse.RawResponse);
-            var epaymentObject = deserializedResponse.RawResponse.GetProperty("epayment");
+            var epaymentObject = deserializedResponse.RawResponse
+                .GetValue("epayment")
+                ?.ToObject<JObject>();
             Assert.AreEqual(
                 initiateSessionResponse.epayment.pollingUrl,
-                epaymentObject.GetProperty("pollingUrl").GetString()
+                epaymentObject?.GetValue("pollingUrl")?.ToString()
             );
             Assert.AreEqual(
                 initiateSessionResponse.epayment.captureUrl,
-                epaymentObject.GetProperty("captureUrl").GetString()
+                epaymentObject?.GetValue("captureUrl")?.ToString()
             );
         }
     }

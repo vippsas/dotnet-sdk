@@ -1,19 +1,19 @@
-﻿using System.Text.Json.Serialization;
+﻿using Newtonsoft.Json;
 
 namespace Vipps.Models.Epayment.RefundPayment
 {
     public class RefundPaymentRequest : VippsRequest
     {
-        [property: JsonPropertyName("modificationAmount")]
+        [property: JsonProperty("modificationAmount")]
         public ModificationAmount ModificationAmount { get; set; }
     }
 
     public class ModificationAmount
     {
-        [property: JsonPropertyName("currency")]
+        [property: JsonProperty("currency")]
         public string Currency { get; set; }
 
-        [property: JsonPropertyName("value")]
+        [property: JsonProperty("value")]
         public int Value { get; set; }
     }
 }

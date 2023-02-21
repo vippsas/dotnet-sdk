@@ -1,4 +1,4 @@
-﻿using System.Text.Json.Serialization;
+﻿using Newtonsoft.Json;
 using Vipps.Models.Checkout.InitiateSession;
 
 namespace Vipps.Models.Checkout.GetSession
@@ -36,28 +36,28 @@ namespace Vipps.Models.Checkout.GetSession
 
     public class BillingDetails
     {
-        [property: JsonPropertyName("firstName")]
+        [property: JsonProperty("firstName")]
         public string FirstName { get; set; }
 
-        [property: JsonPropertyName("lastName")]
+        [property: JsonProperty("lastName")]
         public string LastName { get; set; }
 
-        [property: JsonPropertyName("email")]
+        [property: JsonProperty("email")]
         public string Email { get; set; }
 
-        [property: JsonPropertyName("phoneNumber")]
+        [property: JsonProperty("phoneNumber")]
         public string PhoneNumber { get; set; }
 
-        [property: JsonPropertyName("streetAddress")]
+        [property: JsonProperty("streetAddress")]
         public string StreetAddress { get; set; }
 
-        [property: JsonPropertyName("postalCode")]
+        [property: JsonProperty("postalCode")]
         public string PostalCode { get; set; }
 
-        [property: JsonPropertyName("region")]
+        [property: JsonProperty("region")]
         public string Region { get; set; }
 
-        [property: JsonPropertyName("country")]
+        [property: JsonProperty("country")]
         public string Country { get; set; }
     }
 
@@ -70,52 +70,52 @@ namespace Vipps.Models.Checkout.GetSession
 
     public class PickupPoint
     {
-        [property: JsonPropertyName("id")]
+        [property: JsonProperty("id")]
         public string Id { get; set; }
 
-        [property: JsonPropertyName("name")]
+        [property: JsonProperty("name")]
         public string Name { get; set; }
 
-        [property: JsonPropertyName("postalCode")]
+        [property: JsonProperty("postalCode")]
         public string PostalCode { get; set; }
 
-        [property: JsonPropertyName("city")]
+        [property: JsonProperty("city")]
         public string City { get; set; }
 
-        [property: JsonPropertyName("country")]
+        [property: JsonProperty("country")]
         public string Country { get; set; }
     }
 
     public class ShippingDetails
     {
-        [property: JsonPropertyName("firstName")]
+        [property: JsonProperty("firstName")]
         public string FirstName { get; set; }
 
-        [property: JsonPropertyName("lastName")]
+        [property: JsonProperty("lastName")]
         public string LastName { get; set; }
 
-        [property: JsonPropertyName("email")]
+        [property: JsonProperty("email")]
         public string Email { get; set; }
 
-        [property: JsonPropertyName("phoneNumber")]
+        [property: JsonProperty("phoneNumber")]
         public string PhoneNumber { get; set; }
 
-        [property: JsonPropertyName("streetAddress")]
+        [property: JsonProperty("streetAddress")]
         public string StreetAddress { get; set; }
 
-        [property: JsonPropertyName("postalCode")]
+        [property: JsonProperty("postalCode")]
         public string PostalCode { get; set; }
 
-        [property: JsonPropertyName("region")]
+        [property: JsonProperty("region")]
         public string Region { get; set; }
 
-        [property: JsonPropertyName("country")]
+        [property: JsonProperty("country")]
         public string Country { get; set; }
 
-        [property: JsonPropertyName("shippingMethodId")]
+        [property: JsonProperty("shippingMethodId")]
         public string ShippingMethodId { get; set; }
 
-        [property: JsonPropertyName("pickupPoint")]
+        [property: JsonProperty("pickupPoint")]
         public PickupPoint PickupPoint { get; set; }
     }
 
