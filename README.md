@@ -96,7 +96,5 @@ All response objects have a property called RawResponse that contains the respon
 
 ```c#
 var response = checkoutService.InitiateSession(initiateSessionRequest);
-response.RawResponse
-    .First(property => property.Key == "cancellationUrl")
-    .Value?.GetValue<string>()
+var cancellationUrl = response.RawResponse["cancellationUrl"].ToString();
 ```
