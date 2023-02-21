@@ -3,7 +3,6 @@ using System.Threading;
 using System.Threading.Tasks;
 using Vipps.Models.Checkout.GetSession;
 using Vipps.Models.Checkout.InitiateSession;
-using Vipps.net.Exceptions;
 using Vipps.net.Infrastructure;
 
 namespace Vipps.Services
@@ -20,10 +19,7 @@ namespace Vipps.Services
                 InitiateSessionRequest,
                 InitiateSessionResponse
             >(requestPath, HttpMethod.Post, initiateSessionRequest, cancellationToken);
-            if (sessionInitiationResult is null)
-            {
-                throw new VippsTechnicalException("Failed response from session initiation");
-            }
+
             return sessionInitiationResult;
         }
 
@@ -39,10 +35,7 @@ namespace Vipps.Services
                     HttpMethod.Get,
                     cancellationToken
                 );
-            if (getSessionResult is null)
-            {
-                throw new VippsTechnicalException("Failed response from session polling");
-            }
+
             return getSessionResult;
         }
     }
