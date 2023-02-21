@@ -112,5 +112,5 @@ jobs:
         #if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
         uses: actions/upload-artifact@v3
         with: 
-          name: Nuget package
+          name: Nuget symbols package
           path: Vipps.net.*.snupkg
