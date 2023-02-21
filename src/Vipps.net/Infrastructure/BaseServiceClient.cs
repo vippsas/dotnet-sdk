@@ -124,28 +124,40 @@ namespace Vipps.net.Infrastructure
         {
             var retryPolicy = PolicyHelper.GetRetryPolicyWithFallback(
                 _logger,
-                $"Request for {path} failed even after retries"
+                $"Request to {httpMethod.Method} {path} failed even after retries"
             );
             var headers = await GetHeaders(cancellationToken);
-            var response = await retryPolicy.ExecuteAsync(async () =>
+            HttpResponseMessage response = null;
+            try
             {
-                var requestMessage = new HttpRequestMessage
+                response = await retryPolicy.ExecuteAsync(async () =>
                 {
-                    RequestUri = new Uri(path),
-                    Method = httpMethod,
-                    Content = httpContent,
-                };
-                if (headers != null)
-                {
-                    foreach (var item in headers)
+                    var requestMessage = new HttpRequestMessage
                     {
-                        AddOrUpdateHeader(requestMessage.Headers, item.Key, item.Value);
+                        RequestUri = new Uri(path),
+                        Method = httpMethod,
+                        Content = httpContent,
+                    };
+                    if (headers != null)
+                    {
+                        foreach (var item in headers)
+                        {
+                            AddOrUpdateHeader(requestMessage.Headers, item.Key, item.Value);
+                        }
                     }
-                }
-                return await _vippsHttpClient
-                    .SendAsync(requestMessage, cancellationToken)
-                    .ConfigureAwait(false);
-            });
+
+                    return await _vippsHttpClient
+                        .SendAsync(requestMessage, cancellationToken)
+                        .ConfigureAwait(false);
+                });
+            }
+            catch (Exception ex)
+            {
+                throw new VippsTechnicalException(
+                    $"Request to {httpMethod.Method} {path} failed with exception: '{ex.Message}'.",
+                    ex
+                );
+            }
 
             if (!response.IsSuccessStatusCode)
             {
@@ -155,7 +167,7 @@ namespace Vipps.net.Infrastructure
                     .ConfigureAwait(false);
 #pragma warning restore CA2016 // Forward the 'CancellationToken' parameter to methods
                 throw new VippsTechnicalException(
-                    $"Request failed with status code {response.StatusCode}, content: '{responseContent}'"
+                    $"Request to {httpMethod.Method} {path} failed with status code {response.StatusCode}, content: '{responseContent}'"
                 );
             }
 
