@@ -1,5 +1,4 @@
-﻿using System;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Vipps.Models;
 
@@ -36,19 +35,34 @@ namespace Vipps.net.Helpers
         }
 
         public static T DeserializeVippsResponse<T>(string vippsResponse)
-            where T : VippsResponse
+            where T : class
         {
-            var deserializedTyped = JsonConvert.DeserializeObject<T>(vippsResponse);
-            if (deserializedTyped is null)
+            try
             {
-                throw new ArgumentException(
-                    "Response could not be deserialized to {type}",
-                    nameof(T)
+                var deserializedTyped = JsonConvert.DeserializeObject<T>(vippsResponse);
+                if (deserializedTyped is null)
+                {
+                    throw new Exceptions.VippsTechnicalException(
+                        $"Response could not be deserialized to {nameof(T)}"
+                    );
+                }
+                if (deserializedTyped is VippsResponse)
+                {
+                    (deserializedTyped as VippsResponse).RawResponse = vippsResponse;
+                }
+                return deserializedTyped;
+            }
+            catch (Exceptions.VippsBaseException)
+            {
+                throw;
+            }
+            catch (System.Exception ex)
+            {
+                throw new Exceptions.VippsTechnicalException(
+                    $"Error deserializing response of type {nameof(T)}",
+                    ex
                 );
             }
-            var deserializedRaw = JsonConvert.DeserializeObject<JObject>(vippsResponse);
-            deserializedTyped.RawResponse = deserializedRaw;
-            return deserializedTyped;
         }
 
         private static string Merge(string request, string extraParameters)

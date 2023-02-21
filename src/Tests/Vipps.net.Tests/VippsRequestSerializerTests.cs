@@ -159,9 +159,13 @@ namespace Vipps.net.Tests
                 );
             Assert.IsNotNull(deserializedResponse);
             Assert.IsNotNull(deserializedResponse.RawResponse);
+            var responseJObject = JsonConvert.DeserializeObject<JObject>(
+                deserializedResponse.RawResponse
+            );
+            Assert.IsNotNull(responseJObject);
             Assert.AreEqual(
                 initiateSessionResponse.cancellationUrl,
-                deserializedResponse.RawResponse.GetValue("cancellationUrl")?.ToString()
+                responseJObject.GetValue("cancellationUrl")?.ToString()
             );
         }
 
@@ -186,9 +190,11 @@ namespace Vipps.net.Tests
                 );
             Assert.IsNotNull(deserializedResponse);
             Assert.IsNotNull(deserializedResponse.RawResponse);
-            var epaymentObject = deserializedResponse.RawResponse
-                .GetValue("epayment")
-                ?.ToObject<JObject>();
+            var responseJObject = JsonConvert.DeserializeObject<JObject>(
+                deserializedResponse.RawResponse
+            );
+            Assert.IsNotNull(responseJObject);
+            var epaymentObject = responseJObject.GetValue("epayment")?.ToObject<JObject>();
             Assert.AreEqual(
                 initiateSessionResponse.epayment.pollingUrl,
                 epaymentObject?.GetValue("pollingUrl")?.ToString()
@@ -196,6 +202,17 @@ namespace Vipps.net.Tests
             Assert.AreEqual(
                 initiateSessionResponse.epayment.captureUrl,
                 epaymentObject?.GetValue("captureUrl")?.ToString()
+            );
+        }
+
+        [TestMethod]
+        public void Deserialization_Given_InvalidData_Throws_Exception()
+        {
+            Assert.ThrowsException<Exceptions.VippsTechnicalException>(
+                () =>
+                    VippsRequestSerializer.DeserializeVippsResponse<InitiateSessionResponse>(
+                        Guid.NewGuid().ToString()
+                    )
             );
         }
     }

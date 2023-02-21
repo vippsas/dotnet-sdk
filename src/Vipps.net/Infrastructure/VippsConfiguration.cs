@@ -1,6 +1,6 @@
-﻿using System;
-using Microsoft.Extensions.Logging;
+﻿using Microsoft.Extensions.Logging;
 using Vipps.Infrastructure;
+using Vipps.net.Exceptions;
 
 namespace Vipps.net.Infrastructure
 {
@@ -48,13 +48,16 @@ namespace Vipps.net.Infrastructure
         private static string _clientId;
         internal static string ClientId
         {
-            get { return _clientId ?? throw new ArgumentNullException(nameof(ClientId)); }
+            get { return _clientId ?? throw CreateMissingConfigException(nameof(ClientId)); }
             set { _clientId = value; }
         }
         private static string _clientSecret;
         internal static string ClientSecret
         {
-            get { return _clientSecret ?? throw new ArgumentNullException(nameof(ClientSecret)); }
+            get
+            {
+                return _clientSecret ?? throw CreateMissingConfigException(nameof(ClientSecret));
+            }
             set { _clientSecret = value; }
         }
         private static string _subscriptionKey;
@@ -62,16 +65,10 @@ namespace Vipps.net.Infrastructure
         {
             get
             {
-                return _subscriptionKey ?? throw new ArgumentNullException(nameof(SubscriptionKey));
+                return _subscriptionKey
+                    ?? throw CreateMissingConfigException(nameof(SubscriptionKey));
             }
-            set
-            {
-                if (_subscriptionKey != null)
-                {
-                    throw new ArgumentException($"{nameof(SubscriptionKey)} is already set");
-                }
-                _subscriptionKey = value;
-            }
+            set { _subscriptionKey = value; }
         }
         private static string _merchantSerialNumber;
         internal static string MerchantSerialNumber
@@ -79,29 +76,15 @@ namespace Vipps.net.Infrastructure
             get
             {
                 return _merchantSerialNumber
-                    ?? throw new ArgumentNullException(nameof(MerchantSerialNumber));
+                    ?? throw CreateMissingConfigException(nameof(MerchantSerialNumber));
             }
-            set
-            {
-                if (_merchantSerialNumber != null)
-                {
-                    throw new ArgumentException($"{nameof(MerchantSerialNumber)} is already set");
-                }
-                _merchantSerialNumber = value;
-            }
+            set { _merchantSerialNumber = value; }
         }
         private static bool? _testMode;
         internal static bool TestMode
         {
-            get { return _testMode ?? throw new ArgumentNullException(nameof(TestMode)); }
-            set
-            {
-                if (_testMode != null)
-                {
-                    throw new ArgumentException($"{nameof(TestMode)} is already set");
-                }
-                _testMode = value;
-            }
+            get { return _testMode ?? throw CreateMissingConfigException(nameof(TestMode)); }
+            set { _testMode = value; }
         }
 
         internal static string BaseUrl =>
@@ -119,21 +102,19 @@ namespace Vipps.net.Infrastructure
 
                 return _vippsHttpClient;
             }
-            set
-            {
-                if (_vippsHttpClient != null)
-                {
-                    throw new InvalidOperationException(
-                        "Once created, VippsHttpClient cannot be modified"
-                    );
-                }
-                _vippsHttpClient = value;
-            }
+            set { _vippsHttpClient = value; }
         }
 
         private static IVippsHttpClient CreateDefaultVippsHttpClient()
         {
             return new VippsHttpClient();
+        }
+
+        private static VippsUserException CreateMissingConfigException(string propertyName)
+        {
+            return new VippsUserException(
+                $"VippsConfiguration incomplete - {propertyName} is missing. Have you run {nameof(VippsConfiguration.ConfigureVipps)}?"
+            );
         }
     }
 }

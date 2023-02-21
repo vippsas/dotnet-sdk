@@ -3,12 +3,12 @@ using System.Collections.Generic;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
-using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using Vipps.Helpers;
 using Vipps.Models;
+using Vipps.net.Exceptions;
 using Vipps.net.Helpers;
 
 namespace Vipps.net.Infrastructure
@@ -96,13 +96,24 @@ namespace Vipps.net.Infrastructure
 #pragma warning disable CA2016 // Forward the 'CancellationToken' parameter to methods
             var contentString = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
 #pragma warning restore CA2016 // Forward the 'CancellationToken' parameter to methods
-            var responseObject = JsonSerializer.Deserialize<TResponse>(contentString);
-            if (responseObject is null)
+            try
             {
-                throw new Exception("Failed deserializing response");
+                var responseObject = VippsRequestSerializer.DeserializeVippsResponse<TResponse>(
+                    contentString
+                );
+                if (responseObject is null)
+                {
+                    throw new VippsTechnicalException("Deserialization returned null");
+                }
+                return responseObject;
             }
-
-            return responseObject;
+            catch (Exception ex)
+            {
+                throw new VippsTechnicalException(
+                    $"Error deserializing response of type {nameof(TResponse)}",
+                    ex
+                );
+            }
         }
 
         private async Task<HttpResponseMessage> ExecuteRequestBase(
@@ -114,28 +125,40 @@ namespace Vipps.net.Infrastructure
         {
             var retryPolicy = PolicyHelper.GetRetryPolicyWithFallback(
                 _logger,
-                $"Request for {path} failed even after retries"
+                $"Request to {httpMethod.Method} {path} failed even after retries"
             );
             var headers = await GetHeaders(cancellationToken);
-            var response = await retryPolicy.ExecuteAsync(async () =>
+            HttpResponseMessage response = null;
+            try
             {
-                var requestMessage = new HttpRequestMessage
+                response = await retryPolicy.ExecuteAsync(async () =>
                 {
-                    RequestUri = new Uri(path),
-                    Method = httpMethod,
-                    Content = httpContent,
-                };
-                if (headers != null)
-                {
-                    foreach (var item in headers)
+                    var requestMessage = new HttpRequestMessage
                     {
-                        AddOrUpdateHeader(requestMessage.Headers, item.Key, item.Value);
+                        RequestUri = new Uri(path),
+                        Method = httpMethod,
+                        Content = httpContent,
+                    };
+                    if (headers != null)
+                    {
+                        foreach (var item in headers)
+                        {
+                            AddOrUpdateHeader(requestMessage.Headers, item.Key, item.Value);
+                        }
                     }
-                }
-                return await _vippsHttpClient
-                    .SendAsync(requestMessage, cancellationToken)
-                    .ConfigureAwait(false);
-            });
+
+                    return await _vippsHttpClient
+                        .SendAsync(requestMessage, cancellationToken)
+                        .ConfigureAwait(false);
+                });
+            }
+            catch (Exception ex)
+            {
+                throw new VippsTechnicalException(
+                    $"Request to {httpMethod.Method} {path} failed with exception: '{ex.Message}'.",
+                    ex
+                );
+            }
 
             if (!response.IsSuccessStatusCode)
             {
@@ -144,9 +167,19 @@ namespace Vipps.net.Infrastructure
                     .ReadAsStringAsync()
                     .ConfigureAwait(false);
 #pragma warning restore CA2016 // Forward the 'CancellationToken' parameter to methods
-                throw new Exception(
-                    $"Request failed with status code {response.StatusCode}, content: '{responseContent}'"
-                );
+                var errorMessage =
+                    $"Request to {httpMethod.Method} {path} failed with status code {response.StatusCode}, content: '{responseContent}'";
+                if (
+                    (int)response.StatusCode >= (int)System.Net.HttpStatusCode.BadRequest
+                    && (int)response.StatusCode < (int)System.Net.HttpStatusCode.InternalServerError
+                )
+                {
+                    throw new VippsUserException(errorMessage);
+                }
+                else
+                {
+                    throw new VippsTechnicalException(errorMessage);
+                }
             }
 
             return response;
