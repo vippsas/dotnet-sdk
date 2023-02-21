@@ -100,10 +100,17 @@ jobs:
         # Create Nuget pack.
       - name: Pack Nuget
         run: dotnet pack "./src/Vipps.net/Vipps.net.csproj" --include-source --p:ContinuousIntegrationBuild=true --output .
-      - name: Upload packed as artifact #replace with nuget 
+      - name: Upload nuget package as artifact #replace with nuget 
         #Publish artifact if main and not PR
         #if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
         uses: actions/upload-artifact@v3
         with: 
           name: Nuget package
-          path: Vipps.net.*.?nupkg
+          path: Vipps.net.*.nupkg
+      - name: Upload nuget symbols package as artifact #replace with nuget 
+        #Publish artifact if main and not PR
+        #if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
+        uses: actions/upload-artifact@v3
+        with: 
+          name: Nuget package
+          path: Vipps.net.*.snupkg
