@@ -20,7 +20,7 @@ namespace Vipps.net.Helpers
                     new JsonSerializerSettings()
                     {
                         NullValueHandling = NullValueHandling.Ignore,
-                        DefaultValueHandling = DefaultValueHandling.Ignore,
+                        DefaultValueHandling = DefaultValueHandling.Include,
                         Converters = new[] { new Newtonsoft.Json.Converters.StringEnumConverter() }
                     }
                 );
@@ -43,7 +43,7 @@ namespace Vipps.net.Helpers
                 new JsonSerializerSettings()
                 {
                     NullValueHandling = NullValueHandling.Ignore,
-                    DefaultValueHandling = DefaultValueHandling.Ignore,
+                    DefaultValueHandling = DefaultValueHandling.Include,
                     Converters = new[] { new Newtonsoft.Json.Converters.StringEnumConverter() }
                 }
             );
