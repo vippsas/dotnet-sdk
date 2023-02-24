@@ -2,7 +2,7 @@
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using Vipps.Models.Checkout.InitiateSession;
+using Vipps.Models.Autogen.Checkout;
 using Vipps.Services;
 
 namespace Vipps.net.AspCore31Demo.Controllers

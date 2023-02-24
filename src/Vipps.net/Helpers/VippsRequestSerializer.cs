@@ -34,6 +34,22 @@ namespace Vipps.net.Helpers
             }
         }
 
+        public static string SerializeVippsRequest<T>(T vippsRequest)
+            where T : class
+        {
+            string serializedRequest = JsonConvert.SerializeObject(
+                vippsRequest,
+                vippsRequest.GetType(),
+                new JsonSerializerSettings()
+                {
+                    NullValueHandling = NullValueHandling.Ignore,
+                    DefaultValueHandling = DefaultValueHandling.Ignore,
+                    Converters = new[] { new Newtonsoft.Json.Converters.StringEnumConverter() }
+                }
+            );
+            return serializedRequest;
+        }
+
         public static T DeserializeVippsResponse<T>(string vippsResponse)
             where T : class
         {

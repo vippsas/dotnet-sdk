@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
-using Vipps.Models.Checkout.InitiateSession;
+using Vipps.Models.Autogen.Checkout;
 using Vipps.Services;
 
 namespace Vipps.net.AspDemo.Services

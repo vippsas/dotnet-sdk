@@ -12,7 +12,7 @@ internal sealed class Program
         var epaymentOptions = new CodegenSettings(
             "https://vippsas.github.io/vipps-developer-docs/redocusaurus/epayment-swagger-id.yaml",
             "VippsEpayment",
-            "Vipps.net.Models.Autogen.Epayment",
+            "Vipps.Models.Autogen.Epayment",
             "../Vipps.net/Models/EpaymentModels.cs"
         );
         await GenerateCode(httpClient, epaymentOptions);
@@ -20,7 +20,7 @@ internal sealed class Program
         var checkoutOptions = new CodegenSettings(
             "https://vippsas.github.io/vipps-developer-docs/redocusaurus/checkout-swagger-id.yaml",
             "VippsCheckout",
-            "Vipps.net.Models.Autogen.Checkout",
+            "Vipps.Models.Autogen.Checkout",
             "../Vipps.net/Models/CheckoutModels.cs"
         );
         await GenerateCode(httpClient, checkoutOptions);

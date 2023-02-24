@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Vipps.Models.Checkout.InitiateSession;
+using Vipps.Models.Autogen.Checkout;
 using Vipps.Services;
 
 namespace Vipps.net.Demo.Controllers
