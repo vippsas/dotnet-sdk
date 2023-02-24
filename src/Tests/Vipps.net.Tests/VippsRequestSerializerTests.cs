@@ -215,5 +215,72 @@ namespace Vipps.net.Tests
                     )
             );
         }
+
+        [TestMethod]
+        public void Can_Deserialize_Response_With_Extra_Properties_Autogen()
+        {
+            dynamic createPaymentRequest = new
+            {
+                Amount = new Models.Autogen.Epayment.Amount
+                {
+                    Value = 1000,
+                    Currency = Models.Autogen.Epayment.Currency.NOK
+                },
+                PaymentMethod = new Models.Autogen.Epayment.PaymentMethod
+                {
+                    Type = Models.Autogen.Epayment.PaymentMethodType.WALLET
+                },
+                Reference = Guid.NewGuid().ToString(),
+                UserFlow = Models.Autogen.Epayment.CreatePaymentRequestUserFlow.WEB_REDIRECT,
+                cancellationUrl = "https://api.vipps.no/checkout/v3/session/reference101/cancel"
+            };
+            var serializedResponse = JsonConvert.SerializeObject(createPaymentRequest);
+            Models.Autogen.Epayment.CreatePaymentRequest deserializedResponse =
+                VippsRequestSerializer.DeserializeVippsResponse<Models.Autogen.Epayment.CreatePaymentRequest>(
+                    serializedResponse
+                );
+            Assert.IsNotNull(deserializedResponse);
+            Assert.IsNotNull(deserializedResponse.AdditionalProperties);
+            Assert.AreEqual(
+                deserializedResponse.AdditionalProperties["cancellationUrl"],
+                createPaymentRequest.cancellationUrl
+            );
+        }
+
+        [TestMethod]
+        public void Can_Serialize_Response_With_Extra_Properties_Autogen()
+        {
+            Models.Autogen.Epayment.CreatePaymentRequest createPaymentRequest =
+                new()
+                {
+                    Amount = new Models.Autogen.Epayment.Amount
+                    {
+                        Value = 1000,
+                        Currency = Models.Autogen.Epayment.Currency.NOK
+                    },
+                    PaymentMethod = new Models.Autogen.Epayment.PaymentMethod
+                    {
+                        Type = Models.Autogen.Epayment.PaymentMethodType.WALLET
+                    },
+                    Reference = Guid.NewGuid().ToString(),
+                    UserFlow = Models.Autogen.Epayment.CreatePaymentRequestUserFlow.WEB_REDIRECT,
+                    AdditionalProperties =
+                    {
+                        { "Transaction", new { Metadata = new { KID = "100001" } } }
+                    }
+                };
+            var serializedRequest = JsonConvert.SerializeObject(createPaymentRequest);
+            Assert.IsNotNull(serializedRequest);
+            Assert.AreNotEqual("", serializedRequest);
+            var deserialized = JsonConvert.DeserializeObject<JObject>(serializedRequest);
+            Assert.IsNotNull(deserialized);
+            deserialized.TryGetValue("AdditionalProperties", out var deserializedExtraParameters);
+            Assert.IsNull(deserializedExtraParameters);
+            var deserializedTransaction = deserialized["Transaction"] as dynamic;
+            Assert.AreEqual(
+                (createPaymentRequest.AdditionalProperties["Transaction"] as dynamic).Metadata.KID,
+                deserializedTransaction?.Metadata?.KID?.ToString()
+            );
+        }
     }
 }

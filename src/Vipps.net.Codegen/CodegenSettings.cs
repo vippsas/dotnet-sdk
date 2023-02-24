@@ -4,7 +4,7 @@ namespace Vipps.net.Codegen
 {
     internal sealed class CodegenSettings
     {
-        internal string OpenApiJsonPath { get; init; }
+        internal string OpenApiUrl { get; init; }
         internal string RelativeFilePath { get; init; }
         internal CSharpClientGeneratorSettings ClientGeneratorSettings { get; init; }
 
@@ -15,12 +15,25 @@ namespace Vipps.net.Codegen
             string relativeFilePath
         )
         {
-            OpenApiJsonPath = openApiJsonPath;
+            OpenApiUrl = openApiJsonPath;
             RelativeFilePath = relativeFilePath;
             ClientGeneratorSettings = new CSharpClientGeneratorSettings
             {
                 ClassName = className,
-                CSharpGeneratorSettings = { Namespace = baseNamespace }
+                GenerateClientClasses = false,
+                GeneratePrepareRequestAndProcessResponseAsAsyncMethods = false,
+                CSharpGeneratorSettings =
+                {
+                    Namespace = baseNamespace,
+                    TypeAccessModifier = "public",
+                    GenerateDataAnnotations = true,
+                    GenerateDefaultValues = true,
+                },
+                GenerateExceptionClasses = false,
+                GenerateBaseUrlProperty = false,
+                GenerateUpdateJsonSerializerSettingsMethod = false,
+                GenerateDtoTypes = true,
+                GenerateOptionalParameters = true,
             };
         }
     }

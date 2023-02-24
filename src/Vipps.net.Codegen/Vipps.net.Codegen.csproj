@@ -9,6 +9,7 @@
 
   <ItemGroup>
     <PackageReference Include="NSwag.CodeGeneration.CSharp" Version="13.18.2" />
+    <PackageReference Include="YamlDotNet" Version="13.0.1" />
   </ItemGroup>
 
 </Project>
