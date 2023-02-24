@@ -1,7 +1,7 @@
 ﻿using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
-using Vipps.Models.Autogen.Checkout;
 using Vipps.net.Helpers;
+using Vipps.net.Models.Autogen.Checkout;
 
 namespace Vipps.net.Tests
 {

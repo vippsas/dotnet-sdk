@@ -1,7 +1,7 @@
 ﻿using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
-using Vipps.Models.Epayment.AccessToken;
-using Vipps.Services;
+using Vipps.net.Models.AccessToken;
+using Vipps.net.Services;
 
 namespace Vipps.net.Tests
 {

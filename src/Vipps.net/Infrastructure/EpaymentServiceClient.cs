@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using Vipps.net.Helpers;
-using Vipps.Services;
+using Vipps.net.Services;
 
 namespace Vipps.net.Infrastructure
 {

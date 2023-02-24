@@ -1,5 +1,4 @@
 ﻿using Microsoft.Extensions.Logging;
-using Vipps.Infrastructure;
 using Vipps.net.Exceptions;
 
 namespace Vipps.net.Infrastructure

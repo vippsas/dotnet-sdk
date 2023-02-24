@@ -1,4 +1,4 @@
-﻿namespace Vipps.Infrastructure
+﻿namespace Vipps.net.Infrastructure
 {
     public class VippsConfigurationOptions
     {

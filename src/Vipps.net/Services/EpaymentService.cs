@@ -2,10 +2,10 @@
 using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
-using Vipps.Models.Autogen.Epayment;
 using Vipps.net.Infrastructure;
+using Vipps.net.Models.Autogen.Epayment;
 
-namespace Vipps.Services
+namespace Vipps.net.Services
 {
     public static class EpaymentService
     {

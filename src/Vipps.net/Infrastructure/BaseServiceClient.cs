@@ -6,7 +6,6 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
-using Vipps.Helpers;
 using Vipps.net.Exceptions;
 using Vipps.net.Helpers;
 

@@ -1,6 +1,5 @@
 ﻿using System.Reflection;
 using Azure.Identity;
-using Vipps.Infrastructure;
 using Vipps.net.Demo.Controllers;
 using Vipps.net.Infrastructure;
 

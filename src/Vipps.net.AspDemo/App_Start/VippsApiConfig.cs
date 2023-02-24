@@ -1,6 +1,5 @@
 ﻿using System.Configuration;
 using System.Reflection;
-using Vipps.Infrastructure;
 using Vipps.net.Infrastructure;
 
 namespace Vipps.net.AspDemo

@@ -1,10 +1,10 @@
 ﻿using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
-using Vipps.Models.Autogen.Checkout;
 using Vipps.net.Infrastructure;
+using Vipps.net.Models.Autogen.Checkout;
 
-namespace Vipps.Services
+namespace Vipps.net.Services
 {
     public static class CheckoutService
     {

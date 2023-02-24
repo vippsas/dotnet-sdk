@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
-using Vipps.Models.Autogen.Checkout;
-using Vipps.Services;
+using Vipps.net.Models.Autogen.Checkout;
+using Vipps.net.Services;
 
 namespace Vipps.net.AspDemo.Services
 {

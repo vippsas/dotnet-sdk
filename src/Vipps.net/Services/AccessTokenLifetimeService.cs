@@ -1,7 +1,7 @@
 ﻿using System;
 using System.IdentityModel.Tokens.Jwt;
 
-namespace Vipps.Services
+namespace Vipps.net.Services
 {
     internal sealed class AccessTokenLifetimeService
     {

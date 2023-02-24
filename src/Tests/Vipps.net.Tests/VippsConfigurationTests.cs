@@ -1,4 +1,4 @@
-﻿using Vipps.Services;
+﻿using Vipps.net.Services;
 
 namespace Vipps.net.Tests
 {
