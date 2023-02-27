@@ -35,7 +35,9 @@ internal sealed class Program
             ? ConvertToJson(retrievedText)
             : EnrichJson(retrievedText);
         var document = await OpenApiDocument.FromJsonAsync(retrievedJson);
-        Console.WriteLine($"Generated document from {options.OpenApiUrl}");
+        Console.WriteLine(
+            $"Generated document from {options.OpenApiUrl}: Title: {document.Info.Title}, Version: {document.Info.Version}."
+        );
 
         var generator = new CSharpClientGenerator(document, options.ClientGeneratorSettings);
         var code = generator.GenerateFile();
