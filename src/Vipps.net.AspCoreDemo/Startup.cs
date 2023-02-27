@@ -55,7 +55,7 @@ namespace Vipps.net.AspCore31Demo
             };
 
             // The following line configures vipps with custom settings
-            VippsConfiguration.ConfigureVipps(
+            VippsConfiguration.ConfigureVippsWithLogging(
                 vippsConfigurationOptions,
                 app.ApplicationServices.GetService<ILoggerFactory>()
             );

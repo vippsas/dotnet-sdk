@@ -1,4 +1,5 @@
-﻿using Vipps.net.Services;
+﻿using Vipps.net.Infrastructure;
+using Vipps.net.Services;
 
 namespace Vipps.net.Tests
 {
@@ -10,6 +11,14 @@ namespace Vipps.net.Tests
         {
             await Assert.ThrowsExceptionAsync<Exceptions.VippsUserException>(
                 () => AccessTokenService.GetAccessToken()
+            );
+        }
+
+        [TestMethod]
+        public void UsingVippsConfiguration_WithInvalid_Throws_Exception()
+        {
+            Assert.ThrowsException<Exceptions.VippsUserException>(
+                () => VippsConfiguration.ConfigureVipps(new VippsConfigurationOptions())
             );
         }
     }
