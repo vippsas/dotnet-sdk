@@ -9,7 +9,7 @@ using Polly.Extensions.Http;
 using Polly.Fallback;
 using Polly.Retry;
 
-namespace Vipps.Helpers
+namespace Vipps.net.Helpers
 {
     internal static class PolicyHelper
     {

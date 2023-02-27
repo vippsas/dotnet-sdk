@@ -1,11 +1,10 @@
 ﻿using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
-using Vipps.Models.Checkout.GetSession;
-using Vipps.Models.Checkout.InitiateSession;
 using Vipps.net.Infrastructure;
+using Vipps.net.Models.Autogen.Checkout;
 
-namespace Vipps.Services
+namespace Vipps.net.Services
 {
     public static class CheckoutService
     {
@@ -23,14 +22,14 @@ namespace Vipps.Services
             return sessionInitiationResult;
         }
 
-        public static async Task<GetSessionInfoResponse> GetSessionInfo(
+        public static async Task<SessionResponse> GetSessionInfo(
             string reference,
             CancellationToken cancellationToken = default
         )
         {
             var requestPath = $"{VippsConfiguration.BaseUrl}/checkout/v3/session/{reference}";
             var getSessionResult =
-                await VippsServices.CheckoutServiceClient.ExecuteRequest<GetSessionInfoResponse>(
+                await VippsServices.CheckoutServiceClient.ExecuteRequest<SessionResponse>(
                     requestPath,
                     HttpMethod.Get,
                     cancellationToken

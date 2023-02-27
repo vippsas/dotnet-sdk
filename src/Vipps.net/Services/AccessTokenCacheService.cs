@@ -3,9 +3,9 @@ using System.Collections.Concurrent;
 using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
-using Vipps.Models.Epayment.AccessToken;
+using Vipps.net.Models.AccessToken;
 
-namespace Vipps.Services
+namespace Vipps.net.Services
 {
     public static class AccessTokenCacheService
     {

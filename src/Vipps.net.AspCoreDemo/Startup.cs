@@ -5,7 +5,6 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
-using Vipps.Infrastructure;
 using Vipps.net.Infrastructure;
 
 namespace Vipps.net.AspCore31Demo

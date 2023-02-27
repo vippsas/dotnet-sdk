@@ -2,17 +2,10 @@
 using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
-using Vipps.Models.Epayment.CancelPayment;
-using Vipps.Models.Epayment.CapturePayment;
-using Vipps.Models.Epayment.CreatePayment;
-using Vipps.Models.Epayment.CreatePaymentRequest;
-using Vipps.Models.Epayment.ForceApprove;
-using Vipps.Models.Epayment.GetPaymentEventLog;
-using Vipps.Models.Epayment.GetPaymentResponse;
-using Vipps.Models.Epayment.RefundPayment;
 using Vipps.net.Infrastructure;
+using Vipps.net.Models.Autogen.Epayment;
 
-namespace Vipps.Services
+namespace Vipps.net.Services
 {
     public static class EpaymentService
     {
@@ -39,36 +32,36 @@ namespace Vipps.Services
             );
         }
 
-        public static async Task<IEnumerable<GetPaymentEventLog>> GetPaymentEventLog(
+        public static async Task<IEnumerable<PaymentEvent>> GetPaymentEventLog(
             string reference,
             CancellationToken cancellationToken = default
         )
         {
             return await VippsServices.EpaymentServiceClient.ExecuteRequest<
-                IEnumerable<GetPaymentEventLog>
+                IEnumerable<PaymentEvent>
             >(GetRequestPath(reference, "events"), HttpMethod.Get, cancellationToken);
         }
 
-        public static async Task<CancelPaymentResponse> CancelPayment(
+        public static async Task<ModificationResponse> CancelPayment(
             string reference,
             CancellationToken cancellationToken = default
         )
         {
-            return await VippsServices.EpaymentServiceClient.ExecuteRequest<CancelPaymentResponse>(
+            return await VippsServices.EpaymentServiceClient.ExecuteRequest<ModificationResponse>(
                 GetRequestPath(reference, "cancel"),
                 HttpMethod.Post,
                 cancellationToken
             );
         }
 
-        public static async Task<CapturePaymentResponse> CapturePayment(
-            CapturePaymentRequest capturePaymentRequest,
+        public static async Task<ModificationResponse> CapturePayment(
+            CaptureModificationRequest capturePaymentRequest,
             CancellationToken cancellationToken = default
         )
         {
             return await VippsServices.EpaymentServiceClient.ExecuteRequest<
-                CapturePaymentRequest,
-                CapturePaymentResponse
+                CaptureModificationRequest,
+                ModificationResponse
             >(
                 GetRequestPath(null, "capture"),
                 HttpMethod.Post,
@@ -77,12 +70,12 @@ namespace Vipps.Services
             );
         }
 
-        public static async Task<RefundPaymentResponse> RefundPayment(
+        public static async Task<ModificationResponse> RefundPayment(
             string reference,
             CancellationToken cancellationToken = default
         )
         {
-            return await VippsServices.EpaymentServiceClient.ExecuteRequest<RefundPaymentResponse>(
+            return await VippsServices.EpaymentServiceClient.ExecuteRequest<ModificationResponse>(
                 GetRequestPath(reference, "refund"),
                 HttpMethod.Post,
                 cancellationToken
@@ -91,7 +84,7 @@ namespace Vipps.Services
 
         public static async Task ForceApprovePayment(
             string reference,
-            ForceApproveRequest forceApproveRequest,
+            ForceApprove forceApproveRequest,
             CancellationToken cancellationToken = default
         )
         {

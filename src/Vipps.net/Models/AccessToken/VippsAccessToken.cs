@@ -1,6 +1,6 @@
 ﻿using Newtonsoft.Json;
 
-namespace Vipps.Models.Epayment.AccessToken
+namespace Vipps.net.Models.AccessToken
 {
     public class AccessToken
     {

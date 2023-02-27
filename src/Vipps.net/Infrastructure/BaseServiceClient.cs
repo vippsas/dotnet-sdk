@@ -6,8 +6,6 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
-using Vipps.Helpers;
-using Vipps.Models;
 using Vipps.net.Exceptions;
 using Vipps.net.Helpers;
 
@@ -30,7 +28,7 @@ namespace Vipps.net.Infrastructure
             TRequest data,
             CancellationToken cancellationToken = default
         )
-            where TRequest : VippsRequest
+            where TRequest : class
             where TResponse : class
         {
             return await ExecuteRequestBaseAndParse<TResponse>(
@@ -47,7 +45,7 @@ namespace Vipps.net.Infrastructure
             TRequest data,
             CancellationToken cancellationToken = default
         )
-            where TRequest : VippsRequest
+            where TRequest : class
         {
             await ExecuteRequestBase(
                 path,
@@ -186,7 +184,7 @@ namespace Vipps.net.Infrastructure
         }
 
         private static HttpContent CreateRequestContent<TRequest>(TRequest vippsRequest)
-            where TRequest : VippsRequest
+            where TRequest : class
         {
             if (vippsRequest is null)
             {

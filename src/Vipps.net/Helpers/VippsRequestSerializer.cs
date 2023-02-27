@@ -1,37 +1,26 @@
 ﻿using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
-using Vipps.Models;
 
 namespace Vipps.net.Helpers
 {
     public static class VippsRequestSerializer
     {
-        public static string SerializeVippsRequest(VippsRequest vippsRequest)
+        private static readonly JsonSerializerSettings _jsonSerializerSettings =
+            new JsonSerializerSettings()
+            {
+                NullValueHandling = NullValueHandling.Ignore,
+                DefaultValueHandling = DefaultValueHandling.Include,
+                Converters = new[] { new Newtonsoft.Json.Converters.StringEnumConverter() }
+            };
+
+        public static string SerializeVippsRequest<T>(T vippsRequest)
+            where T : class
         {
-            if (vippsRequest.ExtraParameters != null)
-            {
-                var extraParameters = vippsRequest.ExtraParameters;
-                dynamic serializedExtraParameters = JsonConvert.SerializeObject(extraParameters);
-
-                vippsRequest.ExtraParameters = null;
-                string serializedRequest = JsonConvert.SerializeObject(
-                    vippsRequest,
-                    vippsRequest.GetType(),
-                    new JsonSerializerSettings()
-                    {
-                        NullValueHandling = NullValueHandling.Ignore,
-                        DefaultValueHandling = DefaultValueHandling.Ignore,
-                        Converters = new[] { new Newtonsoft.Json.Converters.StringEnumConverter() }
-                    }
-                );
-                vippsRequest.ExtraParameters = extraParameters;
-
-                return Merge(serializedRequest, serializedExtraParameters);
-            }
-            else
-            {
-                return JsonConvert.SerializeObject(vippsRequest);
-            }
+            string serializedRequest = JsonConvert.SerializeObject(
+                vippsRequest,
+                vippsRequest.GetType(),
+                _jsonSerializerSettings
+            );
+            return serializedRequest;
         }
 
         public static T DeserializeVippsResponse<T>(string vippsResponse)
@@ -39,16 +28,15 @@ namespace Vipps.net.Helpers
         {
             try
             {
-                var deserializedTyped = JsonConvert.DeserializeObject<T>(vippsResponse);
+                var deserializedTyped = JsonConvert.DeserializeObject<T>(
+                    vippsResponse,
+                    _jsonSerializerSettings
+                );
                 if (deserializedTyped is null)
                 {
                     throw new Exceptions.VippsTechnicalException(
                         $"Response could not be deserialized to {nameof(T)}"
                     );
-                }
-                if (deserializedTyped is VippsResponse)
-                {
-                    (deserializedTyped as VippsResponse).RawResponse = vippsResponse;
                 }
                 return deserializedTyped;
             }
@@ -63,23 +51,6 @@ namespace Vipps.net.Helpers
                     ex
                 );
             }
-        }
-
-        private static string Merge(string request, string extraParameters)
-        {
-            var parsedRequest = JsonConvert.DeserializeObject<JObject>(request);
-            var parsedExtraParameters = JsonConvert.DeserializeObject<JObject>(extraParameters);
-
-            var mergeSettings = new JsonMergeSettings
-            {
-                MergeArrayHandling = MergeArrayHandling.Union
-            };
-
-            if (parsedRequest.Type == JTokenType.Object)
-            {
-                parsedRequest.Merge(parsedExtraParameters, mergeSettings);
-            }
-            return JsonConvert.SerializeObject(parsedRequest);
         }
     }
 }

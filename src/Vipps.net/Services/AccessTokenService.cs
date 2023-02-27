@@ -1,10 +1,10 @@
 ﻿using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
-using Vipps.Models.Epayment.AccessToken;
 using Vipps.net.Infrastructure;
+using Vipps.net.Models.AccessToken;
 
-namespace Vipps.Services
+namespace Vipps.net.Services
 {
     public static class AccessTokenService
     {
