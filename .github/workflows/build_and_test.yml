@@ -49,6 +49,10 @@ jobs:
         run: dotnet test src/Tests/Vipps.net.Tests/Vipps.net.Tests.csproj --no-restore --verbosity normal
       - name: Install dependencies for IntegrationTests
         run: dotnet restore src/Tests/Vipps.net.IntegrationTests/Vipps.net.IntegrationTests.csproj
+      - name: Azure Login
+        uses: azure/login@v1
+        with:
+            creds: ${{ secrets.AZURE_CREDENTIALS }}
       - name: Run IntegrationTests
         run: dotnet test src/Tests/Vipps.net.IntegrationTests/Vipps.net.IntegrationTests.csproj --no-restore --verbosity normal --environment KeyvaultHost="checkout-dm-mt-kv"
       - name: CSharpier check
