@@ -15,15 +15,19 @@ namespace Vipps.net.IntegrationTests
             var configbuilder = new ConfigurationBuilder();
             configbuilder.AddJsonFile("appsettings.json");
             configbuilder.AddUserSecrets<TestSetup>();
-            var config = configbuilder.Build();
-            var host = config.GetSection("keyvaultHost").Value;
+            var keyvaultHost = Environment.GetEnvironmentVariable("KeyvaultHost");
+            if (string.IsNullOrEmpty(keyvaultHost))
+            {
+                keyvaultHost = configbuilder.Build().GetSection("keyvaultHost").Value;
+            }
+
             // The following lines adds secrets from the key vault to the configuration.
             configbuilder.AddAzureKeyVault(
-                new Uri($"https://{host}.vault.azure.net/"),
+                new Uri($"https://{keyvaultHost}.vault.azure.net/"),
                 new DefaultAzureCredential()
             );
 
-            config = configbuilder.Build();
+            var config = configbuilder.Build();
             var vippsConfigurationOptions = new VippsConfigurationOptions
             {
                 ClientId = config.GetSection("CLIENT-ID").Value,

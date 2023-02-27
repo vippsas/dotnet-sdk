@@ -50,7 +50,7 @@ jobs:
       - name: Install dependencies for IntegrationTests
         run: dotnet restore src/Tests/Vipps.net.IntegrationTests/Vipps.net.IntegrationTests.csproj
       - name: Run IntegrationTests
-        run: dotnet test src/Tests/Vipps.net.IntegrationTests/Vipps.net.IntegrationTests.csproj --no-restore --verbosity normal
+        run: dotnet test src/Tests/Vipps.net.IntegrationTests/Vipps.net.IntegrationTests.csproj --no-restore --verbosity normal --environment KeyvaultHost="checkout-dm-mt-kv"
       - name: CSharpier check
         run: |
           dotnet tool restore --tool-manifest src/.config/dotnet-tools.json
