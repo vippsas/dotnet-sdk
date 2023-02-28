@@ -53,7 +53,6 @@ jobs:
         uses: azure/login@v1
         with:
           client-id: ${{ secrets.MT_CLIENT_ID }}
-          client-secret: ${{ secrets.MT_SECRET_ID }}
           tenant-id: ${{ secrets.MT_TENANT_ID }}
           subscription-id: ${{ secrets.TEST_SUBSCRIPTION_ID }}
       - name: Run IntegrationTests
