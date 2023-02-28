@@ -13,6 +13,10 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    permissions:
+        contents: read
+        pages: read
+        id-token: write
     strategy:
       matrix:
         dotnet-version: [ '7.0.x' ]
