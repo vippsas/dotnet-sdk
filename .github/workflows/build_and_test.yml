@@ -97,13 +97,18 @@ jobs:
       - name: Set Nerdbank.Gitversioning version from version, if given
         if: ${{ contains(env.RELEASE_VERSION, '.')}} # To ensure not empty
         run: nbgv set-version ${{ env.RELEASE_VERSION }}
-        # Create Nuget pack.
-      - name: Pack Nuget
+        # Create Nuget package.
+      - name: Pack Nuget package
         run: dotnet pack "./src/Vipps.net/Vipps.net.csproj" --include-source --output .
       - name: Upload nuget package as artifact #replace with nuget 
-        #Publish artifact if main and not PR
+        #Publish artifact if main and not PR. The artifact is a zip with both nupkg and symbols (snupkg).
         if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
         uses: actions/upload-artifact@v3
         with: 
           name: Nuget packages
           path: Vipps.net.*.*nupkg
+
+        #Publish package to Nuget if main and not PR. Also publishes symbols package (snupkg).
+      - name: Publish Nuget package
+        if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
+        run: dotnet nuget push Vipps.net.*.nupkg --api-key ${{ secrets.NUGET_API_KEY }} --source https://api.nuget.org/v3/index.json --skip-duplicate
