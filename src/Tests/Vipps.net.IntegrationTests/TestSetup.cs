@@ -46,11 +46,5 @@ namespace Vipps.net.IntegrationTests
             // The following line configures vipps with custom settings
             VippsConfiguration.ConfigureVipps(vippsConfigurationOptions);
         }
-
-        [ClassCleanup]
-        public static void TestFixtureTearDown()
-        {
-            // Called once after all MSTest test methods have completed (optional)
-        }
     }
 }

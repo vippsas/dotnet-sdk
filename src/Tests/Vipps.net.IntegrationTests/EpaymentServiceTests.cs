@@ -61,26 +61,31 @@ namespace Vipps.net.IntegrationTests
 
             var paymentEvents = await EpaymentService.GetPaymentEventLog(reference);
             Assert.IsNotNull(paymentEvents);
-            Assert.AreEqual(1, paymentEvents.Count(r => r.Name == PaymentEventName.CREATED));
-            Assert.AreEqual(1, paymentEvents.Count(r => r.Name == PaymentEventName.CAPTURED));
-            Assert.AreEqual(1, paymentEvents.Count(r => r.Name == PaymentEventName.REFUNDED));
-            Assert.AreEqual(1, paymentEvents.Count(r => r.Name == PaymentEventName.AUTHORIZED));
+            AssertOneEvent(paymentEvents, PaymentEventName.CREATED);
+            AssertOneEvent(paymentEvents, PaymentEventName.CAPTURED);
+            AssertOneEvent(paymentEvents, PaymentEventName.REFUNDED);
+            AssertOneEvent(paymentEvents, PaymentEventName.AUTHORIZED);
+        }
+
+        private static void AssertOneEvent(
+            IEnumerable<PaymentEvent> paymentEvents,
+            PaymentEventName paymentEventName
+        )
+        {
+            Assert.AreEqual(1, paymentEvents.Count(r => r.Name == paymentEventName));
         }
 
         private static CreatePaymentRequest GetCreatePaymentRequest(string reference)
         {
-            return new Models.Autogen.Epayment.CreatePaymentRequest
+            return new CreatePaymentRequest
             {
-                Amount = new Models.Autogen.Epayment.Amount
+                Amount = new Amount
                 {
-                    Currency = Models.Autogen.Epayment.Currency.NOK,
+                    Currency = Currency.NOK,
                     Value = 100 // 100 øre = 1 KR
                 },
-                PaymentMethod = new Models.Autogen.Epayment.PaymentMethod
-                {
-                    Type = Models.Autogen.Epayment.PaymentMethodType.WALLET
-                },
-                UserFlow = Models.Autogen.Epayment.CreatePaymentRequestUserFlow.WEB_REDIRECT,
+                PaymentMethod = new PaymentMethod { Type = PaymentMethodType.WALLET },
+                UserFlow = CreatePaymentRequestUserFlow.WEB_REDIRECT,
                 Reference = reference,
                 PaymentDescription = nameof(CheckoutServiceTests.Can_Create_And_Get_Session),
                 ReturnUrl = $"https://no.where.com/{reference}",

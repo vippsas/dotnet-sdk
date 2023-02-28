@@ -58,7 +58,7 @@ jobs:
           client-id: ${{ secrets.MT_CLIENT_ID }}
           tenant-id: ${{ secrets.MT_TENANT_ID }}
           subscription-id: ${{ secrets.TEST_SUBSCRIPTION_ID }}
-      - name: Run IntegrationTests
+      - name: Run Integration Tests
         run: dotnet test src/Tests/Vipps.net.IntegrationTests/Vipps.net.IntegrationTests.csproj --no-restore --verbosity normal --environment KeyvaultHost="checkout-dm-mt-kv"
       - name: CSharpier check
         run: |
