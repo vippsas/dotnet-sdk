@@ -55,6 +55,7 @@ namespace Vipps.net.Services
         }
 
         public static async Task<ModificationResponse> CapturePayment(
+            string reference,
             CaptureModificationRequest capturePaymentRequest,
             CancellationToken cancellationToken = default
         )
@@ -63,7 +64,7 @@ namespace Vipps.net.Services
                 CaptureModificationRequest,
                 ModificationResponse
             >(
-                GetRequestPath(null, "capture"),
+                GetRequestPath(reference, "capture"),
                 HttpMethod.Post,
                 capturePaymentRequest,
                 cancellationToken
@@ -72,12 +73,17 @@ namespace Vipps.net.Services
 
         public static async Task<ModificationResponse> RefundPayment(
             string reference,
+            RefundModificationRequest refundModificationRequest,
             CancellationToken cancellationToken = default
         )
         {
-            return await VippsServices.EpaymentServiceClient.ExecuteRequest<ModificationResponse>(
+            return await VippsServices.EpaymentServiceClient.ExecuteRequest<
+                RefundModificationRequest,
+                ModificationResponse
+            >(
                 GetRequestPath(reference, "refund"),
                 HttpMethod.Post,
+                refundModificationRequest,
                 cancellationToken
             );
         }
@@ -89,7 +95,7 @@ namespace Vipps.net.Services
         )
         {
             await VippsServices.EpaymentServiceClient.ExecuteRequest(
-                GetRequestPath(reference, "approve"),
+                $"{VippsConfiguration.BaseUrl}/epayment/v1/test/payments/{reference}/approve",
                 HttpMethod.Post,
                 forceApproveRequest,
                 cancellationToken
