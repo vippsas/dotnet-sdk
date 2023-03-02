@@ -95,17 +95,16 @@ namespace Vipps.net.Services
         )
         {
             await VippsServices.EpaymentServiceClient.ExecuteRequest(
-                GetRequestPath(reference, "approve", true),
+                $"{VippsConfiguration.BaseUrl}/epayment/v1/test/payments/{reference}/approve",
                 HttpMethod.Post,
                 forceApproveRequest,
                 cancellationToken
             );
         }
 
-        private static string GetRequestPath(string reference, string path, bool test = false)
+        private static string GetRequestPath(string reference, string path)
         {
-            var testPath = test ? "test/" : string.Empty;
-            var requestPath = $"{VippsConfiguration.BaseUrl}/epayment/v1/{testPath}payments";
+            var requestPath = $"{VippsConfiguration.BaseUrl}/epayment/v1/payments";
             if (reference != null)
             {
                 requestPath += $"/{reference}";

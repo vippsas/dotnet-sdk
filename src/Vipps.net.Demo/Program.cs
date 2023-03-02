@@ -48,7 +48,7 @@ internal sealed class Program
         };
 
         // The following line configures vipps with custom settings
-        VippsConfiguration.ConfigureVippsWithLogging(
+        VippsConfiguration.ConfigureVipps(
             vippsConfigurationOptions,
             app.Services.GetService<ILoggerFactory>()
         );

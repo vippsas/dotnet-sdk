@@ -10,7 +10,7 @@ namespace Vipps.net.Infrastructure
             ConfigureVipps(vippsConfigurationOptions, null, null);
         }
 
-        public static void ConfigureVippsWithLogging(
+        public static void ConfigureVipps(
             VippsConfigurationOptions vippsConfigurationOptions,
             ILoggerFactory loggerFactory
         )
@@ -18,7 +18,7 @@ namespace Vipps.net.Infrastructure
             ConfigureVipps(vippsConfigurationOptions, loggerFactory, null);
         }
 
-        public static void ConfigureVippsWithHttpClient(
+        public static void ConfigureVipps(
             VippsConfigurationOptions vippsConfigurationOptions,
             VippsHttpClient vippsHttpClient
         )
@@ -26,19 +26,10 @@ namespace Vipps.net.Infrastructure
             ConfigureVipps(vippsConfigurationOptions, null, vippsHttpClient);
         }
 
-        public static void ConfigureVippsWithLoggingAndHttpClient(
+        public static void ConfigureVipps(
             VippsConfigurationOptions vippsConfigurationOptions,
             ILoggerFactory loggerFactory,
             VippsHttpClient vippsHttpClient
-        )
-        {
-            ConfigureVipps(vippsConfigurationOptions, loggerFactory, vippsHttpClient);
-        }
-
-        internal static void ConfigureVipps(
-            VippsConfigurationOptions vippsConfigurationOptions,
-            ILoggerFactory loggerFactory = null,
-            VippsHttpClient vippsHttpClient = null
         )
         {
             if (loggerFactory != null)
