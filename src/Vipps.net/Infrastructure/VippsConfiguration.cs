@@ -5,10 +5,31 @@ namespace Vipps.net.Infrastructure
 {
     public static class VippsConfiguration
     {
+        public static void ConfigureVipps(VippsConfigurationOptions vippsConfigurationOptions)
+        {
+            ConfigureVipps(vippsConfigurationOptions, null, null);
+        }
+
         public static void ConfigureVipps(
             VippsConfigurationOptions vippsConfigurationOptions,
-            ILoggerFactory loggerFactory = null,
-            VippsHttpClient vippsHttpClient = null
+            ILoggerFactory loggerFactory
+        )
+        {
+            ConfigureVipps(vippsConfigurationOptions, loggerFactory, null);
+        }
+
+        public static void ConfigureVipps(
+            VippsConfigurationOptions vippsConfigurationOptions,
+            VippsHttpClient vippsHttpClient
+        )
+        {
+            ConfigureVipps(vippsConfigurationOptions, null, vippsHttpClient);
+        }
+
+        public static void ConfigureVipps(
+            VippsConfigurationOptions vippsConfigurationOptions,
+            ILoggerFactory loggerFactory,
+            VippsHttpClient vippsHttpClient
         )
         {
             if (loggerFactory != null)
@@ -34,21 +55,21 @@ namespace Vipps.net.Infrastructure
         internal static string PluginName
         {
             get { return _pluginName; }
-            set { _pluginName = value; }
+            set { _pluginName = AssertNotNullOrEmpty(value, nameof(PluginName)); }
         }
 
         private static string _pluginVersion = "1.0";
         internal static string PluginVersion
         {
             get { return _pluginVersion; }
-            set { _pluginVersion = value; }
+            set { _pluginVersion = AssertNotNullOrEmpty(value, nameof(PluginVersion)); }
         }
 
         private static string _clientId;
         internal static string ClientId
         {
             get { return _clientId ?? throw CreateMissingConfigException(nameof(ClientId)); }
-            set { _clientId = value; }
+            set { _clientId = AssertNotNullOrEmpty(value, nameof(ClientId)); }
         }
         private static string _clientSecret;
         internal static string ClientSecret
@@ -57,7 +78,7 @@ namespace Vipps.net.Infrastructure
             {
                 return _clientSecret ?? throw CreateMissingConfigException(nameof(ClientSecret));
             }
-            set { _clientSecret = value; }
+            set { _clientSecret = AssertNotNullOrEmpty(value, nameof(ClientSecret)); }
         }
         private static string _subscriptionKey;
         internal static string SubscriptionKey
@@ -67,7 +88,7 @@ namespace Vipps.net.Infrastructure
                 return _subscriptionKey
                     ?? throw CreateMissingConfigException(nameof(SubscriptionKey));
             }
-            set { _subscriptionKey = value; }
+            set { _subscriptionKey = AssertNotNullOrEmpty(value, nameof(SubscriptionKey)); }
         }
         private static string _merchantSerialNumber;
         internal static string MerchantSerialNumber
@@ -77,7 +98,10 @@ namespace Vipps.net.Infrastructure
                 return _merchantSerialNumber
                     ?? throw CreateMissingConfigException(nameof(MerchantSerialNumber));
             }
-            set { _merchantSerialNumber = value; }
+            set
+            {
+                _merchantSerialNumber = AssertNotNullOrEmpty(value, nameof(MerchantSerialNumber));
+            }
         }
         private static bool? _testMode;
         internal static bool TestMode
@@ -87,7 +111,7 @@ namespace Vipps.net.Infrastructure
         }
 
         internal static string BaseUrl =>
-            TestMode == true ? "https://api-test.vipps.no" : "https://api.vipps.no";
+            TestMode == true ? "https://apitest.vipps.no" : "https://api.vipps.no";
 
         private static IVippsHttpClient _vippsHttpClient;
         internal static IVippsHttpClient VippsHttpClient
@@ -114,6 +138,18 @@ namespace Vipps.net.Infrastructure
             return new VippsUserException(
                 $"VippsConfiguration incomplete - {propertyName} is missing. Have you run {nameof(VippsConfiguration.ConfigureVipps)}?"
             );
+        }
+
+        private static string AssertNotNullOrEmpty(string value, string propertyName)
+        {
+            if (string.IsNullOrWhiteSpace(value))
+            {
+                throw new VippsUserException(
+                    $"VippsConfiguration incomplete - {propertyName} is null, empty or whitespace."
+                );
+            }
+
+            return value;
         }
     }
 }

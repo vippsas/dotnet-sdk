@@ -13,6 +13,9 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    permissions:
+        contents: read
+        id-token: write
     strategy:
       matrix:
         dotnet-version: [ '7.0.x' ]
@@ -45,8 +48,18 @@ jobs:
         run: dotnet build src/Vipps.net.AspCoreDemo/Vipps.net.AspCoreDemo.csproj --no-restore
       - name: Install dependencies for Tests
         run: dotnet restore src/Tests/Vipps.net.Tests/Vipps.net.Tests.csproj
-      - name: Test
+      - name: Run Unit Tests
         run: dotnet test src/Tests/Vipps.net.Tests/Vipps.net.Tests.csproj --no-restore --verbosity normal
+      - name: Install dependencies for IntegrationTests
+        run: dotnet restore src/Tests/Vipps.net.IntegrationTests/Vipps.net.IntegrationTests.csproj
+      - name: Azure login
+        uses: azure/login@v1
+        with:
+          client-id: ${{ secrets.MT_CLIENT_ID }}
+          tenant-id: ${{ secrets.MT_TENANT_ID }}
+          subscription-id: ${{ secrets.TEST_SUBSCRIPTION_ID }}
+      - name: Run Integration Tests
+        run: dotnet test src/Tests/Vipps.net.IntegrationTests/Vipps.net.IntegrationTests.csproj --no-restore --verbosity normal --environment KeyvaultHost="checkout-dm-mt-kv"
       - name: CSharpier check
         run: |
           dotnet tool restore --tool-manifest src/.config/dotnet-tools.json

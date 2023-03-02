@@ -20,6 +20,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Vipps.net.AspDemo", "Vipps.
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Vipps.net.Codegen", "Vipps.net.Codegen\Vipps.net.Codegen.csproj", "{52AD8849-DDB6-4542-9E18-2219AF993CAF}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Vipps.net.IntegrationTests", "Tests\Vipps.net.IntegrationTests\Vipps.net.IntegrationTests.csproj", "{42DD89A8-0AE4-4CCD-9CAC-39B8F217805D}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -50,6 +52,10 @@ Global
 		{52AD8849-DDB6-4542-9E18-2219AF993CAF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{52AD8849-DDB6-4542-9E18-2219AF993CAF}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{52AD8849-DDB6-4542-9E18-2219AF993CAF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{42DD89A8-0AE4-4CCD-9CAC-39B8F217805D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{42DD89A8-0AE4-4CCD-9CAC-39B8F217805D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{42DD89A8-0AE4-4CCD-9CAC-39B8F217805D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{42DD89A8-0AE4-4CCD-9CAC-39B8F217805D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
