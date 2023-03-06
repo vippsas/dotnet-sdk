@@ -67,7 +67,7 @@ jobs:
           dotnet csharpier . --check
       # Create tag only if main, not PR, and a version is found in a commit message
       - name: Check commit message for version
-        if: ${{ github.ref == 'refs/heads/main' && github.event_name != 'pull_request' && github.event.head_commit.message != '' }}
+        if: ${{ github.ref == 'refs/heads/main' && github.event_name == 'push' && github.event.head_commit.message != '' }}
         run: "echo \"RELEASE_TAG=$(echo '${{ github.event.head_commit.message }}' | grep -oP '(v(\\d+)\\.(\\d+)\\.(\\d+)(.*?))')\" >> $GITHUB_ENV"
       - name: Set version variable without v (1.2.3)
         if: ${{ startsWith(env.RELEASE_TAG, 'v')}}
@@ -115,7 +115,7 @@ jobs:
         run: dotnet pack "./src/Vipps.net/Vipps.net.csproj" --include-source --output .
       - name: Upload nuget package as artifact #replace with nuget 
         #Publish artifact if main and not PR. The artifact is a zip with both nupkg and symbols (snupkg).
-        if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
+        if: github.ref == 'refs/heads/main' && github.event_name == 'push'
         uses: actions/upload-artifact@v3
         with: 
           name: Nuget packages
@@ -123,5 +123,5 @@ jobs:
 
         #Publish package to Nuget if main and not PR. Also publishes symbols package (snupkg).
       - name: Publish Nuget package
-        if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
+        if: github.ref == 'refs/heads/main' && github.event_name == 'push'
         run: dotnet nuget push Vipps.net.*.nupkg --api-key ${{ secrets.NUGET_API_KEY }} --source https://api.nuget.org/v3/index.json --skip-duplicate
