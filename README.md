@@ -98,3 +98,19 @@ All response objects have a property called RawResponse that contains the respon
 var response = checkoutService.InitiateSession(initiateSessionRequest);
 var cancellationUrl = response.RawResponse["cancellationUrl"].ToString();
 ```
+
+
+### Versioning
+
+The patch version (major.minor.patch) is automatically bumped on every main push using https://github.com/dotnet/Nerdbank.GitVersioning.
+
+**How to set major and minor version**
+
+Edit the version in the src/version.json file's version field.
+
+**The pipeline will on every push to main:**
+
+1. Create a tag with the version for the commit.
+2. Create a release with the tag and version. This will also generate release notes.
+3. Pack a nuget package with the version specified.
+4. Publish the nuget package.

@@ -20,22 +20,18 @@ jobs:
       matrix:
         dotnet-version: [ '7.0.x' ]
     steps:
-      - name: Get repo with depth
+      - name: Get repo
         uses: actions/checkout@v3
-        with: 
-          fetch-depth: 0
       - name: Setup .NET Core SDK ${{ matrix.dotnet-version }}
         uses: actions/setup-dotnet@v3
         with:
           dotnet-version: ${{ matrix.dotnet-version }}
-      - name: Install dependencies Vipps.net
-        run: dotnet restore src/Vipps.net/Vipps.net.csproj
       - name: Setup Nerdbank.GitVersioning
         run: dotnet tool install --tool-path some/where nbgv
-      - name: Set Cloud Version using Nerdbank.Gitversioning
-        run: nbgv cloud
-      - name: Get Nerdbank.Gitversioning NugetPackageVersion
-        run: "echo \"NBGV_VERSION=$(nbgv get-version -v NugetPackageVersion)\" >> $GITHUB_ENV"
+      - name: Set Version for test using Nerdbank.Gitversioning
+        run: nbgv set-version 0.9.0.0
+      - name: Install dependencies Vipps.net
+        run: dotnet restore src/Vipps.net/Vipps.net.csproj
       - name: Build vipps.net
         run: dotnet build src/Vipps.net/Vipps.net.csproj --no-restore
       - name: Install dependencies Vipps.net.Demo
@@ -50,6 +46,11 @@ jobs:
         run: dotnet restore src/Tests/Vipps.net.Tests/Vipps.net.Tests.csproj
       - name: Run Unit Tests
         run: dotnet test src/Tests/Vipps.net.Tests/Vipps.net.Tests.csproj --no-restore --verbosity normal
+      - name: CSharpier check
+        run: |
+          dotnet tool restore --tool-manifest src/.config/dotnet-tools.json
+          cd src
+          dotnet csharpier . --check
       - name: Install dependencies for IntegrationTests
         run: dotnet restore src/Tests/Vipps.net.IntegrationTests/Vipps.net.IntegrationTests.csproj
       - name: Azure login
@@ -60,63 +61,3 @@ jobs:
           subscription-id: ${{ secrets.TEST_SUBSCRIPTION_ID }}
       - name: Run Integration Tests
         run: dotnet test src/Tests/Vipps.net.IntegrationTests/Vipps.net.IntegrationTests.csproj --no-restore --verbosity normal --environment KeyvaultHost="checkout-dm-mt-kv"
-      - name: CSharpier check
-        run: |
-          dotnet tool restore --tool-manifest src/.config/dotnet-tools.json
-          cd src
-          dotnet csharpier . --check
-      # Create tag only if main, not PR, and a version is found in a commit message
-      - name: Check commit message for version
-        if: ${{ github.ref == 'refs/heads/main' && github.event_name != 'pull_request' && github.event.head_commit.message != '' }}
-        run: "echo \"RELEASE_TAG=$(echo '${{ github.event.head_commit.message }}' | grep -oP '(v(\\d+)\\.(\\d+)\\.(\\d+)(.*?))')\" >> $GITHUB_ENV"
-      - name: Set version variable without v (1.2.3)
-        if: ${{ startsWith(env.RELEASE_TAG, 'v')}}
-        run: "echo \"RELEASE_VERSION=$(echo '${{ env.RELEASE_TAG }}' | grep -oP '((\\d+)\\.(\\d+)\\.(\\d+)(.*?))')\" >> $GITHUB_ENV"
-      - name: Configure git username
-        if: ${{ startsWith(env.RELEASE_TAG, 'v')}}
-        run: git config user.name github-actions-bot
-      - name: Configure git user email
-        if: ${{ startsWith(env.RELEASE_TAG, 'v')}}
-        run: git config user.email noreply@vipps.no
-      - name: Create Tag
-        if: ${{ startsWith(env.RELEASE_TAG, 'v')}}
-        run: git tag ${{ env.RELEASE_TAG }} -m ${{ env.RELEASE_TAG }}
-      - name: Publish Tag
-        if: ${{ startsWith(env.RELEASE_TAG, 'v')}}
-        run: git push --tags 
-        # Create release only if main, not PR, and a version is found in a commit message
-      - name: "Create GitHub Release"
-        if: ${{ startsWith(env.RELEASE_TAG, 'v')}}
-        uses: "actions/github-script@v6"
-        with:
-          github-token: "${{ secrets.GITHUB_TOKEN }}"
-          script: |
-            try {
-              const response = await github.rest.repos.createRelease({
-                draft: false,
-                generate_release_notes: true,
-                name: process.env.RELEASE_TAG,
-                owner: context.repo.owner,
-                prerelease: false,
-                repo: context.repo.repo,
-                tag_name: process.env.RELEASE_TAG,
-              });
-
-              core.exportVariable('RELEASE_ID', response.data.id);
-              core.exportVariable('RELEASE_UPLOAD_URL', response.data.upload_url);
-            } catch (error) {
-              core.setFailed(error.message);
-            }
-      - name: Set Nerdbank.Gitversioning version from version, if given
-        if: ${{ contains(env.RELEASE_VERSION, '.')}} # To ensure not empty
-        run: nbgv set-version ${{ env.RELEASE_VERSION }}
-        # Create Nuget pack.
-      - name: Pack Nuget
-        run: dotnet pack "./src/Vipps.net/Vipps.net.csproj" --include-source --output .
-      - name: Upload nuget package as artifact #replace with nuget 
-        #Publish artifact if main and not PR
-        if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
-        uses: actions/upload-artifact@v3
-        with: 
-          name: Nuget packages
-          path: Vipps.net.*.*nupkg
