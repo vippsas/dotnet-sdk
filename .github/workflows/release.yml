@@ -5,16 +5,12 @@ env:
 on:
   push:
     branches: [ "main" ]
-  pull_request:
-    branches: [ "main" ]
-    paths-ignore:
-      - 'docs/**'
 
 jobs:
   build:
     runs-on: ubuntu-latest
     permissions:
-        contents: write
+        contents: write # needed to push tag
     strategy:
       matrix:
         dotnet-version: [ '7.0.x' ]
@@ -22,7 +18,7 @@ jobs:
       - name: Get repo with depth
         uses: actions/checkout@v3
         with: 
-          fetch-depth: 0
+          fetch-depth: 0 # needed to calculate version
       - name: Setup .NET Core SDK ${{ matrix.dotnet-version }}
         uses: actions/setup-dotnet@v3
         with:
@@ -31,17 +27,19 @@ jobs:
         run: dotnet tool install --tool-path some/where nbgv
       - name: Set Cloud Version using Nerdbank.Gitversioning
         run: nbgv cloud
-      # Create tag and release only if main, not PR
+      # Setup necessary info to create tag 
       - name: Set tag variable with v, for use in tag and release
         run: "echo \"RELEASE_TAG=v$(nbgv get-version --variable NugetPackageVersion)\" >> $GITHUB_ENV"
       - name: Configure git username
         run: git config user.name github-actions-bot
       - name: Configure git user email
         run: git config user.email noreply@vipps.no
+      # Create git tag
       - name: Create Tag
         run: git tag ${{ env.RELEASE_TAG }} -m ${{ env.RELEASE_TAG }}
       - name: Publish Tag
         run: git push --tags 
+      # Create git release
       - name: "Create GitHub Release"
         uses: "actions/github-script@v6"
         with:
@@ -63,7 +61,7 @@ jobs:
             } catch (error) {
               core.setFailed(error.message);
             }
-        # Create Nuget pack.
+      # Create Nuget pack.
       - name: Pack Nuget
         run: dotnet pack "./src/Vipps.net/Vipps.net.csproj" --include-source --output .
       - name: Upload nuget package as artifact #replace with nuget 
