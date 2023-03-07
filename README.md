@@ -104,11 +104,9 @@ var cancellationUrl = response.RawResponse["cancellationUrl"].ToString();
 
 The patch version (major.minor.patch) is automatically bumped on every main push using https://github.com/dotnet/Nerdbank.GitVersioning.
 
-**Increasing major and minor versions**
+**How to set major and minor version**
 
-It is possible to set the major and minor version manually by:
-
-1. Bump the version in the src/version.json files version field.
+Edit the version in the src/version.json file's version field.
 
 **The pipeline will on every push to main:**
 
