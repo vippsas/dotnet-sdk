@@ -15,7 +15,6 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
         contents: write
-        id-token: write
     strategy:
       matrix:
         dotnet-version: [ '7.0.x' ]
@@ -34,7 +33,7 @@ jobs:
         run: nbgv cloud
       # Create tag and release only if main, not PR
       - name: Set tag variable with v, for use in tag and release
-        run: "echo \"RELEASE_TAG=v$(nbgv get-version --variable AssemblyVersion)\" >> $GITHUB_ENV"
+        run: "echo \"RELEASE_TAG=v$(nbgv get-version --variable NugetPackageVersion)\" >> $GITHUB_ENV"
       - name: Configure git username
         run: git config user.name github-actions-bot
       - name: Configure git user email
