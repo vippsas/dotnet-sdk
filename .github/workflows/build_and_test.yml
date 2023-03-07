@@ -65,18 +65,18 @@ jobs:
           dotnet tool restore --tool-manifest src/.config/dotnet-tools.json
           cd src
           dotnet csharpier . --check
-      # Create tag only if main, not PR, and a version is found in a commit message
-      - name: Check commit message for version
-        if: ${{ github.ref == 'refs/heads/main' && github.event_name != 'pull_request' && github.event.head_commit.message != '' }}
-        run: "echo \"RELEASE_TAG=$(echo '${{ github.event.head_commit.message }}' | grep -oP '(v(\\d+)\\.(\\d+)\\.(\\d+)(.*?))')\" >> $GITHUB_ENV"
-      - name: Set version variable without v (1.2.3)
-        if: ${{ startsWith(env.RELEASE_TAG, 'v')}}
-        run: "echo \"RELEASE_VERSION=$(echo '${{ env.RELEASE_TAG }}' | grep -oP '((\\d+)\\.(\\d+)\\.(\\d+)(.*?))')\" >> $GITHUB_ENV"
+      # Create tag and release only if main, not PR
+      - name: Set version variable
+        #if: github.ref == 'refs/heads/main' && github.event_name == 'push' #TODO: enable filter
+        run: "echo \"RELEASE_VERSION=$(nbgv get-version --variable AssemblyVersion)\" >> $GITHUB_ENV"
+      - name: Set tag variable
+        if: ${{ contains(env.RELEASE_VERSION, '.')}} # To ensure not empty
+        run: "echo \"RELEASE_TAG=v${{ env.RELEASE_VERSION }}\" >> $GITHUB_ENV"
       - name: Configure git username
-        if: ${{ startsWith(env.RELEASE_TAG, 'v')}}
+        if: ${{ contains(env.RELEASE_VERSION, '.')}}
         run: git config user.name github-actions-bot
       - name: Configure git user email
-        if: ${{ startsWith(env.RELEASE_TAG, 'v')}}
+        if: ${{ contains(env.RELEASE_VERSION, '.')}}
         run: git config user.email noreply@vipps.no
       - name: Create Tag
         if: ${{ startsWith(env.RELEASE_TAG, 'v')}}
@@ -84,7 +84,6 @@ jobs:
       - name: Publish Tag
         if: ${{ startsWith(env.RELEASE_TAG, 'v')}}
         run: git push --tags 
-        # Create release only if main, not PR, and a version is found in a commit message
       - name: "Create GitHub Release"
         if: ${{ startsWith(env.RELEASE_TAG, 'v')}}
         uses: "actions/github-script@v6"
@@ -107,15 +106,12 @@ jobs:
             } catch (error) {
               core.setFailed(error.message);
             }
-      - name: Set Nerdbank.Gitversioning version from version, if given
-        if: ${{ contains(env.RELEASE_VERSION, '.')}} # To ensure not empty
-        run: nbgv set-version ${{ env.RELEASE_VERSION }}
         # Create Nuget pack.
       - name: Pack Nuget
         run: dotnet pack "./src/Vipps.net/Vipps.net.csproj" --include-source --output .
       - name: Upload nuget package as artifact #replace with nuget 
         #Publish artifact if main and not PR
-        if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
+        if: ${{ contains(env.RELEASE_VERSION, '.')}}
         uses: actions/upload-artifact@v3
         with: 
           name: Nuget packages
