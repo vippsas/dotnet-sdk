@@ -23,13 +23,17 @@ jobs:
         uses: actions/setup-dotnet@v3
         with:
           dotnet-version: ${{ matrix.dotnet-version }}
-      - name: Setup Nerdbank.GitVersioning
-        run: dotnet tool install --tool-path some/where nbgv
-      - name: Set Cloud Version using Nerdbank.Gitversioning
-        run: nbgv cloud
+       # Create Nuget pack.
+      - name: Pack Nuget
+        run: dotnet pack "./src/Vipps.net/Vipps.net.csproj" --include-source --output .
+      - name: Upload nuget package as artifact #replace with nuget 
+        uses: actions/upload-artifact@v3
+        with: 
+          name: Nuget packages
+          path: Vipps.net.*.*nupkg
       # Setup necessary info to create tag 
       - name: Set tag variable with v, for use in tag and release
-        run: "echo \"RELEASE_TAG=v$(nbgv get-version --variable NugetPackageVersion)\" >> $GITHUB_ENV"
+        run: "echo \"RELEASE_TAG=v$(find . -maxdepth 1 -name *.nupkg | grep -oP '(v(\\d+)\\.(\\d+)\\.(\\d+)(.*?))')\" >> $GITHUB_ENV"
       - name: Configure git username
         run: git config user.name github-actions-bot
       - name: Configure git user email
@@ -61,11 +65,4 @@ jobs:
             } catch (error) {
               core.setFailed(error.message);
             }
-      # Create Nuget pack.
-      - name: Pack Nuget
-        run: dotnet pack "./src/Vipps.net/Vipps.net.csproj" --include-source --output .
-      - name: Upload nuget package as artifact #replace with nuget 
-        uses: actions/upload-artifact@v3
-        with: 
-          name: Nuget packages
-          path: Vipps.net.*.*nupkg
+

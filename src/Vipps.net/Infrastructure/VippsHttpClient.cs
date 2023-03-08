@@ -64,14 +64,15 @@ namespace Vipps.net.Infrastructure
             return httpClient;
         }
 
-        private static Dictionary<string, string> GetHeaders()
+        public static Dictionary<string, string> GetHeaders()
         {
+            var assemblyName = typeof(VippsConfiguration).Assembly.GetName();
             return new Dictionary<string, string>
             {
                 { "Ocp-Apim-Subscription-Key", VippsConfiguration.SubscriptionKey },
                 { "Merchant-Serial-Number", VippsConfiguration.MerchantSerialNumber },
-                { "Vipps-System-Name", ThisAssembly.AssemblyName },
-                { "Vipps-System-Version", ThisAssembly.AssemblyInformationalVersion },
+                { "Vipps-System-Name", assemblyName.Name },
+                { "Vipps-System-Version", assemblyName.Version.ToString() },
                 { "Vipps-System-Plugin-Name", VippsConfiguration.PluginName },
                 { "Vipps-System-Plugin-Version", VippsConfiguration.PluginVersion }
             };

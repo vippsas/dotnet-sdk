@@ -6,8 +6,7 @@
     <Product>Vipps.net</Product>
     <Description>Vipps.net SDK</Description>
     <PackageId>Vipps.net</PackageId>
-    <Version>1.0.0</Version>
-    <PackageVersion>1.0.1</PackageVersion>
+    <Version>0.8.1</Version>
     <Authors>Vipps Mobilepay AS</Authors>
     <Company>Vipps Mobilepay AS</Company>
     <Title>Vipps SDK .Net</Title>
