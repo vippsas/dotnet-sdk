@@ -21,28 +21,5 @@ namespace Vipps.net.Tests
                 () => VippsConfiguration.ConfigureVipps(new VippsConfigurationOptions())
             );
         }
-
-        [TestMethod]
-        public void jalla()
-        {
-            VippsConfiguration.ConfigureVipps(
-                new VippsConfigurationOptions
-                {
-                    ClientId = "CI",
-                    ClientSecret = "CS",
-                    MerchantSerialNumber = "MSN",
-                    PluginName = "PLN",
-                    PluginVersion = "PLV",
-                    SubscriptionKey = "SK",
-                    UseTestMode = true
-                }
-            );
-            var x = VippsHttpClient.GetHeaders();
-            if (x != null)
-            {
-                Console.WriteLine(x);
-            }
-            Assert.IsNotNull(x);
-        }
     }
 }

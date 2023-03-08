@@ -64,7 +64,7 @@ namespace Vipps.net.Infrastructure
             return httpClient;
         }
 
-        public static Dictionary<string, string> GetHeaders()
+        private static Dictionary<string, string> GetHeaders()
         {
             var assemblyName = typeof(VippsConfiguration).Assembly.GetName();
             return new Dictionary<string, string>
