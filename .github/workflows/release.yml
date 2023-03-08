@@ -33,7 +33,7 @@ jobs:
           path: Vipps.net.*.*nupkg
       # Setup necessary info to create tag 
       - name: Set tag variable with v, for use in tag and release
-        run: "echo \"RELEASE_TAG=v$(find . -maxdepth 1 -name *.nupkg | grep -oP '(v(\\d+)\\.(\\d+)\\.(\\d+)(.*?))')\" >> $GITHUB_ENV"
+        run: "echo \"RELEASE_TAG=v$(find . -maxdepth 1 -name *.nupkg | grep -oP '((\\d+)\\.(\\d+)\\.(\\d+)(.*?))')\" >> $GITHUB_ENV"
       - name: Configure git username
         run: git config user.name github-actions-bot
       - name: Configure git user email
