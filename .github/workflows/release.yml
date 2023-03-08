@@ -32,7 +32,7 @@ jobs:
           name: Nuget packages
           path: Vipps.net.*.*nupkg
       # Setup necessary info to create tag 
-      - name: Set tag variable with v, for use in tag and release
+      - name: Set tag variable with v, for use in tag and release based on packed Nuget
         run: "echo \"RELEASE_TAG=v$(find . -maxdepth 1 -name Vipps.net.*.nupkg | grep -oP '((\\d+)\\.(\\d+)\\.(\\d+)(.*?))')\" >> $GITHUB_ENV"
       - name: Configure git username
         run: git config user.name github-actions-bot
