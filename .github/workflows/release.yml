@@ -4,7 +4,7 @@ env:
   solution_file: 'src/Vipps.net.sln'
 on:
   push:
-    branches: [ "main" ]
+    branches: [ "main", "basic-versioning" ]
 
 jobs:
   build:
