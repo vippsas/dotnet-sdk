@@ -13,7 +13,7 @@ namespace Vipps.net.Services
             CancellationToken cancellationToken = default
         )
         {
-            var requestPath = $"{VippsConfiguration.BaseUrl}/checkout/v3/session";
+            var requestPath = $"/checkout/v3/session";
             var sessionInitiationResult = await VippsServices.CheckoutServiceClient.ExecuteRequest<
                 InitiateSessionRequest,
                 InitiateSessionResponse
@@ -27,7 +27,7 @@ namespace Vipps.net.Services
             CancellationToken cancellationToken = default
         )
         {
-            var requestPath = $"{VippsConfiguration.BaseUrl}/checkout/v3/session/{reference}";
+            var requestPath = $"/checkout/v3/session/{reference}";
             var getSessionResult =
                 await VippsServices.CheckoutServiceClient.ExecuteRequest<SessionResponse>(
                     requestPath,

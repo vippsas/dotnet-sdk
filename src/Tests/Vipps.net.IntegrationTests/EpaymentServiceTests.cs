@@ -6,7 +6,7 @@ namespace Vipps.net.IntegrationTests
     [TestClass]
     public class EpaymentServiceTests
     {
-        private const string _customerPhoneNumber = "4747753942";
+        private const string CustomerPhoneNumber = "4747753942";
 
         [TestMethod]
         public async Task Can_Create_Get_Cancel_Payment()
@@ -40,7 +40,7 @@ namespace Vipps.net.IntegrationTests
 
             await EpaymentService.ForceApprovePayment(
                 reference,
-                new ForceApprove { Customer = new Customer { PhoneNumber = _customerPhoneNumber } }
+                new ForceApprove { Customer = new Customer { PhoneNumber = CustomerPhoneNumber } }
             );
 
             var captureResponse = await EpaymentService.CapturePayment(
@@ -89,7 +89,7 @@ namespace Vipps.net.IntegrationTests
                 Reference = reference,
                 PaymentDescription = nameof(CheckoutServiceTests.Can_Create_And_Get_Session),
                 ReturnUrl = $"https://no.where.com/{reference}",
-                Customer = new Customer { PhoneNumber = _customerPhoneNumber }
+                Customer = new Customer { PhoneNumber = CustomerPhoneNumber }
             };
         }
     }
