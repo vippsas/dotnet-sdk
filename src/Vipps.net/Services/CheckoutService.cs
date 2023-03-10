@@ -2,7 +2,7 @@
 using System.Threading;
 using System.Threading.Tasks;
 using Vipps.net.Infrastructure;
-using Vipps.net.Models.Autogen.Checkout;
+using Vipps.net.Models.Checkout;
 
 namespace Vipps.net.Services
 {

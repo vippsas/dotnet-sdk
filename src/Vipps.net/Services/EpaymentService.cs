@@ -3,7 +3,7 @@ using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
 using Vipps.net.Infrastructure;
-using Vipps.net.Models.Autogen.Epayment;
+using Vipps.net.Models.Epayment;
 
 namespace Vipps.net.Services
 {

@@ -1,4 +1,4 @@
-﻿using Vipps.net.Models.Autogen.Epayment;
+﻿using Vipps.net.Models.Epayment;
 using Vipps.net.Services;
 
 namespace Vipps.net.IntegrationTests

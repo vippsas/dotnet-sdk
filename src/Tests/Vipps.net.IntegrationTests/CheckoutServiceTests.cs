@@ -9,15 +9,15 @@ namespace Vipps.net.IntegrationTests
         public async Task Can_Create_And_Get_Session()
         {
             var reference = Guid.NewGuid().ToString();
-            var sessionInitiationRequest = new Models.Autogen.Checkout.InitiateSessionRequest
+            var sessionInitiationRequest = new Models.Checkout.InitiateSessionRequest
             {
-                Transaction = new Models.Autogen.Checkout.PaymentTransaction
+                Transaction = new Models.Checkout.PaymentTransaction
                 {
-                    Amount = new Models.Autogen.Checkout.Amount { Currency = "NOK", Value = 1000 },
+                    Amount = new Models.Checkout.Amount { Currency = "NOK", Value = 1000 },
                     Reference = reference,
                     PaymentDescription = nameof(CheckoutServiceTests.Can_Create_And_Get_Session),
                 },
-                MerchantInfo = new Models.Autogen.Checkout.PaymentMerchantInfo
+                MerchantInfo = new Models.Checkout.PaymentMerchantInfo
                 {
                     CallbackAuthorizationToken = Guid.NewGuid().ToString(),
                     CallbackUrl = "https://no.where.com/callback",
@@ -30,7 +30,7 @@ namespace Vipps.net.IntegrationTests
             Assert.IsNotNull(sessionResponse);
             var sessionPolledResponse = await CheckoutService.GetSessionInfo(reference);
             Assert.AreEqual(
-                Models.Autogen.Checkout.ExternalSessionState.SessionCreated,
+                Models.Checkout.ExternalSessionState.SessionCreated,
                 sessionPolledResponse.SessionState
             );
         }
