@@ -13,7 +13,7 @@
 #pragma warning disable 3016 // Disable "CS3016 Arrays as attribute arguments is not CLS-compliant"
 #pragma warning disable 8603 // Disable "CS8603 Possible null reference return"
 
-namespace Vipps.net.Models.Autogen.Checkout
+namespace Vipps.net.Models.Checkout
 {
     using System = global::System;
 
@@ -155,6 +155,12 @@ namespace Vipps.net.Models.Autogen.Checkout
         /// </summary>
         [Newtonsoft.Json.JsonProperty("customConsent", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
         public CustomConsent CustomConsent { get; set; }
+
+        /// <summary>
+        /// Decides whether the order lines are displayed as a shopping cart context in the checkout.
+        /// </summary>
+        [Newtonsoft.Json.JsonProperty("showOrderSummary", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public bool? ShowOrderSummary { get; set; }
 
         private System.Collections.Generic.IDictionary<string, object> _additionalProperties;
 
@@ -314,19 +320,21 @@ namespace Vipps.net.Models.Autogen.Checkout
         /// <summary>
         /// The Username provided to you by Helthjem
         /// </summary>
-        [Newtonsoft.Json.JsonProperty("username", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        [Newtonsoft.Json.JsonProperty("username", Required = Newtonsoft.Json.Required.Always)]
+        [System.ComponentModel.DataAnnotations.Required]
         public string Username { get; set; }
 
         /// <summary>
         /// The Password provided to you by Helthjem
         /// </summary>
-        [Newtonsoft.Json.JsonProperty("password", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        [Newtonsoft.Json.JsonProperty("password", Required = Newtonsoft.Json.Required.Always)]
+        [System.ComponentModel.DataAnnotations.Required]
         public string Password { get; set; }
 
         /// <summary>
         /// The ShopId provided to you by Helthjem
         /// </summary>
-        [Newtonsoft.Json.JsonProperty("shopId", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        [Newtonsoft.Json.JsonProperty("shopId", Required = Newtonsoft.Json.Required.Always)]
         public int ShopId { get; set; }
 
         private System.Collections.Generic.IDictionary<string, object> _additionalProperties;
@@ -447,13 +455,15 @@ namespace Vipps.net.Models.Autogen.Checkout
         /// <summary>
         /// The client id provided to you by Instabox
         /// </summary>
-        [Newtonsoft.Json.JsonProperty("clientId", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        [Newtonsoft.Json.JsonProperty("clientId", Required = Newtonsoft.Json.Required.Always)]
+        [System.ComponentModel.DataAnnotations.Required]
         public string ClientId { get; set; }
 
         /// <summary>
         /// The client secret provided to you by Instabox
         /// </summary>
-        [Newtonsoft.Json.JsonProperty("clientSecret", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        [Newtonsoft.Json.JsonProperty("clientSecret", Required = Newtonsoft.Json.Required.Always)]
+        [System.ComponentModel.DataAnnotations.Required]
         public string ClientSecret { get; set; }
 
         private System.Collections.Generic.IDictionary<string, object> _additionalProperties;
@@ -582,7 +592,7 @@ namespace Vipps.net.Models.Autogen.Checkout
         /// Fixed list of logistics options.
         /// </summary>
         [Newtonsoft.Json.JsonProperty("fixedOptions", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public System.Collections.Generic.ICollection<PostenLogisticsOption> FixedOptions { get; set; }
+        public System.Collections.Generic.ICollection<LogisticsOptionBase> FixedOptions { get; set; }
 
         /// <summary>
         /// Some optional checkout features require carrier-specific configuration. Can not be used with AddressFields set to false.
@@ -1112,7 +1122,8 @@ namespace Vipps.net.Models.Autogen.Checkout
         /// <summary>
         /// The API key provided to you by Porterbuddy
         /// </summary>
-        [Newtonsoft.Json.JsonProperty("apiKey", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        [Newtonsoft.Json.JsonProperty("apiKey", Required = Newtonsoft.Json.Required.Always)]
+        [System.ComponentModel.DataAnnotations.Required]
         public string ApiKey { get; set; }
 
         /// <summary>
@@ -1325,7 +1336,8 @@ namespace Vipps.net.Models.Autogen.Checkout
         /// <summary>
         /// Format must be MSISDN (including country code). Example: "4791234567"
         /// </summary>
-        [Newtonsoft.Json.JsonProperty("phoneNumber", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        [Newtonsoft.Json.JsonProperty("phoneNumber", Required = Newtonsoft.Json.Required.Always)]
+        [System.ComponentModel.DataAnnotations.Required(AllowEmptyStrings = true)]
         public string PhoneNumber { get; set; }
 
         /// <summary>
@@ -1343,7 +1355,8 @@ namespace Vipps.net.Models.Autogen.Checkout
         /// <summary>
         /// Example: "0154"
         /// </summary>
-        [Newtonsoft.Json.JsonProperty("postalCode", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        [Newtonsoft.Json.JsonProperty("postalCode", Required = Newtonsoft.Json.Required.Always)]
+        [System.ComponentModel.DataAnnotations.Required(AllowEmptyStrings = true)]
         public string PostalCode { get; set; }
 
         /// <summary>
