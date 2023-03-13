@@ -1,7 +1,7 @@
 ﻿using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Vipps.net.Helpers;
-using Vipps.net.Models.Autogen.Checkout;
+using Vipps.net.Models.Checkout;
 
 namespace Vipps.net.Tests
 {
@@ -223,22 +223,22 @@ namespace Vipps.net.Tests
         {
             dynamic createPaymentRequest = new
             {
-                Amount = new Models.Autogen.Epayment.Amount
+                Amount = new Models.Epayment.Amount
                 {
                     Value = 1000,
-                    Currency = Models.Autogen.Epayment.Currency.NOK
+                    Currency = Models.Epayment.Currency.NOK
                 },
-                PaymentMethod = new Models.Autogen.Epayment.PaymentMethod
+                PaymentMethod = new Models.Epayment.PaymentMethod
                 {
-                    Type = Models.Autogen.Epayment.PaymentMethodType.WALLET
+                    Type = Models.Epayment.PaymentMethodType.WALLET
                 },
                 Reference = Guid.NewGuid().ToString(),
-                UserFlow = Models.Autogen.Epayment.CreatePaymentRequestUserFlow.WEB_REDIRECT,
+                UserFlow = Models.Epayment.CreatePaymentRequestUserFlow.WEB_REDIRECT,
                 cancellationUrl = "https://api.vipps.no/checkout/v3/session/reference101/cancel"
             };
             var serializedResponse = JsonConvert.SerializeObject(createPaymentRequest);
-            Models.Autogen.Epayment.CreatePaymentRequest deserializedResponse =
-                VippsRequestSerializer.DeserializeVippsResponse<Models.Autogen.Epayment.CreatePaymentRequest>(
+            Models.Epayment.CreatePaymentRequest deserializedResponse =
+                VippsRequestSerializer.DeserializeVippsResponse<Models.Epayment.CreatePaymentRequest>(
                     serializedResponse
                 );
             Assert.IsNotNull(deserializedResponse);
@@ -252,20 +252,20 @@ namespace Vipps.net.Tests
         [TestMethod]
         public void Can_Serialize_Response_With_Extra_Properties_Autogen()
         {
-            Models.Autogen.Epayment.CreatePaymentRequest createPaymentRequest =
+            Models.Epayment.CreatePaymentRequest createPaymentRequest =
                 new()
                 {
-                    Amount = new Models.Autogen.Epayment.Amount
+                    Amount = new Models.Epayment.Amount
                     {
                         Value = 1000,
-                        Currency = Models.Autogen.Epayment.Currency.NOK
+                        Currency = Models.Epayment.Currency.NOK
                     },
-                    PaymentMethod = new Models.Autogen.Epayment.PaymentMethod
+                    PaymentMethod = new Models.Epayment.PaymentMethod
                     {
-                        Type = Models.Autogen.Epayment.PaymentMethodType.WALLET
+                        Type = Models.Epayment.PaymentMethodType.WALLET
                     },
                     Reference = Guid.NewGuid().ToString(),
-                    UserFlow = Models.Autogen.Epayment.CreatePaymentRequestUserFlow.WEB_REDIRECT,
+                    UserFlow = Models.Epayment.CreatePaymentRequestUserFlow.WEB_REDIRECT,
                     AdditionalProperties =
                     {
                         { "Transaction", new { Metadata = new { KID = "100001" } } }

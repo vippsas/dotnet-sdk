@@ -121,9 +121,10 @@ namespace Vipps.net.Infrastructure
             CancellationToken cancellationToken
         )
         {
+            var absolutePath = $"{_vippsHttpClient.BaseAddress}{path}";
             var retryPolicy = PolicyHelper.GetRetryPolicyWithFallback(
                 _logger,
-                $"Request to {httpMethod.Method} {path} failed even after retries"
+                $"Request to {httpMethod.Method} {absolutePath} failed even after retries"
             );
             var headers = await GetHeaders(cancellationToken);
             HttpResponseMessage response = null;
@@ -133,7 +134,7 @@ namespace Vipps.net.Infrastructure
                 {
                     var requestMessage = new HttpRequestMessage
                     {
-                        RequestUri = new Uri(path),
+                        RequestUri = new Uri(absolutePath),
                         Method = httpMethod,
                         Content = httpContent,
                     };
@@ -153,7 +154,7 @@ namespace Vipps.net.Infrastructure
             catch (Exception ex)
             {
                 throw new VippsTechnicalException(
-                    $"Request to {httpMethod.Method} {path} failed with exception: '{ex.Message}'.",
+                    $"Request to {httpMethod.Method} {absolutePath} failed with exception: '{ex.Message}'.",
                     ex
                 );
             }
@@ -166,7 +167,7 @@ namespace Vipps.net.Infrastructure
                     .ConfigureAwait(false);
 #pragma warning restore CA2016 // Forward the 'CancellationToken' parameter to methods
                 var errorMessage =
-                    $"Request to {httpMethod.Method} {path} failed with status code {response.StatusCode}, content: '{responseContent}'";
+                    $"Request to {httpMethod.Method} {absolutePath} failed with status code {response.StatusCode}, content: '{responseContent}'";
                 if (
                     (int)response.StatusCode >= (int)System.Net.HttpStatusCode.BadRequest
                     && (int)response.StatusCode < (int)System.Net.HttpStatusCode.InternalServerError
