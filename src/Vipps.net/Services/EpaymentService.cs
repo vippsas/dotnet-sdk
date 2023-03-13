@@ -3,7 +3,7 @@ using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
 using Vipps.net.Infrastructure;
-using Vipps.net.Models.Autogen.Epayment;
+using Vipps.net.Models.Epayment;
 
 namespace Vipps.net.Services
 {
@@ -95,7 +95,7 @@ namespace Vipps.net.Services
         )
         {
             await VippsServices.EpaymentServiceClient.ExecuteRequest(
-                $"{VippsConfiguration.BaseUrl}/epayment/v1/test/payments/{reference}/approve",
+                $"/epayment/v1/test/payments/{reference}/approve",
                 HttpMethod.Post,
                 forceApproveRequest,
                 cancellationToken
@@ -104,7 +104,7 @@ namespace Vipps.net.Services
 
         private static string GetRequestPath(string reference, string path)
         {
-            var requestPath = $"{VippsConfiguration.BaseUrl}/epayment/v1/payments";
+            var requestPath = "/epayment/v1/payments";
             if (reference != null)
             {
                 requestPath += $"/{reference}";

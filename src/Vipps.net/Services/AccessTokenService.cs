@@ -19,10 +19,9 @@ namespace Vipps.net.Services
                 return cachedToken;
             }
 
-            var requestPath = $"{VippsConfiguration.BaseUrl}/accesstoken/get";
             var accessToken =
                 await VippsServices.AccessTokenServiceClient.ExecuteRequest<AccessToken>(
-                    requestPath,
+                    "/accesstoken/get",
                     HttpMethod.Post,
                     cancellationToken
                 );

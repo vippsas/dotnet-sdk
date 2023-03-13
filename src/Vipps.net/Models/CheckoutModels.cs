@@ -13,7 +13,7 @@
 #pragma warning disable 3016 // Disable "CS3016 Arrays as attribute arguments is not CLS-compliant"
 #pragma warning disable 8603 // Disable "CS8603 Possible null reference return"
 
-namespace Vipps.net.Models.Autogen.Checkout
+namespace Vipps.net.Models.Checkout
 {
     using System = global::System;
 
@@ -613,7 +613,7 @@ namespace Vipps.net.Models.Autogen.Checkout
         /// Fixed list of logistics options.
         /// </summary>
         [Newtonsoft.Json.JsonProperty("fixedOptions", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public System.Collections.Generic.ICollection<PostenLogisticsOption> FixedOptions { get; set; }
+        public System.Collections.Generic.ICollection<LogisticsOptionBase> FixedOptions { get; set; }
 
         /// <summary>
         /// Some optional checkout features require carrier-specific configuration. Can not be used with AddressFields set to false.

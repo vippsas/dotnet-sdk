@@ -13,7 +13,7 @@
 #pragma warning disable 3016 // Disable "CS3016 Arrays as attribute arguments is not CLS-compliant"
 #pragma warning disable 8603 // Disable "CS8603 Possible null reference return"
 
-namespace Vipps.net.Models.Autogen.Epayment
+namespace Vipps.net.Models.Epayment
 {
     using System = global::System;
 
@@ -120,7 +120,7 @@ namespace Vipps.net.Models.Autogen.Epayment
         /// </summary>
         [Newtonsoft.Json.JsonProperty("customerInteraction", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
         [Newtonsoft.Json.JsonConverter(typeof(Newtonsoft.Json.Converters.StringEnumConverter))]
-        public CreatePaymentRequestCustomerInteraction CustomerInteraction { get; set; } = Vipps.net.Models.Autogen.Epayment.CreatePaymentRequestCustomerInteraction.CUSTOMER_NOT_PRESENT;
+        public CreatePaymentRequestCustomerInteraction CustomerInteraction { get; set; } = Vipps.net.Models.Epayment.CreatePaymentRequestCustomerInteraction.CUSTOMER_NOT_PRESENT;
 
         [Newtonsoft.Json.JsonProperty("industryData", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
         public IndustryData IndustryData { get; set; }
@@ -812,7 +812,7 @@ namespace Vipps.net.Models.Autogen.Epayment
         [Newtonsoft.Json.JsonProperty("format", Required = Newtonsoft.Json.Required.Always)]
         [System.ComponentModel.DataAnnotations.Required(AllowEmptyStrings = true)]
         [Newtonsoft.Json.JsonConverter(typeof(Newtonsoft.Json.Converters.StringEnumConverter))]
-        public QrFormatFormat Format { get; set; } = Vipps.net.Models.Autogen.Epayment.QrFormatFormat.IMAGE_SVG_XML;
+        public QrFormatFormat Format { get; set; } = Vipps.net.Models.Epayment.QrFormatFormat.IMAGE_SVG_XML;
 
         /// <summary>
         /// For example, if the value is 200, then 200x200 px is set as the dimension for the QR code.
