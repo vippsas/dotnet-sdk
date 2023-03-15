@@ -28,11 +28,6 @@ jobs:
        # Create Nuget package.
       - name: Pack Nuget
         run: dotnet pack "./src/Vipps.net/Vipps.net.csproj" --include-source --output out --configuration Release --no-restore
-      - name: Upload package as artifact #remove
-        uses: actions/upload-artifact@v3
-        with:
-          name: Nuget package
-          path: out/*
       # Publish Nuget package
       #- name: Publish Nuget package
       #  run: dotnet nuget push out/* --api-key ${{ secrets.NUGET_API_KEY }} --source https://api.nuget.org/v3/index.json 
@@ -70,4 +65,10 @@ jobs:
             } catch (error) {
               core.setFailed(error.message);
             }
+      - name: Upload to GitHub release
+        env:
+            GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+            TAG: ${{ env.RELEASE_TAG }}
+        run: |
+             gh release upload ${{ env.RELEASE_TAG }} out/* --clobber
 
