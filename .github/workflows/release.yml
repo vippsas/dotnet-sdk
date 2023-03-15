@@ -4,7 +4,7 @@ env:
   solution_file: 'src/Vipps.net.sln'
 on:
   push:
-    branches: [ "main", "vico-891-publish" ]
+    branches: [ "main" ]
 
 jobs:
   build:
@@ -29,8 +29,8 @@ jobs:
       - name: Pack Nuget
         run: dotnet pack "./src/Vipps.net/Vipps.net.csproj" --include-source --output out --configuration Release --no-restore
       # Publish Nuget package
-      #- name: Publish Nuget package
-      #  run: dotnet nuget push out/* --api-key ${{ secrets.NUGET_API_KEY }} --source https://api.nuget.org/v3/index.json 
+      - name: Publish Nuget package
+        run: dotnet nuget push out/* --api-key ${{ secrets.NUGET_API_KEY }} --source https://api.nuget.org/v3/index.json 
       # Setup necessary info to create tag 
       - name: Set tag variable with v, for use in tag and release based on packed Nuget
         run: "echo \"RELEASE_TAG=v$(find ./out -maxdepth 1 -name Vipps.net.*.nupkg | grep -oP '((\\d+)\\.(\\d+)\\.(\\d+)(.*?))')\" >> $GITHUB_ENV"
