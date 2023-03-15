@@ -4,7 +4,7 @@ env:
   solution_file: 'src/Vipps.net.sln'
 on:
   push:
-    branches: [ "main" ]
+    branches: [ "main", "vico-891-publish" ]
 
 jobs:
   build:
@@ -23,12 +23,19 @@ jobs:
         uses: actions/setup-dotnet@v3
         with:
           dotnet-version: ${{ matrix.dotnet-version }}
+      - name: Restore dependencies
+        run: dotnet restore "./src/Vipps.net/Vipps.net.csproj"
        # Create Nuget package.
       - name: Pack Nuget
-        run: dotnet pack "./src/Vipps.net/Vipps.net.csproj" --include-source --output .
+        run: dotnet pack "./src/Vipps.net/Vipps.net.csproj" --include-source --output out --configuration Release --no-restore
+      - name: Upload package as artifact #remove
+        uses: actions/upload-artifact@v3
+        with:
+          name: Nuget package
+          path: out/*
       # Publish Nuget package
-      - name: Publish Nuget package
-        run: dotnet nuget push Vipps.net.*.nupkg --api-key ${{ secrets.NUGET_API_KEY }} --source https://api.nuget.org/v3/index.json 
+      #- name: Publish Nuget package
+      #  run: dotnet nuget push out/* --api-key ${{ secrets.NUGET_API_KEY }} --source https://api.nuget.org/v3/index.json 
       # Setup necessary info to create tag 
       - name: Set tag variable with v, for use in tag and release based on packed Nuget
         run: "echo \"RELEASE_TAG=v$(find . -maxdepth 1 -name Vipps.net.*.nupkg | grep -oP '((\\d+)\\.(\\d+)\\.(\\d+)(.*?))')\" >> $GITHUB_ENV"
