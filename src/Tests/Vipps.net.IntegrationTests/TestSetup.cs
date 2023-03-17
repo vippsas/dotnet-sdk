@@ -27,16 +27,6 @@ namespace Vipps.net.IntegrationTests
             }
 
             var config = configbuilder.Build();
-            context.WriteLine(
-                string.Join(
-                    " | ",
-                    config.Providers.Select(
-                        p =>
-                            $"{p.GetType().Name}: {string.Join(",", p.GetChildKeys(Array.Empty<string>(), null))}"
-                    )
-                )
-            );
-
             var vippsConfigurationOptions = new VippsConfigurationOptions
             {
                 ClientId = GetConfigKey(config, "CLIENT-ID"),
