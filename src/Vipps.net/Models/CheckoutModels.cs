@@ -643,10 +643,12 @@ namespace Vipps.net.Models.Checkout
         public Amount Amount { get; set; } = new Amount();
 
         [Newtonsoft.Json.JsonProperty("id", Required = Newtonsoft.Json.Required.Always)]
-        [System.ComponentModel.DataAnnotations.Required(AllowEmptyStrings = true)]
+        [System.ComponentModel.DataAnnotations.Required]
+        [System.ComponentModel.DataAnnotations.StringLength(200, MinimumLength = 1)]
         public string Id { get; set; }
 
         [Newtonsoft.Json.JsonProperty("priority", Required = Newtonsoft.Json.Required.Always)]
+        [System.ComponentModel.DataAnnotations.Range(0, int.MaxValue)]
         public int Priority { get; set; }
 
         [Newtonsoft.Json.JsonProperty("isDefault", Required = Newtonsoft.Json.Required.Always)]
@@ -953,7 +955,8 @@ namespace Vipps.net.Models.Checkout
     public partial class OtherLogisticsOption : LogisticsOptionBase
     {
         [Newtonsoft.Json.JsonProperty("title", Required = Newtonsoft.Json.Required.Always)]
-        [System.ComponentModel.DataAnnotations.Required(AllowEmptyStrings = true)]
+        [System.ComponentModel.DataAnnotations.Required]
+        [System.ComponentModel.DataAnnotations.StringLength(200, MinimumLength = 1)]
         public string Title { get; set; }
 
         [Newtonsoft.Json.JsonProperty("brand", Required = Newtonsoft.Json.Required.Always)]
@@ -1013,6 +1016,7 @@ namespace Vipps.net.Models.Checkout
 
         [System.Runtime.Serialization.EnumMember(Value = @"Card")]
         Card = 1,
+
     }
 
     [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "13.18.2.0 (NJsonSchema v10.8.0.0 (Newtonsoft.Json v10.0.0.0))")]
