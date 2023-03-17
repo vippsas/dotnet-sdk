@@ -50,4 +50,4 @@ jobs:
       - name: Install dependencies for IntegrationTests
         run: dotnet restore src/Tests/Vipps.net.IntegrationTests/Vipps.net.IntegrationTests.csproj
       - name: Run Integration Tests
-        run: dotnet test src/Tests/Vipps.net.IntegrationTests/Vipps.net.IntegrationTests.csproj --no-restore --verbosity normal --environment vmp_net_sdk_CLIENT-ID=${{ secrets.CLIENT_ID }} --environment vmp_net_sdk_CLIENT-SECRET=${{ secrets.CLIENT_SECRET }} --environment vmp_net_sdk_SUBSCRIPTION-KEY=${{ secrets.SUBSCRIPTION_KEY }} --environment vmp_net_sdk_MERCHANT-SERIAL-NUMBER=${{ secrets.MERCHANT_SERIAL_NUMBER }}
+        run: dotnet test src/Tests/Vipps.net.IntegrationTests/Vipps.net.IntegrationTests.csproj --no-restore --verbosity normal --environment vmp_net_sdk_CLIENT_ID=${{ secrets.CLIENT_ID }} --environment vmp_net_sdk_CLIENT_SECRET=${{ secrets.CLIENT_SECRET }} --environment vmp_net_sdk_SUBSCRIPTION_KEY=${{ secrets.SUBSCRIPTION_KEY }} --environment vmp_net_sdk_MERCHANT_SERIAL_NUMBER=${{ secrets.MERCHANT_SERIAL_NUMBER }}

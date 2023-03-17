@@ -27,12 +27,22 @@ namespace Vipps.net.IntegrationTests
             }
 
             var config = configbuilder.Build();
+            context.WriteLine(
+                string.Join(
+                    " | ",
+                    config.Providers.Select(
+                        p =>
+                            $"{p.GetType().Name}: {string.Join(",", p.GetChildKeys(Array.Empty<string>(), null))}"
+                    )
+                )
+            );
+
             var vippsConfigurationOptions = new VippsConfigurationOptions
             {
-                ClientId = config.GetSection("CLIENT-ID").Value,
-                ClientSecret = config.GetSection("CLIENT-SECRET").Value,
-                MerchantSerialNumber = config.GetSection("MERCHANT-SERIAL-NUMBER").Value,
-                SubscriptionKey = config.GetSection("SUBSCRIPTION-KEY").Value,
+                ClientId = GetConfigKey(config, "CLIENT-ID"),
+                ClientSecret = GetConfigKey(config, "CLIENT-SECRET"),
+                MerchantSerialNumber = GetConfigKey(config, "MERCHANT-SERIAL-NUMBER"),
+                SubscriptionKey = GetConfigKey(config, "SUBSCRIPTION-KEY"),
                 UseTestMode = true,
                 PluginName = Assembly.GetExecutingAssembly().GetName().Name,
                 PluginVersion =
@@ -41,6 +51,13 @@ namespace Vipps.net.IntegrationTests
 
             // The following line configures vipps with custom settings
             VippsConfiguration.ConfigureVipps(vippsConfigurationOptions);
+        }
+
+        private static string GetConfigKey(IConfiguration config, string key)
+        {
+            return config.GetSection(key.Replace("-", "_"))?.Value
+                ?? config.GetSection(key)?.Value
+                ?? string.Empty;
         }
     }
 }
