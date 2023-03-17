@@ -29,10 +29,10 @@ namespace Vipps.net.IntegrationTests
             var config = configbuilder.Build();
             var vippsConfigurationOptions = new VippsConfigurationOptions
             {
-                ClientId = GetConfigKey(config, "CLIENT-ID"),
-                ClientSecret = GetConfigKey(config, "CLIENT-SECRET"),
-                MerchantSerialNumber = GetConfigKey(config, "MERCHANT-SERIAL-NUMBER"),
-                SubscriptionKey = GetConfigKey(config, "SUBSCRIPTION-KEY"),
+                ClientId = GetConfigValue(config, "CLIENT-ID"),
+                ClientSecret = GetConfigValue(config, "CLIENT-SECRET"),
+                MerchantSerialNumber = GetConfigValue(config, "MERCHANT-SERIAL-NUMBER"),
+                SubscriptionKey = GetConfigValue(config, "SUBSCRIPTION-KEY"),
                 UseTestMode = true,
                 PluginName = Assembly.GetExecutingAssembly().GetName().Name,
                 PluginVersion =
@@ -43,7 +43,7 @@ namespace Vipps.net.IntegrationTests
             VippsConfiguration.ConfigureVipps(vippsConfigurationOptions);
         }
 
-        private static string GetConfigKey(IConfiguration config, string key)
+        private static string GetConfigValue(IConfiguration config, string key)
         {
             return config.GetSection(key.Replace("-", "_"))?.Value
                 ?? config.GetSection(key)?.Value
