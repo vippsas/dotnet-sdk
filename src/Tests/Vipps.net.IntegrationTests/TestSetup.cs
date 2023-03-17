@@ -1,5 +1,4 @@
 ﻿using System.Reflection;
-using Azure.Core;
 using Azure.Identity;
 using Microsoft.Extensions.Configuration;
 using Vipps.net.Infrastructure;
@@ -14,29 +13,26 @@ namespace Vipps.net.IntegrationTests
         {
             // Called once before any MSTest test method has started (optional)
             var configbuilder = new ConfigurationBuilder();
+            configbuilder.AddEnvironmentVariables(prefix: "vmp_net_sdk_");
             configbuilder.AddJsonFile("appsettings.json");
             configbuilder.AddUserSecrets<TestSetup>();
-            var keyvaultHost = Environment.GetEnvironmentVariable("KeyvaultHost");
-            TokenCredential azureCredential = new AzureCliCredential();
-            if (string.IsNullOrEmpty(keyvaultHost))
+            var keyvaultHost = configbuilder.Build().GetSection("keyvaultHost")?.Value;
+            if (!string.IsNullOrEmpty(keyvaultHost))
             {
-                keyvaultHost = configbuilder.Build().GetSection("keyvaultHost").Value;
-                azureCredential = new DefaultAzureCredential();
+                // The following lines adds secrets from the key vault to the configuration.
+                configbuilder.AddAzureKeyVault(
+                    new Uri($"https://{keyvaultHost}.vault.azure.net/"),
+                    new DefaultAzureCredential()
+                );
             }
-
-            // The following lines adds secrets from the key vault to the configuration.
-            configbuilder.AddAzureKeyVault(
-                new Uri($"https://{keyvaultHost}.vault.azure.net/"),
-                azureCredential
-            );
 
             var config = configbuilder.Build();
             var vippsConfigurationOptions = new VippsConfigurationOptions
             {
-                ClientId = config.GetSection("CLIENT-ID").Value,
-                ClientSecret = config.GetSection("CLIENT-SECRET").Value,
-                MerchantSerialNumber = config.GetSection("MERCHANT-SERIAL-NUMBER").Value,
-                SubscriptionKey = config.GetSection("SUBSCRIPTION-KEY").Value,
+                ClientId = GetConfigValue(config, "CLIENT-ID"),
+                ClientSecret = GetConfigValue(config, "CLIENT-SECRET"),
+                MerchantSerialNumber = GetConfigValue(config, "MERCHANT-SERIAL-NUMBER"),
+                SubscriptionKey = GetConfigValue(config, "SUBSCRIPTION-KEY"),
                 UseTestMode = true,
                 PluginName = Assembly.GetExecutingAssembly().GetName().Name,
                 PluginVersion =
@@ -45,6 +41,13 @@ namespace Vipps.net.IntegrationTests
 
             // The following line configures vipps with custom settings
             VippsConfiguration.ConfigureVipps(vippsConfigurationOptions);
+        }
+
+        private static string GetConfigValue(IConfiguration config, string key)
+        {
+            return config.GetSection(key.Replace("-", "_"))?.Value
+                ?? config.GetSection(key)?.Value
+                ?? string.Empty;
         }
     }
 }
