@@ -866,6 +866,7 @@ namespace Vipps.net.Models.Epayment
     [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "13.18.2.0 (NJsonSchema v10.8.0.0 (Newtonsoft.Json v10.0.0.0))")]
     public enum PaymentEventPaymentAction
     {
+
         [System.Runtime.Serialization.EnumMember(Value = @"CREATE")]
         CREATE = 0,
 

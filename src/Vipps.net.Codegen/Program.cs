@@ -41,6 +41,10 @@ internal sealed class Program
 
         var generator = new CSharpClientGenerator(document, options.ClientGeneratorSettings);
         var code = generator.GenerateFile();
+        code = code.Replace(
+            "<PostenLogisticsOption> FixedOptions",
+            "<LogisticsOptionBase> FixedOptions"
+        );
         Console.WriteLine($"Generated code from {options.OpenApiUrl}");
         File.WriteAllText(options.RelativeFilePath, code);
         Console.WriteLine($"Wrote file {options.RelativeFilePath}");
