@@ -26,10 +26,6 @@ jobs:
         uses: actions/setup-dotnet@v3
         with:
           dotnet-version: ${{ matrix.dotnet-version }}
-      - name: Setup Nerdbank.GitVersioning
-        run: dotnet tool install --tool-path some/where nbgv
-      - name: Set Version for test using Nerdbank.Gitversioning
-        run: nbgv set-version 0.9.0.0
       - name: Install dependencies Vipps.net
         run: dotnet restore src/Vipps.net/Vipps.net.csproj
       - name: Build vipps.net
@@ -53,11 +49,5 @@ jobs:
           dotnet csharpier . --check
       - name: Install dependencies for IntegrationTests
         run: dotnet restore src/Tests/Vipps.net.IntegrationTests/Vipps.net.IntegrationTests.csproj
-      - name: Azure login
-        uses: azure/login@v1
-        with:
-          client-id: ${{ secrets.MT_CLIENT_ID }}
-          tenant-id: ${{ secrets.MT_TENANT_ID }}
-          subscription-id: ${{ secrets.TEST_SUBSCRIPTION_ID }}
       - name: Run Integration Tests
-        run: dotnet test src/Tests/Vipps.net.IntegrationTests/Vipps.net.IntegrationTests.csproj --no-restore --verbosity normal --environment KeyvaultHost="checkout-dm-mt-kv"
+        run: dotnet test src/Tests/Vipps.net.IntegrationTests/Vipps.net.IntegrationTests.csproj --no-restore --verbosity normal --environment vmp_net_sdk_CLIENT_ID=${{ secrets.CLIENT_ID }} --environment vmp_net_sdk_CLIENT_SECRET=${{ secrets.CLIENT_SECRET }} --environment vmp_net_sdk_SUBSCRIPTION_KEY=${{ secrets.SUBSCRIPTION_KEY }} --environment vmp_net_sdk_MERCHANT_SERIAL_NUMBER=${{ secrets.MERCHANT_SERIAL_NUMBER }}

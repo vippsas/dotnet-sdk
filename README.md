@@ -98,17 +98,3 @@ All response objects have a property called RawResponse that contains the respon
 var response = checkoutService.InitiateSession(initiateSessionRequest);
 var cancellationUrl = response.RawResponse["cancellationUrl"].ToString();
 ```
-
-
-### Versioning
-
-**Remember to bump the version depending on breaking, feature or patch in every pull request**
-
-Bump the major, minor or patch version in Vipps.net.csproj's fields named 'Version'.
-
-**The pipeline will on every push to main:**
-
-1. Create a tag with the version for the commit.
-2. Create a release with the tag and version. This will also generate release notes.
-3. Pack a nuget package with the version specified.
-4. Publish the nuget package.
