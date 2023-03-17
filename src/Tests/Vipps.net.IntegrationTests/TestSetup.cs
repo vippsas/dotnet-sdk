@@ -13,7 +13,7 @@ namespace Vipps.net.IntegrationTests
         {
             // Called once before any MSTest test method has started (optional)
             var configbuilder = new ConfigurationBuilder();
-            configbuilder.AddEnvironmentVariables(prefix: "vmp_net_sdk");
+            configbuilder.AddEnvironmentVariables(prefix: "vmp_net_sdk_");
             configbuilder.AddJsonFile("appsettings.json");
             configbuilder.AddUserSecrets<TestSetup>();
             var keyvaultHost = configbuilder.Build().GetSection("keyvaultHost")?.Value;
