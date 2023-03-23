@@ -14,7 +14,7 @@
     <PackageProjectUrl>https://github.com/vippsas/vipps-dotnet</PackageProjectUrl>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
-    <PackageTags>SDK, sample, library</PackageTags>
+    <PackageTags>Vipps, SDK, sample, library</PackageTags>
     <PackageReadmeFile>README.md</PackageReadmeFile>
     <PackageReleaseNotes>https://github.com/vippsas/vipps-dotnet/releases</PackageReleaseNotes>
     <RepositoryUrl>https://github.com/vippsas/vipps-dotnet</RepositoryUrl>
