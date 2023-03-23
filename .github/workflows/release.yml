@@ -23,17 +23,14 @@ jobs:
         uses: actions/setup-dotnet@v3
         with:
           dotnet-version: ${{ matrix.dotnet-version }}
-       # Create Nuget pack.
+      - name: Restore dependencies
+        run: dotnet restore "./src/Vipps.net/Vipps.net.csproj"
+       # Create Nuget package.
       - name: Pack Nuget
-        run: dotnet pack "./src/Vipps.net/Vipps.net.csproj" --include-source --output .
-      - name: Upload nuget package as artifact #replace with nuget 
-        uses: actions/upload-artifact@v3
-        with: 
-          name: Nuget packages
-          path: Vipps.net.*.*nupkg
+        run: dotnet pack "./src/Vipps.net/Vipps.net.csproj" --include-source --output out --configuration Release --no-restore
       # Setup necessary info to create tag 
       - name: Set tag variable with v, for use in tag and release based on packed Nuget
-        run: "echo \"RELEASE_TAG=v$(find . -maxdepth 1 -name Vipps.net.*.nupkg | grep -oP '((\\d+)\\.(\\d+)\\.(\\d+)(.*?))')\" >> $GITHUB_ENV"
+        run: "echo \"RELEASE_TAG=v$(find ./out -maxdepth 1 -name Vipps.net.*.nupkg | grep -oP '((\\d+)\\.(\\d+)\\.(\\d+)(.*?))')\" >> $GITHUB_ENV"
       - name: Configure git username
         run: git config user.name github-actions-bot
       - name: Configure git user email
@@ -65,4 +62,12 @@ jobs:
             } catch (error) {
               core.setFailed(error.message);
             }
-
+      - name: Upload to GitHub release
+        env:
+            GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+            TAG: ${{ env.RELEASE_TAG }}
+        run: |
+             gh release upload ${{ env.RELEASE_TAG }} out/* --clobber
+        # Publish Nuget package
+      - name: Publish Nuget package
+        run: dotnet nuget push out/* --api-key ${{ secrets.NUGET_API_KEY }} --source https://api.nuget.org/v3/index.json 
