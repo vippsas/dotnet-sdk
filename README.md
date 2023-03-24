@@ -75,9 +75,9 @@ InitiateSessionRequest initiateSessionRequest = new()
         },
         PaymentDescription = "Hei"
     },
-    ExtraParameters = new
+    AdditionalProperties =
     {
-        { "Transaction", new { Metadata = new { KID = "100001" } } }
+        { "Configuration", new { AcceptedPaymentMethods = new[] { "WALLET", "CARD" } } }
     }
 };
 ```
