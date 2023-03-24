@@ -59,9 +59,9 @@ The Vipps SDK offer typed request and response classes. These classes might not 
 
 #### Request
 
-All request objects have a property called "ExtraParameters". This is a dynamic object that if set will merge with the request object.
+All request objects have a property called "AdditionalProperties". This is a dictionary that if set will merge with the request object.
 
-##### ExtraParameters example
+##### AdditionalProperties example
 
 ```c#
 InitiateSessionRequest initiateSessionRequest = new()
@@ -75,7 +75,7 @@ InitiateSessionRequest initiateSessionRequest = new()
         },
         PaymentDescription = "Hei"
     },
-    AdditionalProperties =
+    ExtraParameters = new
     {
         { "Transaction", new { Metadata = new { KID = "100001" } } }
     }
