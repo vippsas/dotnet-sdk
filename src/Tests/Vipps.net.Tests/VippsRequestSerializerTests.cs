@@ -9,7 +9,7 @@ namespace Vipps.net.Tests
     public class VippsRequestSerializerTests
     {
         [TestMethod]
-        public void Can_Serialize_With_Nested_Extra_Parameters()
+        public void Can_Serialize_With_Nested_Additional_Properties()
         {
             InitiateSessionRequest initiateSessionRequest =
                 new()
@@ -45,7 +45,7 @@ namespace Vipps.net.Tests
         }
 
         [TestMethod]
-        public void Can_Serialize_With_Extra_Parameters_Array()
+        public void Can_Serialize_With_Additional_Properties_Array()
         {
             InitiateSessionRequest initiateSessionRequest =
                 new()
@@ -80,7 +80,7 @@ namespace Vipps.net.Tests
         }
 
         [TestMethod]
-        public void Can_Serialize_With_Extra_Parameters_On_Undefined_Receiver()
+        public void Can_Serialize_With_Additional_Properties_On_Undefined_Receiver()
         {
             InitiateSessionRequest initiateSessionRequest =
                 new()
@@ -114,7 +114,7 @@ namespace Vipps.net.Tests
         }
 
         [TestMethod]
-        public void Can_Serialize_Without_Extra_Parameters()
+        public void Can_Serialize_Without_Additional_Properties()
         {
             InitiateSessionRequest initiateSessionRequest =
                 new()
