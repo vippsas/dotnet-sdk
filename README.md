@@ -1,8 +1,8 @@
-# Vipps.net
+# Vipps .NET SDK
 
-The official Vipps .NET SDK for the Checkout and Epayment APIs.
+The official Vipps .NET SDK for the Checkout and ePayment APIs.
 
-Supports .NET Standard 2.0+, .NET Core 2.0+ and .NET Framework 4.8+
+Supports .NET Standard 2.0+, .NET Core 2.0+, and .NET Framework 4.8+.
 
 **Features**
 
@@ -55,13 +55,13 @@ var result = await CheckoutService.InitiateSession(request);
 
 ### Unimplemented parameters and properties
 
-The Vipps SDK offer typed request and response classes. These classes might not be up to date if you are on the bleeding edge of our APIs, or if you use features that are not generally available.
+The Vipps SDK offers typed request and response classes. These classes might not be up-to-date if you are on the bleeding edge of our APIs, or if you use features that are not generally available.
 
 #### Request
 
-All request objects have a property called "AdditionalProperties". This is a dictionary that if set will merge with the request object.
+All request objects have a property called `AdditionalProperties`. This is a dictionary that if set will merge with the request object.
 
-##### AdditionalProperties example
+**`AdditionalProperties` example:**
 
 ```c#
 InitiateSessionRequest initiateSessionRequest = new()
@@ -84,9 +84,9 @@ InitiateSessionRequest initiateSessionRequest = new()
 
 #### Response
 
-All response objects have a property called RawResponse that contains the response in the form of a JsonObject.
+All response objects have a property called `RawResponse` that contains the response in the form of a Json Object.
 
-##### RawResponse example
+**`RawResponse` example:**
 
 ```c#
 var response = checkoutService.InitiateSession(initiateSessionRequest);
