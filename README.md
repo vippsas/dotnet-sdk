@@ -1,6 +1,12 @@
-# Vipps .NET SDK
+---
+sidebar_label: .NET
+pagination_next: null
+pagination_prev: null
+---
 
-The official Vipps .NET SDK for the Checkout and ePayment APIs.
+# .NET SDK
+
+The official .NET SDK for the Checkout and ePayment APIs.
 
 Supports .NET Standard 2.0+, .NET Core 2.0+, and .NET Framework 4.8+.
 
@@ -55,7 +61,7 @@ var result = await CheckoutService.InitiateSession(request);
 
 ### Unimplemented parameters and properties
 
-The Vipps SDK offers typed request and response classes. These classes might not be up-to-date if you are on the bleeding edge of our APIs, or if you use features that are not generally available.
+This SDK offers typed request and response classes. These classes might not be up-to-date if you are on the bleeding edge of our APIs, or if you use features that are not generally available.
 
 #### Request
 
