@@ -11,7 +11,7 @@
     <Company>Vipps Mobilepay AS</Company>
     <Title>Vipps SDK .Net</Title>
     <Copyright>Copyright (c) Vipps MobilePay AS 2023</Copyright>
-    <PackageProjectUrl>https://github.com/vippsas/vipps-dotnet</PackageProjectUrl>
+    <PackageProjectUrl>htps://www.nuget.org/packages/Vipps.net</PackageProjectUrl>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
     <PackageTags>Vipps, SDK, sample, library</PackageTags>
