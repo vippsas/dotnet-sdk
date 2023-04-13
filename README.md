@@ -8,10 +8,8 @@ pagination_prev: null
 
 The official .NET SDK for the Checkout and ePayment APIs. Supports .NET Standard 2.0+, .NET Core 2.0+ and .NET Framework 4.8+.
 
-You can download the SDK here:
-
-<https://www.nuget.org/packages/Vipps.net>
-
+You can install the SDK with Nuget as per [Installation](#installation).
+More information about the package can be found on [nuget.org](https://www.nuget.org/packages/Vipps.net).
 
 **Features**
 
