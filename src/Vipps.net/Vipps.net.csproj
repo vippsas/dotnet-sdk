@@ -17,6 +17,7 @@
     <PackageTags>Vipps, SDK, sample, library</PackageTags>
     <PackageReadmeFile>README.md</PackageReadmeFile>
     <PackageReleaseNotes>https://github.com/vippsas/vipps-dotnet/releases</PackageReleaseNotes>
+    <ProjectUrl>https://developer.vippsmobilepay.com/docs/SDKs/dotnet-sdk</ProjectUrl>
     <RepositoryUrl>https://github.com/vippsas/vipps-dotnet</RepositoryUrl>
     <PublishRepositoryUrl>true</PublishRepositoryUrl>
     <RepositoryType>git</RepositoryType>
