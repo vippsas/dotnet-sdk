@@ -1,8 +1,12 @@
+---
+draft: true
+---
+
 # Contributing
 
 ## Getting started
 
-Read the readme.md file.
+Read the [README](README.md).
 
 ## Issues
 
