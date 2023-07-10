@@ -355,3 +355,4 @@ MigrationBackup/
 # Do not include secrets from windows forms demo
 /src/Vipps.net.WindowsFormsDemo/secrets.xml
 /src/Vipps.net.AspDemo/secrets.xml
+src/Vipps.net.AspCoreDemo/.env

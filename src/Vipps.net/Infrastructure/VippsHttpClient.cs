@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
+using Vipps.net.Helpers;
 
 namespace Vipps.net.Infrastructure
 {
@@ -10,17 +11,17 @@ namespace Vipps.net.Infrastructure
     {
         private HttpClient _httpClient;
         private readonly TimeSpan DefaultTimeOut = TimeSpan.FromSeconds(100);
+        private readonly VippsConfigurationOptions _options;
 
-        public VippsHttpClient() { }
-
-        public VippsHttpClient(HttpClient httpClient)
+        public VippsHttpClient(HttpClient httpClient, VippsConfigurationOptions options)
         {
             _httpClient = httpClient;
+            _options = options;
         }
 
         public Uri BaseAddress
         {
-            get { return HttpClient.BaseAddress; }
+            get { return new Uri(UrlHelper.GetBaseUrl(_options.UseTestMode)); }
         }
 
         internal HttpClient HttpClient
@@ -63,23 +64,22 @@ namespace Vipps.net.Infrastructure
             var httpClient = new HttpClient()
             {
                 Timeout = DefaultTimeOut,
-                BaseAddress = new Uri($"{VippsConfiguration.BaseUrl}")
+                BaseAddress = new Uri(UrlHelper.GetBaseUrl(_options.UseTestMode))
             };
 
             return httpClient;
         }
 
-        private static Dictionary<string, string> GetHeaders()
+        private Dictionary<string, string> GetHeaders()
         {
-            var assemblyName = typeof(VippsConfiguration).Assembly.GetName();
+            var assemblyName = typeof(VippsApi).Assembly.GetName();
             return new Dictionary<string, string>
             {
-                { "Ocp-Apim-Subscription-Key", VippsConfiguration.SubscriptionKey },
-                { "Merchant-Serial-Number", VippsConfiguration.MerchantSerialNumber },
                 { "Vipps-System-Name", assemblyName.Name },
                 { "Vipps-System-Version", assemblyName.Version.ToString() },
-                { "Vipps-System-Plugin-Name", VippsConfiguration.PluginName },
-                { "Vipps-System-Plugin-Version", VippsConfiguration.PluginVersion }
+                { "Merchant-Serial-Number", _options.MerchantSerialNumber },
+                { "Vipps-System-Plugin-Name", _options.PluginName },
+                { "Vipps-System-Plugin-Version", _options.PluginVersion }
             };
         }
     }

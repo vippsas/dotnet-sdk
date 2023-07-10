@@ -15,7 +15,7 @@ internal sealed class Program
             "Vipps.net.Models.Epayment",
             "../Vipps.net/Models/EpaymentModels.cs"
         );
-        await GenerateCode(httpClient, epaymentOptions);
+        //await GenerateCode(httpClient, epaymentOptions);
 
         var checkoutOptions = new CodegenSettings(
             "https://vippsas.github.io/vipps-developer-docs/redocusaurus/checkout-swagger-id.yaml",
@@ -23,7 +23,17 @@ internal sealed class Program
             "Vipps.net.Models.Checkout",
             "../Vipps.net/Models/CheckoutModels.cs"
         );
-        await GenerateCode(httpClient, checkoutOptions);
+
+        //await GenerateCode(httpClient, checkoutOptions);
+
+        var loginOptions = new CodegenSettings(
+            "https://vippsas.github.io/vipps-developer-docs/redocusaurus/login-swagger-id.yaml",
+            "VippsLogin",
+            "Vipps.net.Models.Login",
+            "../../../../Vipps.net/Models/LoginModels.cs"
+        );
+
+        await GenerateCode(httpClient, loginOptions);
     }
 
     private static async Task GenerateCode(HttpClient httpClient, CodegenSettings options)
