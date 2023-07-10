@@ -49,5 +49,21 @@
                 return _checkoutServiceClient;
             }
         }
+        
+        private static LoginServiceClient _loginServiceClient;
+        internal static LoginServiceClient LoginServiceClient
+        {
+            get
+            {
+                if (_loginServiceClient == null)
+                {
+                    _loginServiceClient = new LoginServiceClient(
+                        VippsConfiguration.VippsHttpClient
+                    );
+                }
+
+                return _loginServiceClient;
+            }
+        }
     }
 }
