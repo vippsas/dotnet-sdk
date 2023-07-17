@@ -22,16 +22,16 @@ namespace Vipps.net.AspCore31Demo
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            DotEnv.Load();
             var vippsConfigurationOptions = new VippsConfigurationOptions
             {
-                PluginName = "Sommerprosjekt plugin",
-                PluginVersion = "1.0.0",
-                ClientId = Environment.GetEnvironmentVariable("CLIENT_ID"),
-                ClientSecret = Environment.GetEnvironmentVariable("CLIENT_SECRET"),
-                MerchantSerialNumber = Environment.GetEnvironmentVariable("MSN"),
-                SubscriptionKey = Environment.GetEnvironmentVariable("OCP_APIM_SUBSCRIPTION_KEY"),
-                UseTestMode = true
+                ClientId = configuration.GetValue<string>("CLIENT-ID")!,
+                ClientSecret = configuration.GetValue<string>("CLIENT-SECRET")!,
+                MerchantSerialNumber = configuration.GetValue<string>("MERCHANT-SERIAL-NUMBER")!,
+                SubscriptionKey = configuration.GetValue<string>("SUBSCRIPTION-KEY")!,
+                UseTestMode = true,
+                PluginName = Assembly.GetExecutingAssembly().GetName().Name,
+                PluginVersion =
+                    Assembly.GetExecutingAssembly().GetName().Version?.ToString() ?? "1.0.0"
             };
 
             var vippsApi = VippsApi.Create(vippsConfigurationOptions);
