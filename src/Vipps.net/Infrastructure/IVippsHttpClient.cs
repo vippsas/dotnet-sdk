@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace Vipps.net.Infrastructure
 {
-    internal interface IVippsHttpClient
+    public interface IVippsHttpClient
     {
         Task<HttpResponseMessage> SendAsync(
             HttpRequestMessage request,
