@@ -63,7 +63,7 @@ namespace Vipps.net.AspCore31Demo
                 });
             }
 
-            //app.UseHttpsRedirection();
+            app.UseHttpsRedirection();
 
             app.UseRouting();
 

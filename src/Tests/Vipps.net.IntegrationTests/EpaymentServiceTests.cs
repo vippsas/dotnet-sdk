@@ -11,7 +11,7 @@ namespace Vipps.net.IntegrationTests
         [TestMethod]
         public async Task Can_Create_Get_Cancel_Payment()
         {
-            IVippsApi vippsApi = TestSetup.CreateVippsAPI();
+            var vippsApi = TestSetup.CreateVippsAPI();
             var reference = Guid.NewGuid().ToString();
             var createPaymentRequest = GetCreatePaymentRequest(reference);
 
