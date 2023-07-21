@@ -9,16 +9,12 @@ namespace Vipps.net.Services
 {
     public class AccessTokenCacheService
     {
-#pragma warning disable IDE0090 // Use 'new(...)'
         private readonly AccessTokenLifetimeService _lifetimeService;
         private readonly TimeSpan _backoffTimespan = TimeSpan.FromMinutes(2);
-
         private readonly ConcurrentDictionary<
             string,
             (AccessToken token, DateTimeOffset validTo)
         > _dictionary;
-
-#pragma warning restore IDE0090 // Use 'new(...)'
         private const string KeyPrefix = "access-token-";
 
         public AccessTokenCacheService()

@@ -1,5 +1,4 @@
-﻿using System;
-using dotenv.net;
+﻿using System.Reflection;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -24,10 +23,10 @@ namespace Vipps.net.AspCore31Demo
         {
             var vippsConfigurationOptions = new VippsConfigurationOptions
             {
-                ClientId = configuration.GetValue<string>("CLIENT-ID")!,
-                ClientSecret = configuration.GetValue<string>("CLIENT-SECRET")!,
-                MerchantSerialNumber = configuration.GetValue<string>("MERCHANT-SERIAL-NUMBER")!,
-                SubscriptionKey = configuration.GetValue<string>("SUBSCRIPTION-KEY")!,
+                ClientId = Configuration.GetValue<string>("CLIENT-ID")!,
+                ClientSecret = Configuration.GetValue<string>("CLIENT-SECRET")!,
+                MerchantSerialNumber = Configuration.GetValue<string>("MERCHANT-SERIAL-NUMBER")!,
+                SubscriptionKey = Configuration.GetValue<string>("SUBSCRIPTION-KEY")!,
                 UseTestMode = true,
                 PluginName = Assembly.GetExecutingAssembly().GetName().Name,
                 PluginVersion =
