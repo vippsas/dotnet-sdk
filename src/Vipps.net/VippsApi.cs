@@ -59,7 +59,7 @@ namespace Vipps.net
                 )
             );
         }
-        
+
         public IVippsCheckoutService CheckoutService()
         {
             return new VippsCheckoutService(
