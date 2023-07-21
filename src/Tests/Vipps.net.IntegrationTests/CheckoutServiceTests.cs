@@ -8,6 +8,7 @@ namespace Vipps.net.IntegrationTests
         [TestMethod]
         public async Task Can_Create_And_Get_Session()
         {
+            var vippsApi = TestSetup.CreateVippsAPI();
             var reference = Guid.NewGuid().ToString();
             var sessionInitiationRequest = new Models.Checkout.InitiateSessionRequest
             {
@@ -26,9 +27,11 @@ namespace Vipps.net.IntegrationTests
                 }
             };
 
-            var sessionResponse = await CheckoutService.InitiateSession(sessionInitiationRequest);
+            var sessionResponse = await vippsApi
+                .CheckoutService()
+                .InitiateSession(sessionInitiationRequest);
             Assert.IsNotNull(sessionResponse);
-            var sessionPolledResponse = await CheckoutService.GetSessionInfo(reference);
+            var sessionPolledResponse = await vippsApi.CheckoutService().GetSessionInfo(reference);
             Assert.AreEqual(
                 Models.Checkout.ExternalSessionState.SessionCreated,
                 sessionPolledResponse.SessionState

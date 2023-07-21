@@ -7,22 +7,24 @@ using Vipps.net.Models.AccessToken;
 
 namespace Vipps.net.Services
 {
-    public static class AccessTokenCacheService
+    public class AccessTokenCacheService
     {
-#pragma warning disable IDE0090 // Use 'new(...)'
-        private static readonly AccessTokenLifetimeService _lifetimeService =
-            new AccessTokenLifetimeService();
-
-        private static readonly TimeSpan _backoffTimespan = TimeSpan.FromMinutes(2);
-        private static readonly ConcurrentDictionary<
+        private readonly AccessTokenLifetimeService _lifetimeService;
+        private readonly TimeSpan _backoffTimespan = TimeSpan.FromMinutes(2);
+        private readonly ConcurrentDictionary<
             string,
             (AccessToken token, DateTimeOffset validTo)
-        > _dictionary =
-            new ConcurrentDictionary<string, (AccessToken token, DateTimeOffset validTo)>();
-#pragma warning restore IDE0090 // Use 'new(...)'
+        > _dictionary;
         private const string KeyPrefix = "access-token-";
 
-        public static void Add(string key, AccessToken token)
+        public AccessTokenCacheService()
+        {
+            _lifetimeService = new AccessTokenLifetimeService();
+            _dictionary =
+                new ConcurrentDictionary<string, (AccessToken token, DateTimeOffset validTo)>();
+        }
+
+        public void Add(string key, AccessToken token)
         {
             var tokenValidTo = _lifetimeService.GetValidTo(token.Token);
             var tokenValidToWithBackoff = tokenValidTo.HasValue
@@ -41,7 +43,7 @@ namespace Vipps.net.Services
             }
         }
 
-        public static AccessToken Get(string key)
+        public AccessToken Get(string key)
         {
             if (_dictionary.TryGetValue(GetPrefixedHashedKey(key), out var values))
             {
@@ -50,6 +52,7 @@ namespace Vipps.net.Services
                     _dictionary.TryRemove(key, out _);
                     return null;
                 }
+
                 return values.token;
             }
 

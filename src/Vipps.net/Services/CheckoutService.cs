@@ -6,15 +6,35 @@ using Vipps.net.Models.Checkout;
 
 namespace Vipps.net.Services
 {
-    public static class CheckoutService
+    public interface IVippsCheckoutService
     {
-        public static async Task<InitiateSessionResponse> InitiateSession(
+        Task<InitiateSessionResponse> InitiateSession(
+            InitiateSessionRequest initiateSessionRequest,
+            CancellationToken cancellationToken = default
+        );
+
+        Task<SessionResponse> GetSessionInfo(
+            string reference,
+            CancellationToken cancellationToken = default
+        );
+    }
+
+    internal sealed class VippsCheckoutService : IVippsCheckoutService
+    {
+        private readonly CheckoutServiceClient _checkoutServiceClient;
+
+        public VippsCheckoutService(CheckoutServiceClient checkoutServiceClient)
+        {
+            _checkoutServiceClient = checkoutServiceClient;
+        }
+
+        public async Task<InitiateSessionResponse> InitiateSession(
             InitiateSessionRequest initiateSessionRequest,
             CancellationToken cancellationToken = default
         )
         {
             var requestPath = $"/checkout/v3/session";
-            var sessionInitiationResult = await VippsServices.CheckoutServiceClient.ExecuteRequest<
+            var sessionInitiationResult = await _checkoutServiceClient.ExecuteRequest<
                 InitiateSessionRequest,
                 InitiateSessionResponse
             >(requestPath, HttpMethod.Post, initiateSessionRequest, cancellationToken);
@@ -22,18 +42,17 @@ namespace Vipps.net.Services
             return sessionInitiationResult;
         }
 
-        public static async Task<SessionResponse> GetSessionInfo(
+        public async Task<SessionResponse> GetSessionInfo(
             string reference,
             CancellationToken cancellationToken = default
         )
         {
             var requestPath = $"/checkout/v3/session/{reference}";
-            var getSessionResult =
-                await VippsServices.CheckoutServiceClient.ExecuteRequest<SessionResponse>(
-                    requestPath,
-                    HttpMethod.Get,
-                    cancellationToken
-                );
+            var getSessionResult = await _checkoutServiceClient.ExecuteRequest<SessionResponse>(
+                requestPath,
+                HttpMethod.Get,
+                cancellationToken
+            );
 
             return getSessionResult;
         }

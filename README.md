@@ -39,7 +39,7 @@ var vippsConfigurationOptions = new VippsConfigurationOptions
     UseTestMode = true
 };
 
-VippsConfiguration.ConfigureVipps(vippsConfigurationOptions);
+var vippsApi = VippsApi.Create(vippsConfigurationOptions)
 
 var request = new InitiateSessionRequest
 {
@@ -57,7 +57,7 @@ var request = new InitiateSessionRequest
     }
 };
 
-var result = await CheckoutService.InitiateSession(request);
+var result = await vippsApi.CheckoutService().InitiateSession(request);
 
 ```
 
@@ -97,6 +97,6 @@ All response objects have a property called `RawResponse` that contains the resp
 **`RawResponse` example:**
 
 ```c#
-var response = checkoutService.InitiateSession(initiateSessionRequest);
+var response = vippsApi.CheckoutService().InitiateSession(initiateSessionRequest);
 var cancellationUrl = response.RawResponse["cancellationUrl"].ToString();
 ```

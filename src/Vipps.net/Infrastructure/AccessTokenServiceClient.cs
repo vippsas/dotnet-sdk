@@ -7,8 +7,16 @@ namespace Vipps.net.Infrastructure
 {
     internal sealed class AccessTokenServiceClient : BaseServiceClient
     {
-        internal AccessTokenServiceClient(IVippsHttpClient vippsHttpClient)
-            : base(vippsHttpClient) { }
+        private readonly VippsConfigurationOptions _vippsConfigurationOptions;
+
+        internal AccessTokenServiceClient(
+            IVippsHttpClient vippsHttpClient,
+            VippsConfigurationOptions vippsConfigurationOptions
+        )
+            : base(vippsHttpClient)
+        {
+            _vippsConfigurationOptions = vippsConfigurationOptions;
+        }
 
         protected override async Task<Dictionary<string, string>> GetHeaders(
             CancellationToken cancellationToken
@@ -17,8 +25,9 @@ namespace Vipps.net.Infrastructure
             return await Task.FromResult(
                 new Dictionary<string, string>
                 {
-                    { Constants.HeaderNameClientId, VippsConfiguration.ClientId },
-                    { Constants.HeaderNameClientSecret, VippsConfiguration.ClientSecret }
+                    { Constants.HeaderNameClientId, _vippsConfigurationOptions.ClientId },
+                    { Constants.HeaderNameClientSecret, _vippsConfigurationOptions.ClientSecret },
+                    { Constants.SubscriptionKey, _vippsConfigurationOptions.SubscriptionKey }
                 }
             );
         }
