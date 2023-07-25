@@ -1,7 +1,9 @@
 ﻿using System.Reflection;
 using Azure.Identity;
+using Vipps.net;
 using Vipps.net.Demo.Controllers;
 using Vipps.net.Infrastructure;
+using Vipps.net.Services;
 
 internal sealed class Program
 {
@@ -15,6 +17,22 @@ internal sealed class Program
             new Uri($"https://{host}.vault.azure.net/"),
             new DefaultAzureCredential()
         );
+
+        var vippsConfigurationOptions = new VippsConfigurationOptions
+        {
+            ClientId = builder.Configuration.GetValue<string>("CLIENT-ID")!,
+            ClientSecret = builder.Configuration.GetValue<string>("CLIENT-SECRET")!,
+            MerchantSerialNumber = builder.Configuration.GetValue<string>(
+                "MERCHANT-SERIAL-NUMBER"
+            )!,
+            SubscriptionKey = builder.Configuration.GetValue<string>("SUBSCRIPTION-KEY")!,
+            UseTestMode = true,
+            PluginName = Assembly.GetExecutingAssembly().GetName().Name,
+            PluginVersion = Assembly.GetExecutingAssembly().GetName().Version?.ToString() ?? "1.0.0"
+        };
+
+        builder.Services.AddTransient(_ => vippsConfigurationOptions);
+        builder.Services.AddTransient<IVippsApi, VippsApi>(); 
 
         builder.Services.AddControllers();
         builder.Services.AddEndpointsApiExplorer();
@@ -34,24 +52,8 @@ internal sealed class Program
         //builder.Services.ConfigureVipps(builder.Configuration, "Vipps");
 
         // The following lines initialises VippConfigurationOptions with values fetched from key vault.
-        var vippsConfigurationOptions = new VippsConfigurationOptions
-        {
-            ClientId = builder.Configuration.GetValue<string>("CLIENT-ID")!,
-            ClientSecret = builder.Configuration.GetValue<string>("CLIENT-SECRET")!,
-            MerchantSerialNumber = builder.Configuration.GetValue<string>(
-                "MERCHANT-SERIAL-NUMBER"
-            )!,
-            SubscriptionKey = builder.Configuration.GetValue<string>("SUBSCRIPTION-KEY")!,
-            UseTestMode = true,
-            PluginName = Assembly.GetExecutingAssembly().GetName().Name,
-            PluginVersion = Assembly.GetExecutingAssembly().GetName().Version?.ToString() ?? "1.0.0"
-        };
 
-        // The following line configures vipps with custom settings
-        VippsConfiguration.ConfigureVipps(
-            vippsConfigurationOptions,
-            app.Services.GetService<ILoggerFactory>()
-        );
+
 
         app.UseAuthorization();
 

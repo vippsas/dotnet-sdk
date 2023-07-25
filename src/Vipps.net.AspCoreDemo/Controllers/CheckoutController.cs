@@ -12,10 +12,15 @@ namespace Vipps.net.AspCore31Demo.Controllers
     public class CheckoutController : ControllerBase
     {
         private readonly ILogger<CheckoutController> _logger;
+        private readonly IVippsCheckoutService _checkoutService;
 
-        public CheckoutController(ILogger<CheckoutController> logger)
+        public CheckoutController(
+            ILogger<CheckoutController> logger,
+            IVippsApi vippsApi
+        )
         {
             _logger = logger;
+            _checkoutService = vippsApi.CheckoutService();
         }
 
         [HttpPost]
@@ -42,7 +47,7 @@ namespace Vipps.net.AspCore31Demo.Controllers
                 request.Transaction.Reference
             );
 
-            var result = await CheckoutService.InitiateSession(request);
+            var result = await _checkoutService.InitiateSession(request);
 
             _logger.LogInformation(
                 "Created session with reference {reference}",

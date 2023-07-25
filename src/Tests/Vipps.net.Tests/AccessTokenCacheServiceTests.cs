@@ -11,30 +11,33 @@ namespace Vipps.net.Tests
         [TestMethod]
         public void Can_Retrieve_Saved_Valid()
         {
+            var accessTokenCacheService = new AccessTokenCacheService();
             var key = Guid.NewGuid().ToString();
             var accessToken = GetToken(DateTime.Now.AddHours(-1), DateTime.Now.AddHours(1));
-            AccessTokenCacheService.Add(key, accessToken);
-            var res = AccessTokenCacheService.Get(key);
+            accessTokenCacheService.Add(key, accessToken);
+            var res = accessTokenCacheService.Get(key);
             Assert.AreEqual(accessToken, res);
         }
 
         [TestMethod]
         public void Can_Not_Retrieve_Saved_Expired()
         {
+            AccessTokenCacheService accessTokenCacheService = new AccessTokenCacheService();
             var key = Guid.NewGuid().ToString();
             var accessToken = GetToken(DateTime.Now.AddHours(-2), DateTime.Now.AddHours(-1));
-            AccessTokenCacheService.Add(key, accessToken);
-            var res = AccessTokenCacheService.Get(key);
+            accessTokenCacheService.Add(key, accessToken);
+            var res = accessTokenCacheService.Get(key);
             Assert.IsNull(res);
         }
 
         [TestMethod]
         public void Can_Not_Retrieve_Saved_NotValidForLongEnough()
         {
+            AccessTokenCacheService accessTokenCacheService = new AccessTokenCacheService();
             var key = Guid.NewGuid().ToString();
             var accessToken = GetToken(DateTime.Now.AddHours(-2), DateTime.Now.AddMinutes(1));
-            AccessTokenCacheService.Add(key, accessToken);
-            var res = AccessTokenCacheService.Get(key);
+            accessTokenCacheService.Add(key, accessToken);
+            var res = accessTokenCacheService.Get(key);
             Assert.IsNull(res);
         }
 

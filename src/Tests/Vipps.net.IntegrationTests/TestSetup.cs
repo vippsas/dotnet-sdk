@@ -8,8 +8,7 @@ namespace Vipps.net.IntegrationTests
     [TestClass]
     public class TestSetup
     {
-        [AssemblyInitialize]
-        public static void TestFixtureSetup(TestContext context)
+        public static IVippsApi CreateVippsAPI()
         {
             // Called once before any MSTest test method has started (optional)
             var configbuilder = new ConfigurationBuilder();
@@ -40,7 +39,7 @@ namespace Vipps.net.IntegrationTests
             };
 
             // The following line configures vipps with custom settings
-            VippsConfiguration.ConfigureVipps(vippsConfigurationOptions);
+            return new VippsApi(vippsConfigurationOptions);
         }
 
         private static string GetConfigValue(IConfiguration config, string key)
