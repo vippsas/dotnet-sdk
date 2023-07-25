@@ -12,9 +12,9 @@ namespace Vipps.net.AspCore31Demo.Controllers
     {
         private readonly IVippsEpaymentService _epaymentService;
 
-        public EpaymentController(IVippsEpaymentService vippsEpaymentService)
+        public EpaymentController(IVippsApi vippsApi)
         {
-            _epaymentService = vippsEpaymentService;
+            _epaymentService = vippsApi.EpaymentService();
         }
 
         [HttpPost]

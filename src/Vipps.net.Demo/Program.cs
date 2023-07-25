@@ -31,9 +31,8 @@ internal sealed class Program
             PluginVersion = Assembly.GetExecutingAssembly().GetName().Version?.ToString() ?? "1.0.0"
         };
 
-        var vippsAPI = VippsApi.Create(vippsConfigurationOptions);
-
-        builder.Services.AddSingleton<IVippsCheckoutService>(vippsAPI.CheckoutService());
+        builder.Services.AddTransient(_ => vippsConfigurationOptions);
+        builder.Services.AddTransient<IVippsApi, VippsApi>(); 
 
         builder.Services.AddControllers();
         builder.Services.AddEndpointsApiExplorer();

@@ -13,11 +13,11 @@ namespace Vipps.net.Demo.Controllers
 
         public CheckoutController(
             ILogger<CheckoutController> logger,
-            IVippsCheckoutService vippsCheckoutService
+            IVippsApi vippsApi
         )
         {
             _logger = logger;
-            _vippsCheckoutService = vippsCheckoutService;
+            _vippsCheckoutService = vippsApi.CheckoutService();
         }
 
         [HttpPost]

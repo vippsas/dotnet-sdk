@@ -32,12 +32,10 @@ namespace Vipps.net.AspCore31Demo
                 PluginVersion =
                     Assembly.GetExecutingAssembly().GetName().Version?.ToString() ?? "1.0.0"
             };
-
-            var vippsApi = VippsApi.Create(vippsConfigurationOptions);
-
-            services.AddSingleton(vippsApi.CheckoutService());
-            services.AddSingleton(vippsApi.EpaymentService());
-
+            
+            services.AddTransient(_ => vippsConfigurationOptions);
+            services.AddTransient<IVippsApi, VippsApi>(); 
+            
             services.AddControllers();
             services.AddSwaggerGen(c =>
             {

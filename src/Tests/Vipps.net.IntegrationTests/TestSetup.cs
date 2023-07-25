@@ -39,7 +39,7 @@ namespace Vipps.net.IntegrationTests
             };
 
             // The following line configures vipps with custom settings
-            return VippsApi.Create(vippsConfigurationOptions);
+            return new VippsApi(vippsConfigurationOptions);
         }
 
         private static string GetConfigValue(IConfiguration config, string key)

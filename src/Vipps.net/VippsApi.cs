@@ -1,4 +1,5 @@
 ﻿using System.Net.Http;
+using System.Threading;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
 using Vipps.net.Infrastructure;
@@ -19,16 +20,10 @@ namespace Vipps.net
         private VippsHttpClient _vippsHttpClient;
         private ILoggerFactory _loggerFactory;
         private readonly VippsAccessTokenService _accessTokenService;
-
-        public static IVippsApi Create(
-            VippsConfigurationOptions options,
-            ILoggerFactory loggerFactory = null
-        )
-        {
-            return new VippsApi(options, loggerFactory);
-        }
-
-        private VippsApi(
+        private readonly IVippsEpaymentService _epaymentService;
+        private readonly IVippsCheckoutService _checkoutService; 
+        
+        public VippsApi(
             VippsConfigurationOptions configurationOptions,
             ILoggerFactory loggerFactory = null
         )
@@ -42,6 +37,18 @@ namespace Vipps.net
                 new AccessTokenServiceClient(_vippsHttpClient, configurationOptions),
                 new AccessTokenCacheService()
             );
+            
+            _epaymentService = new VippsEpaymentService(
+                new EpaymentServiceClient(
+                    _vippsHttpClient,
+                    _vippsConfigurationOptions,
+                    _accessTokenService
+                )
+            );
+            
+            _checkoutService = new VippsCheckoutService(
+                new CheckoutServiceClient(_vippsHttpClient, _vippsConfigurationOptions)
+            );
         }
 
         public IVippsAccessTokenService AccessTokenService()
@@ -51,20 +58,12 @@ namespace Vipps.net
 
         public IVippsEpaymentService EpaymentService()
         {
-            return new VippsEpaymentService(
-                new EpaymentServiceClient(
-                    _vippsHttpClient,
-                    _vippsConfigurationOptions,
-                    _accessTokenService
-                )
-            );
+            return this._epaymentService;
         }
 
         public IVippsCheckoutService CheckoutService()
         {
-            return new VippsCheckoutService(
-                new CheckoutServiceClient(_vippsHttpClient, _vippsConfigurationOptions)
-            );
+            return this._checkoutService; 
         }
     }
 }
