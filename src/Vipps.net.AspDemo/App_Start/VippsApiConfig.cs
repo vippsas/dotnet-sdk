@@ -6,6 +6,12 @@ namespace Vipps.net.AspDemo
 {
     public static class VippsApiConfig
     {
+        private static VippsApi _vippsApi = null;
+        public static VippsApi VippsApi
+        {
+            get { return _vippsApi; }
+        }
+
         public static void Configure()
         {
             var configurationOptions = new VippsConfigurationOptions
@@ -20,7 +26,7 @@ namespace Vipps.net.AspDemo
                     Assembly.GetExecutingAssembly().GetName().Version?.ToString() ?? "1.0.0"
             };
 
-            VippsConfiguration.ConfigureVipps(configurationOptions);
+            _vippsApi = new VippsApi(configurationOptions);
         }
     }
 }

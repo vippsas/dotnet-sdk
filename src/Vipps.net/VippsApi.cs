@@ -16,8 +16,7 @@ namespace Vipps.net
     public class VippsApi : IVippsApi
     {
         private readonly VippsConfigurationOptions _vippsConfigurationOptions;
-        private VippsHttpClient _vippsHttpClient;
-        private ILoggerFactory _loggerFactory;
+        private readonly VippsHttpClient _vippsHttpClient;
         private readonly VippsAccessTokenService _accessTokenService;
         private readonly IVippsEpaymentService _epaymentService;
         private readonly IVippsCheckoutService _checkoutService;
@@ -28,8 +27,8 @@ namespace Vipps.net
             ILoggerFactory loggerFactory = null
         )
         {
-            _loggerFactory = loggerFactory ?? NullLoggerFactory.Instance;
-            this._vippsConfigurationOptions = configurationOptions;
+            VippsLogging.LoggerFactory = loggerFactory ?? NullLoggerFactory.Instance; // TODO: This should be un-staticed
+            _vippsConfigurationOptions = configurationOptions;
             _vippsHttpClient = new VippsHttpClient(httpClient, configurationOptions);
 
             _accessTokenService = new VippsAccessTokenService(
