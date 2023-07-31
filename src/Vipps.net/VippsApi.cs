@@ -24,7 +24,7 @@ namespace Vipps.net
 
         public VippsApi(
             VippsConfigurationOptions configurationOptions,
-            HttpClient httpClient,
+            HttpClient httpClient = null,
             ILoggerFactory loggerFactory = null
         )
         {
