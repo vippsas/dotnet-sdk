@@ -21,7 +21,7 @@ namespace Vipps.net.Infrastructure
 
         public Uri BaseAddress
         {
-            get { return new Uri(UrlHelper.GetBaseUrl(_options.UseTestMode)); }
+            get { return _httpClient.BaseAddress; }
         }
 
         internal HttpClient HttpClient

@@ -1,5 +1,4 @@
 ﻿using System.Net.Http;
-using System.Threading;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
 using Vipps.net.Infrastructure;
@@ -21,23 +20,24 @@ namespace Vipps.net
         private ILoggerFactory _loggerFactory;
         private readonly VippsAccessTokenService _accessTokenService;
         private readonly IVippsEpaymentService _epaymentService;
-        private readonly IVippsCheckoutService _checkoutService; 
-        
+        private readonly IVippsCheckoutService _checkoutService;
+
         public VippsApi(
             VippsConfigurationOptions configurationOptions,
+            HttpClient httpClient,
             ILoggerFactory loggerFactory = null
         )
         {
             _loggerFactory = loggerFactory ?? NullLoggerFactory.Instance;
             this._vippsConfigurationOptions = configurationOptions;
-            _vippsHttpClient = new VippsHttpClient(new HttpClient(), configurationOptions);
+            _vippsHttpClient = new VippsHttpClient(httpClient, configurationOptions);
 
             _accessTokenService = new VippsAccessTokenService(
                 configurationOptions,
                 new AccessTokenServiceClient(_vippsHttpClient, configurationOptions),
                 new AccessTokenCacheService()
             );
-            
+
             _epaymentService = new VippsEpaymentService(
                 new EpaymentServiceClient(
                     _vippsHttpClient,
@@ -45,7 +45,7 @@ namespace Vipps.net
                     _accessTokenService
                 )
             );
-            
+
             _checkoutService = new VippsCheckoutService(
                 new CheckoutServiceClient(_vippsHttpClient, _vippsConfigurationOptions)
             );
@@ -63,7 +63,7 @@ namespace Vipps.net
 
         public IVippsCheckoutService CheckoutService()
         {
-            return this._checkoutService; 
+            return this._checkoutService;
         }
     }
 }
