@@ -38,6 +38,18 @@ namespace Vipps.net.Models.Epayment
             set { _additionalProperties = value; }
         }
 
+        [Newtonsoft.Json.JsonProperty("phoneNumber", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        [System.ComponentModel.DataAnnotations.StringLength(15, MinimumLength = 10)]
+        [System.ComponentModel.DataAnnotations.RegularExpression(@"^\d{10,15}$")]
+        public string PhoneNumber { get; set; }
+
+        /// <summary>
+        /// The full content of the user's personal QR code in the app.
+        /// </summary>
+        [Newtonsoft.Json.JsonProperty("personalQr", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        [System.ComponentModel.DataAnnotations.StringLength(255, MinimumLength = 5)]
+        public string PersonalQr { get; set; }
+
     }
 
     /// <summary>

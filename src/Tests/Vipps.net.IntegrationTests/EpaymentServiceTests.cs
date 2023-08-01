@@ -30,7 +30,6 @@ namespace Vipps.net.IntegrationTests
             Assert.AreEqual(State.TERMINATED, getPaymentResponse.State);
         }
 
-        [Ignore] //Test is failing because paymentaction has changed variable name
         [TestMethod]
         public async Task Can_Create_Approve_Capture_Refund_Payment()
         {
@@ -46,7 +45,13 @@ namespace Vipps.net.IntegrationTests
 
             await vippsApi
                 .EpaymentService()
-                .ForceApprovePayment(reference, new ForceApprove { Customer = new Customer { } });
+                .ForceApprovePayment(
+                    reference,
+                    new ForceApprove
+                    {
+                        Customer = new Customer { PhoneNumber = CustomerPhoneNumber }
+                    }
+                );
 
             var captureResponse = await vippsApi
                 .EpaymentService()

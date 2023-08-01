@@ -24,7 +24,7 @@ namespace Vipps.net.AspCore31Demo.Controllers
             {
                 Amount = new Amount { Value = 1000, Currency = Currency.NOK },
                 PaymentMethod = new PaymentMethod { Type = PaymentMethodType.WALLET },
-                Customer = new Customer { },
+                Customer = new Customer { PhoneNumber = "4747375750" },
                 Reference = Guid.NewGuid().ToString(),
                 UserFlow = CreatePaymentRequestUserFlow.WEB_REDIRECT,
                 ReturnUrl = $"http://localhost:3000",
