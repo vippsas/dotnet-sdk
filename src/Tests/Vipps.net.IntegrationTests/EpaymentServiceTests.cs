@@ -1,5 +1,4 @@
 ﻿using Vipps.net.Models.Epayment;
-using Vipps.net.Services;
 
 namespace Vipps.net.IntegrationTests
 {
@@ -47,13 +46,7 @@ namespace Vipps.net.IntegrationTests
 
             await vippsApi
                 .EpaymentService()
-                .ForceApprovePayment(
-                    reference,
-                    new ForceApprove
-                    {
-                        Customer = new Customer { PhoneNumber = CustomerPhoneNumber }
-                    }
-                );
+                .ForceApprovePayment(reference, new ForceApprove { Customer = new Customer { } });
 
             var captureResponse = await vippsApi
                 .EpaymentService()
@@ -111,7 +104,7 @@ namespace Vipps.net.IntegrationTests
                 Reference = reference,
                 PaymentDescription = nameof(CheckoutServiceTests.Can_Create_And_Get_Session),
                 ReturnUrl = $"https://no.where.com/{reference}",
-                Customer = new Customer { PhoneNumber = CustomerPhoneNumber }
+                Customer = new Customer { }
             };
         }
     }

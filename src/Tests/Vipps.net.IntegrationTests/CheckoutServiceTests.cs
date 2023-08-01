@@ -1,6 +1,4 @@
-﻿using Vipps.net.Services;
-
-namespace Vipps.net.IntegrationTests
+﻿namespace Vipps.net.IntegrationTests
 {
     [TestClass]
     public class CheckoutServiceTests

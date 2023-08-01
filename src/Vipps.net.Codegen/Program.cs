@@ -6,7 +6,7 @@ using Vipps.net.Codegen;
 
 internal sealed class Program
 {
-    private static async Task Main(string[] args)
+    private static async Task Main()
     {
         var httpClient = new HttpClient();
         var epaymentOptions = new CodegenSettings(

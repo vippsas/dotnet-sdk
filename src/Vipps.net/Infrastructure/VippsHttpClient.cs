@@ -28,10 +28,12 @@ namespace Vipps.net.Infrastructure
         {
             get
             {
+#pragma warning disable IDE0074 // Use compound assignment // Cannot, because of language level
                 if (_httpClient == null)
                 {
                     _httpClient = CreateDefaultHttpClient();
                 }
+#pragma warning restore IDE0074 // Use compound assignment
 
                 return _httpClient;
             }
