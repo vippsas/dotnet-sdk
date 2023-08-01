@@ -1045,7 +1045,7 @@ namespace Vipps.net.Models.Checkout
         public Amount Amount { get; set; } = new Amount();
 
         /// <summary>
-        /// The merchant's unique reference for the transaction. Also known as OrderId. Example: "acme-shop-123-order123abc". See https://vippsas.github.io/vipps-developer-docs/docs/vipps-developers/common-topics/orderid
+        /// The merchant's unique reference for the transaction. Also known as OrderId. Example: "acme-shop-123-order123abc". See https://vippsas.github.io/vipps-developer-docs/docs/common-topics/orderid
         /// </summary>
         [Newtonsoft.Json.JsonProperty("reference", Required = Newtonsoft.Json.Required.Always)]
         [System.ComponentModel.DataAnnotations.Required]
@@ -1507,7 +1507,7 @@ namespace Vipps.net.Models.Checkout
         public string MerchantSerialNumber { get; set; }
 
         /// <summary>
-        /// The merchant's unique reference for the transaction. Also known as OrderId. Example: "acme-shop-123-order123abc". See https://vippsas.github.io/vipps-developer-docs/docs/vipps-developers/common-topics/orderid
+        /// The merchant's unique reference for the transaction. Also known as OrderId. Example: "acme-shop-123-order123abc". See https://vippsas.github.io/vipps-developer-docs/docs/common-topics/orderid
         /// </summary>
         [Newtonsoft.Json.JsonProperty("reference", Required = Newtonsoft.Json.Required.Always)]
         [System.ComponentModel.DataAnnotations.Required(AllowEmptyStrings = true)]
