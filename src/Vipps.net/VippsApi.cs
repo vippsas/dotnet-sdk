@@ -20,6 +20,7 @@ namespace Vipps.net
         private readonly VippsAccessTokenService _accessTokenService;
         private readonly IVippsEpaymentService _epaymentService;
         private readonly IVippsCheckoutService _checkoutService;
+        private readonly ILoggerFactory _loggerFactory;
 
         public VippsApi(
             VippsConfigurationOptions configurationOptions,
@@ -27,13 +28,17 @@ namespace Vipps.net
             ILoggerFactory loggerFactory = null
         )
         {
-            VippsLogging.LoggerFactory = loggerFactory ?? NullLoggerFactory.Instance; // TODO: This should be un-staticed
+            _loggerFactory = loggerFactory ?? NullLoggerFactory.Instance;
             _vippsConfigurationOptions = configurationOptions;
             _vippsHttpClient = new VippsHttpClient(httpClient, configurationOptions);
 
             _accessTokenService = new VippsAccessTokenService(
                 configurationOptions,
-                new AccessTokenServiceClient(_vippsHttpClient, configurationOptions),
+                new AccessTokenServiceClient(
+                    _vippsHttpClient,
+                    configurationOptions,
+                    _loggerFactory
+                ),
                 new AccessTokenCacheService()
             );
 
@@ -41,28 +46,33 @@ namespace Vipps.net
                 new EpaymentServiceClient(
                     _vippsHttpClient,
                     _vippsConfigurationOptions,
-                    _accessTokenService
+                    _accessTokenService,
+                    _loggerFactory
                 )
             );
 
             _checkoutService = new VippsCheckoutService(
-                new CheckoutServiceClient(_vippsHttpClient, _vippsConfigurationOptions)
+                new CheckoutServiceClient(
+                    _vippsHttpClient,
+                    _vippsConfigurationOptions,
+                    _loggerFactory
+                )
             );
         }
 
         public IVippsAccessTokenService AccessTokenService()
         {
-            return this._accessTokenService;
+            return _accessTokenService;
         }
 
         public IVippsEpaymentService EpaymentService()
         {
-            return this._epaymentService;
+            return _epaymentService;
         }
 
         public IVippsCheckoutService CheckoutService()
         {
-            return this._checkoutService;
+            return _checkoutService;
         }
     }
 }

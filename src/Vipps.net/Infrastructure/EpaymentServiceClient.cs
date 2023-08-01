@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Logging;
 using Vipps.net.Helpers;
 using Vipps.net.Services;
 
@@ -15,9 +16,10 @@ namespace Vipps.net.Infrastructure
         internal EpaymentServiceClient(
             IVippsHttpClient vippsHttpClient,
             VippsConfigurationOptions vippsConfigurationOptions,
-            VippsAccessTokenService accessTokenService
+            VippsAccessTokenService accessTokenService,
+            ILoggerFactory loggerFactory
         )
-            : base(vippsHttpClient)
+            : base(vippsHttpClient, loggerFactory)
         {
             _vippsConfigurationOptions = vippsConfigurationOptions;
             _accessTokenService = accessTokenService;

@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Logging;
 using Vipps.net.Helpers;
 
 namespace Vipps.net.Infrastructure
@@ -11,9 +12,10 @@ namespace Vipps.net.Infrastructure
 
         internal CheckoutServiceClient(
             IVippsHttpClient vippsHttpClient,
-            VippsConfigurationOptions vippsConfigurationOptions
+            VippsConfigurationOptions vippsConfigurationOptions,
+            ILoggerFactory loggerFactory
         )
-            : base(vippsHttpClient)
+            : base(vippsHttpClient, loggerFactory)
         {
             _vippsConfigurationOptions = vippsConfigurationOptions;
         }

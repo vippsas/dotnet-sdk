@@ -16,10 +16,10 @@ namespace Vipps.net.Infrastructure
         protected readonly IVippsHttpClient _vippsHttpClient;
         protected readonly ILogger _logger;
 
-        protected BaseServiceClient(IVippsHttpClient vippsHttpClient)
+        protected BaseServiceClient(IVippsHttpClient vippsHttpClient, ILoggerFactory loggerFactory)
         {
             _vippsHttpClient = vippsHttpClient;
-            _logger = VippsLogging.LoggerFactory?.CreateLogger(this.GetType().Name);
+            _logger = loggerFactory?.CreateLogger(this.GetType().Name);
         }
 
         public async Task<TResponse> ExecuteRequest<TRequest, TResponse>(
