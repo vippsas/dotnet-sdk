@@ -5,12 +5,10 @@ using Vipps.net.Infrastructure;
 
 namespace Vipps.net.IntegrationTests
 {
-    [TestClass]
     public class TestSetup
     {
         public static IVippsApi CreateVippsAPI()
         {
-            // Called once before any MSTest test method has started (optional)
             var configbuilder = new ConfigurationBuilder();
             configbuilder.AddEnvironmentVariables(prefix: "vmp_net_sdk_");
             configbuilder.AddJsonFile("appsettings.json");
