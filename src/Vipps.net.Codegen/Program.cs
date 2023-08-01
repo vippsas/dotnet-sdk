@@ -13,7 +13,7 @@ internal sealed class Program
             "https://vippsas.github.io/vipps-developer-docs/redocusaurus/epayment-swagger-id.yaml",
             "VippsEpayment",
             "Vipps.net.Models.Epayment",
-            "../Vipps.net/Models/EpaymentModels.cs"
+            "../../../../Vipps.net/Models/EpaymentModels.cs"
         );
         await GenerateCode(httpClient, epaymentOptions);
 
@@ -21,7 +21,7 @@ internal sealed class Program
             "https://vippsas.github.io/vipps-developer-docs/redocusaurus/checkout-swagger-id.yaml",
             "VippsCheckout",
             "Vipps.net.Models.Checkout",
-            "../Vipps.net/Models/CheckoutModels.cs"
+            "../../../../Vipps.net/Models/CheckoutModels.cs"
         );
         await GenerateCode(httpClient, checkoutOptions);
     }
