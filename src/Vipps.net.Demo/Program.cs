@@ -3,7 +3,6 @@ using Azure.Identity;
 using Vipps.net;
 using Vipps.net.Demo.Controllers;
 using Vipps.net.Infrastructure;
-using Vipps.net.Services;
 
 internal sealed class Program
 {
@@ -32,7 +31,9 @@ internal sealed class Program
         };
 
         builder.Services.AddTransient(_ => vippsConfigurationOptions);
-        builder.Services.AddTransient<IVippsApi, VippsApi>(); 
+        builder.Services.AddTransient<IVippsApi, VippsApi>(
+            (sp) => new VippsApi(vippsConfigurationOptions, null, sp.GetService<ILoggerFactory>())
+        );
 
         builder.Services.AddControllers();
         builder.Services.AddEndpointsApiExplorer();

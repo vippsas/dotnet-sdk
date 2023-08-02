@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
 using Vipps.net.Infrastructure;
 
@@ -32,10 +33,13 @@ namespace Vipps.net.AspCore31Demo
                 PluginVersion =
                     Assembly.GetExecutingAssembly().GetName().Version?.ToString() ?? "1.0.0"
             };
-            
+
             services.AddTransient(_ => vippsConfigurationOptions);
-            services.AddTransient<IVippsApi, VippsApi>(); 
-            
+            services.AddTransient<IVippsApi, VippsApi>(
+                (sp) =>
+                    new VippsApi(vippsConfigurationOptions, null, sp.GetService<ILoggerFactory>())
+            );
+
             services.AddControllers();
             services.AddSwaggerGen(c =>
             {
