@@ -24,7 +24,7 @@ namespace Vipps.net.AspDemo.Services
                 }
             };
 
-            var result = await VippsApiConfig.VippsApi.CheckoutService().InitiateSession(request);
+            var result = await VippsApiConfig.VippsApi.CheckoutService.InitiateSession(request);
             return result.PollingUrl;
         }
     }

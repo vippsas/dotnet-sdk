@@ -25,11 +25,11 @@
                 }
             };
 
-            var sessionResponse = await vippsApi
-                .CheckoutService()
-                .InitiateSession(sessionInitiationRequest);
+            var sessionResponse = await vippsApi.CheckoutService.InitiateSession(
+                sessionInitiationRequest
+            );
             Assert.IsNotNull(sessionResponse);
-            var sessionPolledResponse = await vippsApi.CheckoutService().GetSessionInfo(reference);
+            var sessionPolledResponse = await vippsApi.CheckoutService.GetSessionInfo(reference);
             Assert.AreEqual(
                 Models.Checkout.ExternalSessionState.SessionCreated,
                 sessionPolledResponse.SessionState

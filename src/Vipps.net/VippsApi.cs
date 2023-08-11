@@ -8,9 +8,9 @@ namespace Vipps.net
 {
     public interface IVippsApi
     {
-        IVippsAccessTokenService AccessTokenService();
-        IVippsEpaymentService EpaymentService();
-        IVippsCheckoutService CheckoutService();
+        IVippsAccessTokenService AccessTokenService { get; }
+        IVippsEpaymentService EpaymentService { get; }
+        IVippsCheckoutService CheckoutService { get; }
     }
 
     public class VippsApi : IVippsApi
@@ -60,19 +60,19 @@ namespace Vipps.net
             );
         }
 
-        public IVippsAccessTokenService AccessTokenService()
+        public IVippsAccessTokenService AccessTokenService
         {
-            return _accessTokenService;
+            get { return _accessTokenService; }
         }
 
-        public IVippsEpaymentService EpaymentService()
+        public IVippsEpaymentService EpaymentService
         {
-            return _epaymentService;
+            get { return _epaymentService; }
         }
 
-        public IVippsCheckoutService CheckoutService()
+        public IVippsCheckoutService CheckoutService
         {
-            return _checkoutService;
+            get { return _checkoutService; }
         }
     }
 }

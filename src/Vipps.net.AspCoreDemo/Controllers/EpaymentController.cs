@@ -14,7 +14,7 @@ namespace Vipps.net.AspCore31Demo.Controllers
 
         public EpaymentController(IVippsApi vippsApi)
         {
-            _epaymentService = vippsApi.EpaymentService();
+            _epaymentService = vippsApi.EpaymentService;
         }
 
         [HttpPost]

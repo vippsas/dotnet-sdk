@@ -14,13 +14,10 @@ namespace Vipps.net.AspCore31Demo.Controllers
         private readonly ILogger<CheckoutController> _logger;
         private readonly IVippsCheckoutService _checkoutService;
 
-        public CheckoutController(
-            ILogger<CheckoutController> logger,
-            IVippsApi vippsApi
-        )
+        public CheckoutController(ILogger<CheckoutController> logger, IVippsApi vippsApi)
         {
             _logger = logger;
-            _checkoutService = vippsApi.CheckoutService();
+            _checkoutService = vippsApi.CheckoutService;
         }
 
         [HttpPost]
