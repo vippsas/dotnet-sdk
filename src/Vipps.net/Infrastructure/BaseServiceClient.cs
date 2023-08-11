@@ -91,9 +91,11 @@ namespace Vipps.net.Infrastructure
                 httpContent,
                 cancellationToken
             );
+#pragma warning disable IDE0079 // Remove unnecessary suppression
 #pragma warning disable CA2016 // Forward the 'CancellationToken' parameter to methods
             var contentString = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
 #pragma warning restore CA2016 // Forward the 'CancellationToken' parameter to methods
+#pragma warning restore IDE0079 // Remove unnecessary suppression
             try
             {
                 var responseObject = VippsRequestSerializer.DeserializeVippsResponse<TResponse>(
@@ -159,11 +161,13 @@ namespace Vipps.net.Infrastructure
 
             if (!response.IsSuccessStatusCode)
             {
+#pragma warning disable IDE0079 // Remove unnecessary suppression
 #pragma warning disable CA2016 // Forward the 'CancellationToken' parameter to methods
                 var responseContent = await response.Content
                     .ReadAsStringAsync()
                     .ConfigureAwait(false);
 #pragma warning restore CA2016 // Forward the 'CancellationToken' parameter to methods
+#pragma warning restore IDE0079 // Remove unnecessary suppression
                 var errorMessage =
                     $"Request to {httpMethod.Method} {absolutePath} failed with status code {response.StatusCode}, content: '{responseContent}'";
                 if (

@@ -35,8 +35,8 @@ namespace Vipps.net
             _accessTokenService = new VippsAccessTokenService(
                 configurationOptions,
                 new AccessTokenServiceClient(
-                    _vippsHttpClient,
                     configurationOptions,
+                    _vippsHttpClient,
                     _loggerFactory
                 ),
                 new AccessTokenCacheService()
@@ -44,8 +44,8 @@ namespace Vipps.net
 
             _epaymentService = new VippsEpaymentService(
                 new EpaymentServiceClient(
-                    _vippsHttpClient,
                     _vippsConfigurationOptions,
+                    _vippsHttpClient,
                     _accessTokenService,
                     _loggerFactory
                 )
@@ -53,8 +53,8 @@ namespace Vipps.net
 
             _checkoutService = new VippsCheckoutService(
                 new CheckoutServiceClient(
-                    _vippsHttpClient,
                     _vippsConfigurationOptions,
+                    _vippsHttpClient,
                     _loggerFactory
                 )
             );

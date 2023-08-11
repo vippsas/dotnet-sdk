@@ -14,8 +14,8 @@ namespace Vipps.net.Infrastructure
         private readonly VippsAccessTokenService _accessTokenService;
 
         internal EpaymentServiceClient(
-            IVippsHttpClient vippsHttpClient,
             VippsConfigurationOptions vippsConfigurationOptions,
+            IVippsHttpClient vippsHttpClient,
             VippsAccessTokenService accessTokenService,
             ILoggerFactory loggerFactory
         )

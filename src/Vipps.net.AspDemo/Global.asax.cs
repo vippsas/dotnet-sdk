@@ -6,8 +6,6 @@ namespace Vipps.net.AspDemo
 {
     public class WebApiApplication : System.Web.HttpApplication
     {
-        public static readonly VippsApi VippsApi;
-
         protected void Application_Start()
         {
             AreaRegistration.RegisterAllAreas();

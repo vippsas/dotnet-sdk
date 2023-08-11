@@ -66,6 +66,7 @@ namespace Vipps.net.Services
 
         private static string GetHashedKey(string key)
         {
+#pragma warning disable IDE0079 // Remove unnecessary suppression
 #pragma warning disable CA1850 // Prefer static 'System.Security.Cryptography.SHA256.HashData' method over 'ComputeHash'
             byte[] hash = null;
             using (var sha256 = SHA256.Create())
@@ -73,6 +74,7 @@ namespace Vipps.net.Services
                 hash = sha256.ComputeHash(Encoding.UTF8.GetBytes(key));
             }
 #pragma warning restore CA1850 // Prefer static 'System.Security.Cryptography.SHA256.HashData' method over 'ComputeHash'
+#pragma warning restore IDE0079 // Remove unnecessary suppression
 
             return string.Join(string.Empty, hash.Select(x => x.ToString("X2")));
         }

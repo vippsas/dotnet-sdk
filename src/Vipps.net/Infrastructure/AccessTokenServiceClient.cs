@@ -11,8 +11,8 @@ namespace Vipps.net.Infrastructure
         private readonly VippsConfigurationOptions _vippsConfigurationOptions;
 
         internal AccessTokenServiceClient(
-            IVippsHttpClient vippsHttpClient,
             VippsConfigurationOptions vippsConfigurationOptions,
+            IVippsHttpClient vippsHttpClient,
             ILoggerFactory loggerFactory
         )
             : base(vippsHttpClient, loggerFactory)
