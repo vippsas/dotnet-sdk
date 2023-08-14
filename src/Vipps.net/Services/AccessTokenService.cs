@@ -17,7 +17,7 @@ namespace Vipps.net.Services
         private readonly AccessTokenServiceClient _accessTokenServiceClient;
         private readonly AccessTokenCacheService _accessTokenCacheService;
 
-        public VippsAccessTokenService(
+        internal VippsAccessTokenService(
             VippsConfigurationOptions vippsConfigurationOptions,
             AccessTokenServiceClient accessTokenServiceClient,
             AccessTokenCacheService accessTokenCacheService

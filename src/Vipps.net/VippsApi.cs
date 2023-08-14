@@ -8,7 +8,6 @@ namespace Vipps.net
 {
     public interface IVippsApi
     {
-        IVippsAccessTokenService AccessTokenService { get; }
         IVippsEpaymentService EpaymentService { get; }
         IVippsCheckoutService CheckoutService { get; }
     }
@@ -58,11 +57,6 @@ namespace Vipps.net
                     _loggerFactory
                 )
             );
-        }
-
-        public IVippsAccessTokenService AccessTokenService
-        {
-            get { return _accessTokenService; }
         }
 
         public IVippsEpaymentService EpaymentService

@@ -10,8 +10,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		.editorconfig = .editorconfig
 	EndProjectSection
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Vipps.net.Tests", "Tests\Vipps.net.Tests\Vipps.net.Tests.csproj", "{AF69864C-6DFE-49A7-857C-36D8FC09833E}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Vipps.net.Demo", "Vipps.net.Demo\Vipps.net.Demo.csproj", "{9A5DAEF5-4D80-46D6-9844-44683AADE796}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Vipps.net.AspCoreDemo", "Vipps.net.AspCoreDemo\Vipps.net.AspCoreDemo.csproj", "{09540EAC-72F5-4562-910E-56299A663C0A}"
@@ -20,7 +18,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Vipps.net.AspDemo", "Vipps.
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Vipps.net.Codegen", "Vipps.net.Codegen\Vipps.net.Codegen.csproj", "{52AD8849-DDB6-4542-9E18-2219AF993CAF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Vipps.net.IntegrationTests", "Tests\Vipps.net.IntegrationTests\Vipps.net.IntegrationTests.csproj", "{42DD89A8-0AE4-4CCD-9CAC-39B8F217805D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Vipps.net.IntegrationTests", "Tests\Vipps.net.IntegrationTests\Vipps.net.IntegrationTests.csproj", "{42DD89A8-0AE4-4CCD-9CAC-39B8F217805D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -32,10 +30,6 @@ Global
 		{C8EEE10C-E51A-43D2-B547-64F2AC6B102A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C8EEE10C-E51A-43D2-B547-64F2AC6B102A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C8EEE10C-E51A-43D2-B547-64F2AC6B102A}.Release|Any CPU.Build.0 = Release|Any CPU
-		{AF69864C-6DFE-49A7-857C-36D8FC09833E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{AF69864C-6DFE-49A7-857C-36D8FC09833E}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{AF69864C-6DFE-49A7-857C-36D8FC09833E}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{AF69864C-6DFE-49A7-857C-36D8FC09833E}.Release|Any CPU.Build.0 = Release|Any CPU
 		{9A5DAEF5-4D80-46D6-9844-44683AADE796}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{9A5DAEF5-4D80-46D6-9844-44683AADE796}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9A5DAEF5-4D80-46D6-9844-44683AADE796}.Release|Any CPU.ActiveCfg = Release|Any CPU

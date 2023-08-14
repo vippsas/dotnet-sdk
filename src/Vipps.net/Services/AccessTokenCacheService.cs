@@ -7,7 +7,7 @@ using Vipps.net.Models.AccessToken;
 
 namespace Vipps.net.Services
 {
-    public class AccessTokenCacheService
+    internal sealed class AccessTokenCacheService
     {
         private readonly AccessTokenLifetimeService _lifetimeService;
         private readonly TimeSpan _backoffTimespan = TimeSpan.FromMinutes(2);
@@ -17,14 +17,14 @@ namespace Vipps.net.Services
         > _dictionary;
         private const string KeyPrefix = "access-token-";
 
-        public AccessTokenCacheService()
+        internal AccessTokenCacheService()
         {
             _lifetimeService = new AccessTokenLifetimeService();
             _dictionary =
                 new ConcurrentDictionary<string, (AccessToken token, DateTimeOffset validTo)>();
         }
 
-        public void Add(string key, AccessToken token)
+        internal void Add(string key, AccessToken token)
         {
             var tokenValidTo = _lifetimeService.GetValidTo(token.Token);
             var tokenValidToWithBackoff = tokenValidTo.HasValue
@@ -43,7 +43,7 @@ namespace Vipps.net.Services
             }
         }
 
-        public AccessToken Get(string key)
+        internal AccessToken Get(string key)
         {
             if (_dictionary.TryGetValue(GetPrefixedHashedKey(key), out var values))
             {
@@ -66,7 +66,7 @@ namespace Vipps.net.Services
 
         private static string GetHashedKey(string key)
         {
-#pragma warning disable IDE0079 // Remove unnecessary suppression
+#pragma warning disable IDE0079 // Remove unnecessary suppression. This is caused by us building multiple targets. In some versions (.net 6, 7), the static method is preferred. In others, it does not exist.
 #pragma warning disable CA1850 // Prefer static 'System.Security.Cryptography.SHA256.HashData' method over 'ComputeHash'
             byte[] hash = null;
             using (var sha256 = SHA256.Create())

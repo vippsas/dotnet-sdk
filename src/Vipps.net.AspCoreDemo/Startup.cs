@@ -43,16 +43,15 @@ namespace Vipps.net.AspCore31Demo
             services.AddControllers();
             services.AddSwaggerGen(c =>
             {
-                c.SwaggerDoc("v1", new OpenApiInfo { Title = "Your API Name", Version = "v1" });
+                c.SwaggerDoc(
+                    "v1",
+                    new OpenApiInfo { Title = "Vipps .Net SDK ASP Core demo", Version = "v1" }
+                );
             });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(
-            IApplicationBuilder app,
-            IWebHostEnvironment env,
-            IConfiguration configuration
-        )
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             if (env.IsDevelopment())
             {
@@ -60,7 +59,10 @@ namespace Vipps.net.AspCore31Demo
                 app.UseSwagger();
                 app.UseSwaggerUI(c =>
                 {
-                    c.SwaggerEndpoint("/swagger/v1/swagger.json", "Your API Name v1");
+                    c.SwaggerEndpoint(
+                        "/swagger/v1/swagger.json",
+                        "Vipps .Net SDK ASP Core demo v1"
+                    );
                 });
             }
 

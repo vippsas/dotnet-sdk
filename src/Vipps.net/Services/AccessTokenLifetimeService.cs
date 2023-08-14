@@ -7,9 +7,9 @@ namespace Vipps.net.Services
     {
         private readonly JwtSecurityTokenHandler _handler = new JwtSecurityTokenHandler();
 
-        public AccessTokenLifetimeService() { }
+        internal AccessTokenLifetimeService() { }
 
-        public DateTimeOffset? GetValidTo(string token)
+        internal DateTimeOffset? GetValidTo(string token)
         {
             try
             {

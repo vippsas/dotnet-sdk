@@ -91,7 +91,7 @@ namespace Vipps.net.Infrastructure
                 httpContent,
                 cancellationToken
             );
-#pragma warning disable IDE0079 // Remove unnecessary suppression
+#pragma warning disable IDE0079 // Remove unnecessary suppression. This is caused by us building multiple targets. In some (net 6, 7), the overload with the cancellationToken is preferred. In the others, it does not exist.
 #pragma warning disable CA2016 // Forward the 'CancellationToken' parameter to methods
             var contentString = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
 #pragma warning restore CA2016 // Forward the 'CancellationToken' parameter to methods
@@ -161,7 +161,7 @@ namespace Vipps.net.Infrastructure
 
             if (!response.IsSuccessStatusCode)
             {
-#pragma warning disable IDE0079 // Remove unnecessary suppression
+#pragma warning disable IDE0079 // Remove unnecessary suppression. This is caused by us building multiple targets. In some (net 6, 7), the overload with the cancellationToken is preferred. In the others, it does not exist.
 #pragma warning disable CA2016 // Forward the 'CancellationToken' parameter to methods
                 var responseContent = await response.Content
                     .ReadAsStringAsync()
