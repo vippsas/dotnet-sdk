@@ -6,12 +6,7 @@ using Vipps.net.Models.AccessToken;
 
 namespace Vipps.net.Services
 {
-    public interface IVippsAccessTokenService
-    {
-        Task<AccessToken> GetAccessToken(CancellationToken cancellationToken = default);
-    }
-
-    internal sealed class VippsAccessTokenService : IVippsAccessTokenService
+    internal sealed class VippsAccessTokenService
     {
         private readonly VippsConfigurationOptions _vippsConfigurationOptions;
         private readonly AccessTokenServiceClient _accessTokenServiceClient;
@@ -28,7 +23,9 @@ namespace Vipps.net.Services
             _accessTokenCacheService = accessTokenCacheService;
         }
 
-        public async Task<AccessToken> GetAccessToken(CancellationToken cancellationToken = default)
+        internal async Task<AccessToken> GetAccessToken(
+            CancellationToken cancellationToken = default
+        )
         {
             var key =
                 $"{_vippsConfigurationOptions.ClientId}{_vippsConfigurationOptions.ClientSecret}";

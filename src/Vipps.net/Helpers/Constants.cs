@@ -1,11 +1,11 @@
 ﻿namespace Vipps.net.Helpers
 {
-    public static class Constants
+    internal static class Constants
     {
-        public const string HeaderNameAuthorization = "Authorization";
-        public const string HeaderNameClientId = "client_id";
-        public const string HeaderNameClientSecret = "client_secret";
-        public const string AuthorizationSchemeNameBearer = "Bearer";
-        public const string SubscriptionKey = "Ocp-Apim-Subscription-Key";
+        internal const string HeaderNameAuthorization = "Authorization";
+        internal const string HeaderNameClientId = "client_id";
+        internal const string HeaderNameClientSecret = "client_secret";
+        internal const string AuthorizationSchemeNameBearer = "Bearer";
+        internal const string SubscriptionKey = "Ocp-Apim-Subscription-Key";
     }
 }
