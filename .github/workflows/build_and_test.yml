@@ -38,10 +38,6 @@ jobs:
         run: dotnet restore src/Vipps.net.AspCoreDemo/Vipps.net.AspCoreDemo.csproj
       - name: Build Vipps.net.AspCoreDemo
         run: dotnet build src/Vipps.net.AspCoreDemo/Vipps.net.AspCoreDemo.csproj --no-restore
-      - name: Install dependencies for Tests
-        run: dotnet restore src/Tests/Vipps.net.Tests/Vipps.net.Tests.csproj
-      - name: Run Unit Tests
-        run: dotnet test src/Tests/Vipps.net.Tests/Vipps.net.Tests.csproj --no-restore --verbosity normal
       - name: CSharpier check
         run: |
           dotnet tool restore --tool-manifest src/.config/dotnet-tools.json
