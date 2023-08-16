@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
 using Vipps.net.Models.Checkout;
-using Vipps.net.Services;
 
 namespace Vipps.net.AspDemo.Services
 {
@@ -25,7 +24,7 @@ namespace Vipps.net.AspDemo.Services
                 }
             };
 
-            var result = await CheckoutService.InitiateSession(request);
+            var result = await VippsApiConfig.VippsApi.CheckoutService.InitiateSession(request);
             return result.PollingUrl;
         }
     }

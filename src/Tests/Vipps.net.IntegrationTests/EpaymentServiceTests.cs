@@ -1,5 +1,4 @@
 ﻿using Vipps.net.Models.Epayment;
-using Vipps.net.Services;
 
 namespace Vipps.net.IntegrationTests
 {
@@ -11,19 +10,22 @@ namespace Vipps.net.IntegrationTests
         [TestMethod]
         public async Task Can_Create_Get_Cancel_Payment()
         {
+            var vippsApi = TestSetup.CreateVippsAPI();
             var reference = Guid.NewGuid().ToString();
             var createPaymentRequest = GetCreatePaymentRequest(reference);
 
-            var createPaymentResponse = await EpaymentService.CreatePayment(createPaymentRequest);
+            var createPaymentResponse = await vippsApi.EpaymentService.CreatePayment(
+                createPaymentRequest
+            );
             Assert.IsNotNull(createPaymentResponse);
             Assert.AreEqual(reference, createPaymentResponse.Reference);
 
-            var modificationResponse = await EpaymentService.CancelPayment(reference);
+            var modificationResponse = await vippsApi.EpaymentService.CancelPayment(reference);
             Assert.IsNotNull(modificationResponse);
             Assert.AreEqual(reference, modificationResponse.Reference);
             Assert.AreEqual(State.TERMINATED, modificationResponse.State);
 
-            var getPaymentResponse = await EpaymentService.GetPayment(reference);
+            var getPaymentResponse = await vippsApi.EpaymentService.GetPayment(reference);
             Assert.AreEqual(reference, getPaymentResponse.Reference);
             Assert.AreEqual(State.TERMINATED, getPaymentResponse.State);
         }
@@ -31,19 +33,22 @@ namespace Vipps.net.IntegrationTests
         [TestMethod]
         public async Task Can_Create_Approve_Capture_Refund_Payment()
         {
+            IVippsApi vippsApi = TestSetup.CreateVippsAPI();
             var reference = Guid.NewGuid().ToString();
             var createPaymentRequest = GetCreatePaymentRequest(reference);
 
-            var createPaymentResponse = await EpaymentService.CreatePayment(createPaymentRequest);
+            var createPaymentResponse = await vippsApi.EpaymentService.CreatePayment(
+                createPaymentRequest
+            );
             Assert.IsNotNull(createPaymentResponse);
             Assert.AreEqual(reference, createPaymentResponse.Reference);
 
-            await EpaymentService.ForceApprovePayment(
+            await vippsApi.EpaymentService.ForceApprovePayment(
                 reference,
                 new ForceApprove { Customer = new Customer { PhoneNumber = CustomerPhoneNumber } }
             );
 
-            var captureResponse = await EpaymentService.CapturePayment(
+            var captureResponse = await vippsApi.EpaymentService.CapturePayment(
                 reference,
                 new CaptureModificationRequest { ModificationAmount = createPaymentRequest.Amount }
             );
@@ -51,7 +56,7 @@ namespace Vipps.net.IntegrationTests
             Assert.AreEqual(reference, captureResponse.Reference);
             Assert.AreEqual(State.AUTHORIZED, captureResponse.State);
 
-            var refundResponse = await EpaymentService.RefundPayment(
+            var refundResponse = await vippsApi.EpaymentService.RefundPayment(
                 reference,
                 new RefundModificationRequest { ModificationAmount = createPaymentRequest.Amount }
             );
@@ -59,7 +64,7 @@ namespace Vipps.net.IntegrationTests
             Assert.AreEqual(reference, refundResponse.Reference);
             Assert.AreEqual(State.AUTHORIZED, refundResponse.State);
 
-            var paymentEvents = await EpaymentService.GetPaymentEventLog(reference);
+            var paymentEvents = await vippsApi.EpaymentService.GetPaymentEventLog(reference);
             Assert.IsNotNull(paymentEvents);
             AssertOneEvent(paymentEvents, PaymentEventName.CREATED);
             AssertOneEvent(paymentEvents, PaymentEventName.CAPTURED);
@@ -89,7 +94,7 @@ namespace Vipps.net.IntegrationTests
                 Reference = reference,
                 PaymentDescription = nameof(CheckoutServiceTests.Can_Create_And_Get_Session),
                 ReturnUrl = $"https://no.where.com/{reference}",
-                Customer = new Customer { PhoneNumber = CustomerPhoneNumber }
+                Customer = new Customer { }
             };
         }
     }

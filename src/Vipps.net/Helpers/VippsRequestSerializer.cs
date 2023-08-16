@@ -2,7 +2,7 @@
 
 namespace Vipps.net.Helpers
 {
-    public static class VippsRequestSerializer
+    internal static class VippsRequestSerializer
     {
         private static readonly JsonSerializerSettings _jsonSerializerSettings =
             new JsonSerializerSettings()
@@ -12,7 +12,7 @@ namespace Vipps.net.Helpers
                 Converters = new[] { new Newtonsoft.Json.Converters.StringEnumConverter() }
             };
 
-        public static string SerializeVippsRequest<T>(T vippsRequest)
+        internal static string SerializeVippsRequest<T>(T vippsRequest)
             where T : class
         {
             string serializedRequest = JsonConvert.SerializeObject(
@@ -23,7 +23,7 @@ namespace Vipps.net.Helpers
             return serializedRequest;
         }
 
-        public static T DeserializeVippsResponse<T>(string vippsResponse)
+        internal static T DeserializeVippsResponse<T>(string vippsResponse)
             where T : class
         {
             try
@@ -32,13 +32,11 @@ namespace Vipps.net.Helpers
                     vippsResponse,
                     _jsonSerializerSettings
                 );
-                if (deserializedTyped is null)
-                {
-                    throw new Exceptions.VippsTechnicalException(
+                return deserializedTyped is null
+                    ? throw new Exceptions.VippsTechnicalException(
                         $"Response could not be deserialized to {nameof(T)}"
-                    );
-                }
-                return deserializedTyped;
+                    )
+                    : deserializedTyped;
             }
             catch (Exceptions.VippsBaseException)
             {

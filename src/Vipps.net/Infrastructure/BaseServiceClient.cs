@@ -16,10 +16,10 @@ namespace Vipps.net.Infrastructure
         protected readonly IVippsHttpClient _vippsHttpClient;
         protected readonly ILogger _logger;
 
-        protected BaseServiceClient(IVippsHttpClient vippsHttpClient)
+        protected BaseServiceClient(IVippsHttpClient vippsHttpClient, ILoggerFactory loggerFactory)
         {
             _vippsHttpClient = vippsHttpClient;
-            _logger = VippsLogging.LoggerFactory?.CreateLogger(this.GetType().Name);
+            _logger = loggerFactory?.CreateLogger(this.GetType().Name);
         }
 
         public async Task<TResponse> ExecuteRequest<TRequest, TResponse>(
@@ -91,19 +91,19 @@ namespace Vipps.net.Infrastructure
                 httpContent,
                 cancellationToken
             );
+#pragma warning disable IDE0079 // Remove unnecessary suppression. This is caused by us building multiple targets. In some (net 6, 7), the overload with the cancellationToken is preferred. In the others, it does not exist.
 #pragma warning disable CA2016 // Forward the 'CancellationToken' parameter to methods
             var contentString = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
 #pragma warning restore CA2016 // Forward the 'CancellationToken' parameter to methods
+#pragma warning restore IDE0079 // Remove unnecessary suppression
             try
             {
                 var responseObject = VippsRequestSerializer.DeserializeVippsResponse<TResponse>(
                     contentString
                 );
-                if (responseObject is null)
-                {
-                    throw new VippsTechnicalException("Deserialization returned null");
-                }
-                return responseObject;
+                return responseObject is null
+                    ? throw new VippsTechnicalException("Deserialization returned null")
+                    : responseObject;
             }
             catch (Exception ex)
             {
@@ -161,11 +161,13 @@ namespace Vipps.net.Infrastructure
 
             if (!response.IsSuccessStatusCode)
             {
+#pragma warning disable IDE0079 // Remove unnecessary suppression. This is caused by us building multiple targets. In some (net 6, 7), the overload with the cancellationToken is preferred. In the others, it does not exist.
 #pragma warning disable CA2016 // Forward the 'CancellationToken' parameter to methods
                 var responseContent = await response.Content
                     .ReadAsStringAsync()
                     .ConfigureAwait(false);
 #pragma warning restore CA2016 // Forward the 'CancellationToken' parameter to methods
+#pragma warning restore IDE0079 // Remove unnecessary suppression
                 var errorMessage =
                     $"Request to {httpMethod.Method} {absolutePath} failed with status code {response.StatusCode}, content: '{responseContent}'";
                 if (

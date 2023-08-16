@@ -20,23 +20,59 @@ namespace Vipps.net.Models.Epayment
     
 
     /// <summary>
-    /// Target customer
+    /// The target customer if the identity is known.
+    /// <br/>The customer can be specified either with phone number or with the
+    /// <br/>user's personal QR code.
+    /// <br/>Specifying more than one of these will result in an error.
     /// </summary>
     [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "13.18.2.0 (NJsonSchema v10.8.0.0 (Newtonsoft.Json v10.0.0.0))")]
     public partial class Customer
     {
-        /// <summary>
-        /// The phone number of the user paying the transaction with Vipps.
-        /// <br/>Only Norwegian mobile numbers are supported (for now).
-        /// <br/>The format is MSISDN: Digits only: Country code and subscriber
-        /// <br/>number, but no prefix.
-        /// <br/>
-        /// <br/>See: https://en.wikipedia.org/wiki/MSISDN
-        /// </summary>
+
+        private System.Collections.Generic.IDictionary<string, object> _additionalProperties;
+
+        [Newtonsoft.Json.JsonExtensionData]
+        public System.Collections.Generic.IDictionary<string, object> AdditionalProperties
+        {
+            get { return _additionalProperties ?? (_additionalProperties = new System.Collections.Generic.Dictionary<string, object>()); }
+            set { _additionalProperties = value; }
+        }
+
         [Newtonsoft.Json.JsonProperty("phoneNumber", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
         [System.ComponentModel.DataAnnotations.StringLength(15, MinimumLength = 10)]
         [System.ComponentModel.DataAnnotations.RegularExpression(@"^\d{10,15}$")]
         public string PhoneNumber { get; set; }
+
+        /// <summary>
+        /// The full content of the user's personal QR code in the app.
+        /// </summary>
+        [Newtonsoft.Json.JsonProperty("personalQr", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        [System.ComponentModel.DataAnnotations.StringLength(255, MinimumLength = 5)]
+        public string PersonalQr { get; set; }
+
+    }
+
+    /// <summary>
+    /// The full content of the user's personal QR code in the app, used in 'merchant scan' scenarios. 
+    /// <br/>After the personal QR code has been scanned in a physical context, send the complete QR
+    /// <br/>code content in this field to initiate a payment from the user (and do not send `phoneNumber`).
+    /// <br/>
+    /// <br/>**Important:** The content of the QR code can change at any time, without warning.
+    /// <br/>It is very important to send the _complete content of the QR code_, like the complete URL in the example below.
+    /// <br/>While the personal QR code does reveal the user's phone number in this example, that may change.
+    /// <br/>The [Userinfo API](https://developer.vippsmobilepay.com/docs/APIs/userinfo-api/)
+    /// <br/>should be used if you need the user to share personal information, 
+    /// <br/>such as phone number, email address, etc.
+    /// </summary>
+    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "13.18.2.0 (NJsonSchema v10.8.0.0 (Newtonsoft.Json v10.0.0.0))")]
+    public partial class PersonalQrCode
+    {
+        /// <summary>
+        /// The full content of the user's personal QR code in the app.
+        /// </summary>
+        [Newtonsoft.Json.JsonProperty("personalQr", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        [System.ComponentModel.DataAnnotations.StringLength(255, MinimumLength = 5)]
+        public string PersonalQr { get; set; }
 
         private System.Collections.Generic.IDictionary<string, object> _additionalProperties;
 
@@ -50,7 +86,7 @@ namespace Vipps.net.Models.Epayment
     }
 
     /// <summary>
-    /// Amount object
+    /// Amount object, containing a `value` and a `currency`.
     /// </summary>
     [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "13.18.2.0 (NJsonSchema v10.8.0.0 (Newtonsoft.Json v10.0.0.0))")]
     public partial class Amount
@@ -102,14 +138,6 @@ namespace Vipps.net.Models.Epayment
         [System.ComponentModel.DataAnnotations.Required]
         public Amount Amount { get; set; } = new Amount();
 
-        /// <summary>
-        /// For special cases. The sales unit must be configured by Vipps.
-        /// <br/>We strongly recommend using "reserve capture" in all situations.
-        /// <br/>Default is `false`.
-        /// </summary>
-        [Newtonsoft.Json.JsonProperty("directCapture", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public bool DirectCapture { get; set; } = false;
-
         [Newtonsoft.Json.JsonProperty("customer", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
         public Customer Customer { get; set; }
 
@@ -140,13 +168,13 @@ namespace Vipps.net.Models.Epayment
 
         /// <summary>
         /// The URL the user is returned to after the payment session.
-        /// <br/>The URL has to use the `https://` scheme or a custom URL scheme.
+        /// <br/>The URL must use the `https://` scheme or a custom URL scheme.
         /// </summary>
         [Newtonsoft.Json.JsonProperty("returnUrl", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
         public string ReturnUrl { get; set; }
 
         /// <summary>
-        /// The flow for bringing to user to the Vipps Wallet payment confirmation screen.
+        /// The flow for bringing the user to the Vipps MobilePay app's payment confirmation screen.
         /// <br/>If `userFlow` is `PUSH_MESSAGE`, a valid value for `customer.phoneNumber` is required.
         /// </summary>
         [Newtonsoft.Json.JsonProperty("userFlow", Required = Newtonsoft.Json.Required.Always)]
@@ -159,6 +187,8 @@ namespace Vipps.net.Models.Epayment
         /// <br/>The format must adhere to RFC 3339.
         /// <br/>The value must be more than 10 minutes and less than 28 days in the future.
         /// <br/>Can only be combined with `userFlow: PUSH_MESSAGE` or `userFlow: QR`.
+        /// <br/>
+        /// <br/>If ExpiresAt is set, receipt also has to be set.
         /// </summary>
         [Newtonsoft.Json.JsonProperty("expiresAt", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
         [System.ComponentModel.DataAnnotations.RegularExpression(@"^((?:(\d{4}-\d{2}-\d{2})(T|t)(\d{2}:\d{2}:\d{2}(?:\.\d+)?))(Z|z|([+-](?:2[0-3]|[01][0-9]):[0-5][0-9])))$")]
@@ -172,11 +202,15 @@ namespace Vipps.net.Models.Epayment
         public QrFormat QrFormat { get; set; }
 
         /// <summary>
-        /// The payment description summary that will be provided to the user through the app, the merchant portal, and the settlement files.
+        /// The payment description summary that will be provided to the user
+        /// <br/>through the app, the merchant portal, and the settlement files.
         /// </summary>
         [Newtonsoft.Json.JsonProperty("paymentDescription", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
         [System.ComponentModel.DataAnnotations.StringLength(100, MinimumLength = 3)]
         public string PaymentDescription { get; set; }
+
+        [Newtonsoft.Json.JsonProperty("receipt", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public Receipt Receipt { get; set; }
 
         private System.Collections.Generic.IDictionary<string, object> _additionalProperties;
 
@@ -196,8 +230,9 @@ namespace Vipps.net.Models.Epayment
     public partial class CreatePaymentResponse
     {
         /// <summary>
-        /// The URL to which the user is redirected when continuing the payment for `NATIVE_REDIRECT` and `WEB_REDIRECT`.
-        /// <br/>When `userFlow` is `QR`, a link to the QR image (or the target URL) will be returned.
+        /// The URL to which the user is redirected when continuing the payment
+        /// <br/>for `NATIVE_REDIRECT` and `WEB_REDIRECT`. When `userFlow` is `QR`,
+        /// <br/>a link to the QR image (or the target URL) will be returned.
         /// <br/>Nothing will be returned when `userFlow` is `PUSH_MESSAGE`.
         /// </summary>
         [Newtonsoft.Json.JsonProperty("redirectUrl", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
@@ -252,7 +287,9 @@ namespace Vipps.net.Models.Epayment
         public string PspReference { get; set; }
 
         /// <summary>
-        /// The URL you should redirect the user to to continue with the payment. 
+        /// The URL you should redirect the user to to continue with the payment.
+        /// <br/>This is the URL to the Vipps MobilePay landing page.
+        /// <br/>See: https://developer.vippsmobilepay.com/docs/vipps-developers/common-topics/landing-page/
         /// </summary>
         [Newtonsoft.Json.JsonProperty("redirectUrl", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
         public System.Uri RedirectUrl { get; set; }
@@ -296,7 +333,8 @@ namespace Vipps.net.Models.Epayment
 
     /// <summary>
     /// Airline related data.
-    /// <br/>If present, `passengerName`, `airlineCode`, `airlineDesignatorCode`, and `agencyInvoiceNumber` are all required.
+    /// <br/>If present, `passengerName`, `airlineCode`, `airlineDesignatorCode`,
+    /// <br/>and `agencyInvoiceNumber` are all required.
     /// </summary>
     [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "13.18.2.0 (NJsonSchema v10.8.0.0 (Newtonsoft.Json v10.0.0.0))")]
     public partial class AirlineData
@@ -310,7 +348,8 @@ namespace Vipps.net.Models.Epayment
         public string AgencyInvoiceNumber { get; set; }
 
         /// <summary>
-        /// IATA 3-digit accounting code (PAX); numeric. It identifies the carrier. eg KLM = 074
+        /// IATA 3-digit accounting code (PAX); numeric.
+        /// <br/>It identifies the carrier. eg KLM = 074.
         /// </summary>
         [Newtonsoft.Json.JsonProperty("airlineCode", Required = Newtonsoft.Json.Required.Always)]
         [System.ComponentModel.DataAnnotations.Required]
@@ -318,7 +357,8 @@ namespace Vipps.net.Models.Epayment
         public string AirlineCode { get; set; }
 
         /// <summary>
-        /// IATA 2-letter accounting code (PAX); alphabetical. It identifies the carrier. Eg KLM = KL
+        /// IATA 2-letter accounting code (PAX); alphabetical.
+        /// <br/>It identifies the carrier. Eg KLM = KL.
         /// </summary>
         [Newtonsoft.Json.JsonProperty("airlineDesignatorCode", Required = Newtonsoft.Json.Required.Always)]
         [System.ComponentModel.DataAnnotations.Required]
@@ -455,6 +495,36 @@ namespace Vipps.net.Models.Epayment
     }
 
     [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "13.18.2.0 (NJsonSchema v10.8.0.0 (Newtonsoft.Json v10.0.0.0))")]
+    public enum PaymentEventName
+    {
+
+        [System.Runtime.Serialization.EnumMember(Value = @"CREATED")]
+        CREATED = 0,
+
+        [System.Runtime.Serialization.EnumMember(Value = @"ABORTED")]
+        ABORTED = 1,
+
+        [System.Runtime.Serialization.EnumMember(Value = @"EXPIRED")]
+        EXPIRED = 2,
+
+        [System.Runtime.Serialization.EnumMember(Value = @"CANCELLED")]
+        CANCELLED = 3,
+
+        [System.Runtime.Serialization.EnumMember(Value = @"CAPTURED")]
+        CAPTURED = 4,
+
+        [System.Runtime.Serialization.EnumMember(Value = @"REFUNDED")]
+        REFUNDED = 5,
+
+        [System.Runtime.Serialization.EnumMember(Value = @"AUTHORIZED")]
+        AUTHORIZED = 6,
+
+        [System.Runtime.Serialization.EnumMember(Value = @"TERMINATED")]
+        TERMINATED = 7,
+
+    }
+
+    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "13.18.2.0 (NJsonSchema v10.8.0.0 (Newtonsoft.Json v10.0.0.0))")]
     public partial class Address
     {
         [Newtonsoft.Json.JsonProperty("city", Required = Newtonsoft.Json.Required.Always)]
@@ -470,7 +540,7 @@ namespace Vipps.net.Models.Epayment
         public string Country { get; set; }
 
         /// <summary>
-        /// Unique ID of the address, always provided in response from Vipps.
+        /// Unique ID of the address, always provided in response from Vipps MobilePay.
         /// </summary>
         [Newtonsoft.Json.JsonProperty("id", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
         public System.Guid Id { get; set; }
@@ -504,7 +574,9 @@ namespace Vipps.net.Models.Epayment
     public partial class ProfileRequest
     {
         /// <summary>
-        /// A space-separated string list of requested user information in accordance with the OpenID Connect specification.
+        /// A space-separated string list of requested user information in
+        /// <br/>accordance with the OpenID Connect specification.
+        /// <br/>See https://vippsas.github.io/vipps-developer-docs/docs/APIs/userinfo-api#scope
         /// </summary>
         [Newtonsoft.Json.JsonProperty("scope", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
         public string Scope { get; set; }
@@ -525,7 +597,8 @@ namespace Vipps.net.Models.Epayment
     {
         /// <summary>
         /// If `profile.scope` was requested in `createPayment` this value will populate once
-        /// <br/>`state` is `AUTHORIZED`. This can be used towards the Vipps Login Userinfo endpoint
+        /// <br/>`state` is `AUTHORIZED`. This can be used towards the
+        /// <br/>[Userinfo endpoint](https://developer.vippsmobilepay.com/api/userinfo#operation/getUserinfo)
         /// <br/>to fetch requested user data.
         /// </summary>
         [Newtonsoft.Json.JsonProperty("sub", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
@@ -569,6 +642,10 @@ namespace Vipps.net.Models.Epayment
         [Newtonsoft.Json.JsonConverter(typeof(Newtonsoft.Json.Converters.StringEnumConverter))]
         public PaymentMethodType Type { get; set; }
 
+        /// <summary>
+        /// The payment card's Bank Identification Number (BIN), that
+        /// <br/>identifies which bank has issued the card.
+        /// </summary>
         [Newtonsoft.Json.JsonProperty("cardBin", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
         [System.ComponentModel.DataAnnotations.StringLength(6, MinimumLength = 6)]
         public string CardBin { get; set; }
@@ -586,7 +663,10 @@ namespace Vipps.net.Models.Epayment
 
     /// <summary>
     /// The paymentMethod type to be performed.
-    /// <br/>`CARD` has to be combined with a `userFlow` of `WEB_REDIRECT`.
+    /// <br/>`WALLET` is a card used in the Vipps MobilePay app.
+    /// <br/>`CARD` is free-standing card payments, outside of the Vipps MobilePay app.
+    /// <br/>`CARD` has to be combined with a `userFlow` of `WEB_REDIRECT`,
+    /// <br/>as the card payment can not be completed in the Vipps MobilePay app.
     /// </summary>
     [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "13.18.2.0 (NJsonSchema v10.8.0.0 (Newtonsoft.Json v10.0.0.0))")]
     public enum PaymentMethodType
@@ -625,8 +705,14 @@ namespace Vipps.net.Models.Epayment
     }
 
     [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "13.18.2.0 (NJsonSchema v10.8.0.0 (Newtonsoft.Json v10.0.0.0))")]
-    public partial class PaymentEvent
+    public partial class WebhookEvent
     {
+        [Newtonsoft.Json.JsonProperty("msn", Required = Newtonsoft.Json.Required.Always)]
+        [System.ComponentModel.DataAnnotations.Required(AllowEmptyStrings = true)]
+        [System.ComponentModel.DataAnnotations.StringLength(6, MinimumLength = 4)]
+        [System.ComponentModel.DataAnnotations.RegularExpression(@"^[0-9]{4,6}$")]
+        public string Msn { get; set; }
+
         [Newtonsoft.Json.JsonProperty("reference", Required = Newtonsoft.Json.Required.Always)]
         [System.ComponentModel.DataAnnotations.Required(AllowEmptyStrings = true)]
         [System.ComponentModel.DataAnnotations.StringLength(50, MinimumLength = 8)]
@@ -637,15 +723,10 @@ namespace Vipps.net.Models.Epayment
         [System.ComponentModel.DataAnnotations.Required(AllowEmptyStrings = true)]
         public string PspReference { get; set; }
 
-        [Newtonsoft.Json.JsonProperty("name", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        [Newtonsoft.Json.JsonConverter(typeof(Newtonsoft.Json.Converters.StringEnumConverter))]
-        public PaymentEventName Name { get; set; }
-
-        [Newtonsoft.Json.JsonProperty("paymentAction", Required = Newtonsoft.Json.Required.Always)]
+        [Newtonsoft.Json.JsonProperty("name", Required = Newtonsoft.Json.Required.Always)]
         [System.ComponentModel.DataAnnotations.Required(AllowEmptyStrings = true)]
         [Newtonsoft.Json.JsonConverter(typeof(Newtonsoft.Json.Converters.StringEnumConverter))]
-        [System.Obsolete]
-        public PaymentEventPaymentAction PaymentAction { get; set; }
+        public PaymentEventName Name { get; set; }
 
         [Newtonsoft.Json.JsonProperty("amount", Required = Newtonsoft.Json.Required.Always)]
         [System.ComponentModel.DataAnnotations.Required]
@@ -654,10 +735,6 @@ namespace Vipps.net.Models.Epayment
         [Newtonsoft.Json.JsonProperty("timestamp", Required = Newtonsoft.Json.Required.Always)]
         [System.ComponentModel.DataAnnotations.Required(AllowEmptyStrings = true)]
         public System.DateTimeOffset Timestamp { get; set; }
-
-        [Newtonsoft.Json.JsonProperty("processedAt", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        [System.Obsolete]
-        public System.DateTimeOffset ProcessedAt { get; set; }
 
         /// <summary>
         /// The Idempotency key of the request.
@@ -683,6 +760,60 @@ namespace Vipps.net.Models.Epayment
     }
 
     [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "13.18.2.0 (NJsonSchema v10.8.0.0 (Newtonsoft.Json v10.0.0.0))")]
+    public partial class PaymentEvent
+    {
+        [Newtonsoft.Json.JsonProperty("reference", Required = Newtonsoft.Json.Required.Always)]
+        [System.ComponentModel.DataAnnotations.Required(AllowEmptyStrings = true)]
+        [System.ComponentModel.DataAnnotations.StringLength(50, MinimumLength = 8)]
+        [System.ComponentModel.DataAnnotations.RegularExpression(@"^[a-zA-Z0-9-]{8,50}$")]
+        public string Reference { get; set; }
+
+        [Newtonsoft.Json.JsonProperty("pspReference", Required = Newtonsoft.Json.Required.Always)]
+        [System.ComponentModel.DataAnnotations.Required(AllowEmptyStrings = true)]
+        public string PspReference { get; set; }
+
+        [Newtonsoft.Json.JsonProperty("name", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        [Newtonsoft.Json.JsonConverter(typeof(Newtonsoft.Json.Converters.StringEnumConverter))]
+        public PaymentEventName Name { get; set; }
+
+        [Newtonsoft.Json.JsonProperty("amount", Required = Newtonsoft.Json.Required.Always)]
+        [System.ComponentModel.DataAnnotations.Required]
+        public Amount Amount { get; set; } = new Amount();
+
+        [Newtonsoft.Json.JsonProperty("timestamp", Required = Newtonsoft.Json.Required.Always)]
+        [System.ComponentModel.DataAnnotations.Required(AllowEmptyStrings = true)]
+        public System.DateTimeOffset Timestamp { get; set; }
+
+        /// <summary>
+        /// The idempotency key of the request.
+        /// <br/>Specified by the merchant/partner making the API request.
+        /// </summary>
+        [Newtonsoft.Json.JsonProperty("idempotencyKey", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        [System.ComponentModel.DataAnnotations.StringLength(50)]
+        public string IdempotencyKey { get; set; }
+
+        /// <summary>
+        /// The outcome of the event
+        /// </summary>
+        [Newtonsoft.Json.JsonProperty("success", Required = Newtonsoft.Json.Required.Always)]
+        public bool Success { get; set; }
+
+        private System.Collections.Generic.IDictionary<string, object> _additionalProperties;
+
+        [Newtonsoft.Json.JsonExtensionData]
+        public System.Collections.Generic.IDictionary<string, object> AdditionalProperties
+        {
+            get { return _additionalProperties ?? (_additionalProperties = new System.Collections.Generic.Dictionary<string, object>()); }
+            set { _additionalProperties = value; }
+        }
+
+    }
+
+    /// <summary>
+    /// The standard error object, based on RFC 7808.
+    /// <br/>See https://vippsas.github.io/vipps-developer-docs/docs/vipps-developers/common-topics/errors
+    /// </summary>
+    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "13.18.2.0 (NJsonSchema v10.8.0.0 (Newtonsoft.Json v10.0.0.0))")]
     public partial class Problem
     {
         /// <summary>
@@ -706,6 +837,12 @@ namespace Vipps.net.Models.Epayment
         public string Detail { get; set; }
 
         /// <summary>
+        /// The HTTP response code.
+        /// </summary>
+        [Newtonsoft.Json.JsonProperty("status", Required = Newtonsoft.Json.Required.Always)]
+        public int Status { get; set; }
+
+        /// <summary>
         /// An id that can be used to facilitate in tracing the error.
         /// </summary>
         [Newtonsoft.Json.JsonProperty("traceId", Required = Newtonsoft.Json.Required.Always)]
@@ -724,13 +861,13 @@ namespace Vipps.net.Models.Epayment
     }
 
     /// <summary>
-    /// State of the Payment.
+    /// The state of the Payment.
     /// <br/>One of:
-    /// <br/>- CREATED : User has not yet acted upon the payment
-    /// <br/>- ABORTED : User has aborted the payment before authorization
+    /// <br/>- CREATED: User has not yet acted upon the payment
+    /// <br/>- ABORTED: User has aborted the payment before authorization
     /// <br/>- EXPIRED: User did not act on the payment within the payment expiration time
-    /// <br/>- AUTHORIZED : User has approved the payment
-    /// <br/>- TERMINATED : Merchant has terminated the payment via the cancelPayment endpoint
+    /// <br/>- AUTHORIZED: User has approved the payment
+    /// <br/>- TERMINATED: Merchant has terminated the payment via the cancelPayment endpoint
     /// </summary>
     [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "13.18.2.0 (NJsonSchema v10.8.0.0 (Newtonsoft.Json v10.0.0.0))")]
     public enum State
@@ -759,8 +896,393 @@ namespace Vipps.net.Models.Epayment
         [Newtonsoft.Json.JsonProperty("customer", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
         public Customer Customer { get; set; }
 
+        /// <summary>
+        /// The token value received in the redirectUrl property in the Create payment response
+        /// </summary>
         [Newtonsoft.Json.JsonProperty("token", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
         public string Token { get; set; }
+
+        private System.Collections.Generic.IDictionary<string, object> _additionalProperties;
+
+        [Newtonsoft.Json.JsonExtensionData]
+        public System.Collections.Generic.IDictionary<string, object> AdditionalProperties
+        {
+            get { return _additionalProperties ?? (_additionalProperties = new System.Collections.Generic.Dictionary<string, object>()); }
+            set { _additionalProperties = value; }
+        }
+
+    }
+
+    /// <summary>
+    /// Available units for quantity. Will default to PCS if not set
+    /// </summary>
+    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "13.18.2.0 (NJsonSchema v10.8.0.0 (Newtonsoft.Json v10.0.0.0))")]
+    public enum QuantityUnitEnum
+    {
+
+        [System.Runtime.Serialization.EnumMember(Value = @"PCS")]
+        PCS = 0,
+
+        [System.Runtime.Serialization.EnumMember(Value = @"KG")]
+        KG = 1,
+
+        [System.Runtime.Serialization.EnumMember(Value = @"KM")]
+        KM = 2,
+
+        [System.Runtime.Serialization.EnumMember(Value = @"MINUTE")]
+        MINUTE = 3,
+
+        [System.Runtime.Serialization.EnumMember(Value = @"LITRE")]
+        LITRE = 4,
+
+        [System.Runtime.Serialization.EnumMember(Value = @"KWH")]
+        KWH = 5,
+
+    }
+
+    /// <summary>
+    /// Optional. If no quantity info is provided the order line will default to 1 pcs
+    /// </summary>
+    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "13.18.2.0 (NJsonSchema v10.8.0.0 (Newtonsoft.Json v10.0.0.0))")]
+    public partial class UnitInfo
+    {
+        /// <summary>
+        /// Total price per unit, including tax and excluding discount
+        /// </summary>
+        [Newtonsoft.Json.JsonProperty("unitPrice", Required = Newtonsoft.Json.Required.AllowNull)]
+        [System.ComponentModel.DataAnnotations.Range(0D, double.MaxValue)]
+        public long? UnitPrice { get; set; }
+
+        /// <summary>
+        /// Quantity given as a integer or fraction (only for cosmetics)
+        /// </summary>
+        [Newtonsoft.Json.JsonProperty("quantity", Required = Newtonsoft.Json.Required.Always)]
+        [System.ComponentModel.DataAnnotations.Required(AllowEmptyStrings = true)]
+        [System.ComponentModel.DataAnnotations.StringLength(10)]
+        [System.ComponentModel.DataAnnotations.RegularExpression(@"^\d+([\.]\d{1,8})?$")]
+        public string Quantity { get; set; }
+
+        [Newtonsoft.Json.JsonProperty("quantityUnit", Required = Newtonsoft.Json.Required.Always)]
+        [System.ComponentModel.DataAnnotations.Required(AllowEmptyStrings = true)]
+        [Newtonsoft.Json.JsonConverter(typeof(Newtonsoft.Json.Converters.StringEnumConverter))]
+        public QuantityUnitEnum QuantityUnit { get; set; }
+
+        private System.Collections.Generic.IDictionary<string, object> _additionalProperties;
+
+        [Newtonsoft.Json.JsonExtensionData]
+        public System.Collections.Generic.IDictionary<string, object> AdditionalProperties
+        {
+            get { return _additionalProperties ?? (_additionalProperties = new System.Collections.Generic.Dictionary<string, object>()); }
+            set { _additionalProperties = value; }
+        }
+
+    }
+
+    /// <summary>
+    /// All numbers are interpreted as integers with two trailing zeros. ex: 10.00 = 1000.
+    /// </summary>
+    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "13.18.2.0 (NJsonSchema v10.8.0.0 (Newtonsoft.Json v10.0.0.0))")]
+    public partial class OrderLine
+    {
+        /// <summary>
+        /// Name of the product in the order line.
+        /// </summary>
+        [Newtonsoft.Json.JsonProperty("name", Required = Newtonsoft.Json.Required.Always)]
+        [System.ComponentModel.DataAnnotations.Required(AllowEmptyStrings = true)]
+        public string Name { get; set; }
+
+        /// <summary>
+        /// The product ID
+        /// </summary>
+        [Newtonsoft.Json.JsonProperty("id", Required = Newtonsoft.Json.Required.Always)]
+        [System.ComponentModel.DataAnnotations.Required(AllowEmptyStrings = true)]
+        public string Id { get; set; }
+
+        /// <summary>
+        /// Total amount of the order line, including tax and discount. Amounts are specified in minor units. For Norwegian kroner (NOK) that means 1 kr = 100 øre. Example: 10 kr = 1000 øre.
+        /// </summary>
+        [Newtonsoft.Json.JsonProperty("totalAmount", Required = Newtonsoft.Json.Required.AllowNull)]
+        public long? TotalAmount { get; set; }
+
+        /// <summary>
+        /// Total amount of order line with discount excluding tax. Amounts are specified in minor units. For Norwegian kroner (NOK) that means 1 kr = 100 øre. Example: 8 kr = 800 øre.
+        /// </summary>
+        [Newtonsoft.Json.JsonProperty("totalAmountExcludingTax", Required = Newtonsoft.Json.Required.AllowNull)]
+        public long? TotalAmountExcludingTax { get; set; }
+
+        /// <summary>
+        /// Total tax amount paid for the order line. Amounts are specified in minor units. For Norwegian kroner (NOK) that means 1 kr = 100 øre. Example: 2.5 kr = 250 øre.
+        /// </summary>
+        [Newtonsoft.Json.JsonProperty("totalTaxAmount", Required = Newtonsoft.Json.Required.AllowNull)]
+        public long? TotalTaxAmount { get; set; }
+
+        /// <summary>
+        /// Tax percentage for the order line. Between 0-100
+        /// </summary>
+        [Newtonsoft.Json.JsonProperty("taxPercentage", Required = Newtonsoft.Json.Required.AllowNull)]
+        [System.ComponentModel.DataAnnotations.Range(0, 100)]
+        public int? TaxPercentage { get; set; }
+
+        [Newtonsoft.Json.JsonProperty("unitInfo", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public UnitInfo UnitInfo { get; set; }
+
+        /// <summary>
+        /// Total discount for the order line. Amounts are specified in minor units. For Norwegian kroner (NOK) that means 1 kr = 100 øre. Example: 20 kr = 2000 øre.
+        /// </summary>
+        [Newtonsoft.Json.JsonProperty("discount", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        [System.ComponentModel.DataAnnotations.Range(0D, double.MaxValue)]
+        public long? Discount { get; set; }
+
+        /// <summary>
+        /// Optional URL linking back to the product at the merchant.
+        /// </summary>
+        [Newtonsoft.Json.JsonProperty("productUrl", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public string ProductUrl { get; set; }
+
+        /// <summary>
+        /// Flag for marking the order line as returned. This will make it count negative towards all the sums in bottomLine.
+        /// </summary>
+        [Newtonsoft.Json.JsonProperty("isReturn", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public bool IsReturn { get; set; }
+
+        /// <summary>
+        /// Flag for marking the order line as a shipping line. This will be shown differently in the app.
+        /// </summary>
+        [Newtonsoft.Json.JsonProperty("isShipping", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public bool IsShipping { get; set; }
+
+        private System.Collections.Generic.IDictionary<string, object> _additionalProperties;
+
+        [Newtonsoft.Json.JsonExtensionData]
+        public System.Collections.Generic.IDictionary<string, object> AdditionalProperties
+        {
+            get { return _additionalProperties ?? (_additionalProperties = new System.Collections.Generic.Dictionary<string, object>()); }
+            set { _additionalProperties = value; }
+        }
+
+    }
+
+    /// <summary>
+    /// Currency information
+    /// </summary>
+    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "13.18.2.0 (NJsonSchema v10.8.0.0 (Newtonsoft.Json v10.0.0.0))")]
+    public enum CurrencyEnum
+    {
+
+        [System.Runtime.Serialization.EnumMember(Value = @"NOK")]
+        NOK = 0,
+
+    }
+
+    /// <summary>
+    /// Deprecated, use a regular orderLine with "isShipping" flag. Using this will result in faulty calculation of sum and tax.
+    /// </summary>
+    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "13.18.2.0 (NJsonSchema v10.8.0.0 (Newtonsoft.Json v10.0.0.0))")]
+    [System.Obsolete]
+    public partial class ShippingInfo
+    {
+        /// <summary>
+        /// Total amount for the shipping, including tax and discount
+        /// </summary>
+        [Newtonsoft.Json.JsonProperty("amount", Required = Newtonsoft.Json.Required.AllowNull)]
+        [System.ComponentModel.DataAnnotations.Range(0D, double.MaxValue)]
+        public long? Amount { get; set; }
+
+        /// <summary>
+        /// Total amount for shipping excluding tax
+        /// </summary>
+        [Newtonsoft.Json.JsonProperty("amountExcludingTax", Required = Newtonsoft.Json.Required.AllowNull)]
+        [System.ComponentModel.DataAnnotations.Range(0D, double.MaxValue)]
+        public long? AmountExcludingTax { get; set; }
+
+        /// <summary>
+        /// Total tax amount paid for the shipping
+        /// </summary>
+        [Newtonsoft.Json.JsonProperty("taxAmount", Required = Newtonsoft.Json.Required.AllowNull)]
+        [System.ComponentModel.DataAnnotations.Range(0D, double.MaxValue)]
+        public long? TaxAmount { get; set; }
+
+        /// <summary>
+        /// Tax-percentage for the Shipping
+        /// </summary>
+        [Newtonsoft.Json.JsonProperty("taxPercentage", Required = Newtonsoft.Json.Required.AllowNull)]
+        [System.ComponentModel.DataAnnotations.Range(0, 100)]
+        public int? TaxPercentage { get; set; }
+
+        private System.Collections.Generic.IDictionary<string, object> _additionalProperties;
+
+        [Newtonsoft.Json.JsonExtensionData]
+        public System.Collections.Generic.IDictionary<string, object> AdditionalProperties
+        {
+            get { return _additionalProperties ?? (_additionalProperties = new System.Collections.Generic.Dictionary<string, object>()); }
+            set { _additionalProperties = value; }
+        }
+
+    }
+
+    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "13.18.2.0 (NJsonSchema v10.8.0.0 (Newtonsoft.Json v10.0.0.0))")]
+    public partial class PaymentSources
+    {
+        [Newtonsoft.Json.JsonProperty("giftCard", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public int GiftCard { get; set; }
+
+        [Newtonsoft.Json.JsonProperty("card", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public int Card { get; set; }
+
+        [Newtonsoft.Json.JsonProperty("voucher", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public int Voucher { get; set; }
+
+        [Newtonsoft.Json.JsonProperty("cash", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public int Cash { get; set; }
+
+        private System.Collections.Generic.IDictionary<string, object> _additionalProperties;
+
+        [Newtonsoft.Json.JsonExtensionData]
+        public System.Collections.Generic.IDictionary<string, object> AdditionalProperties
+        {
+            get { return _additionalProperties ?? (_additionalProperties = new System.Collections.Generic.Dictionary<string, object>()); }
+            set { _additionalProperties = value; }
+        }
+
+    }
+
+    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "13.18.2.0 (NJsonSchema v10.8.0.0 (Newtonsoft.Json v10.0.0.0))")]
+    public enum BarcodeFormatEnum
+    {
+
+        [System.Runtime.Serialization.EnumMember(Value = @"EAN-13")]
+        EAN13 = 0,
+
+        [System.Runtime.Serialization.EnumMember(Value = @"CODE 39")]
+        CODE_39 = 1,
+
+        [System.Runtime.Serialization.EnumMember(Value = @"CODE 128")]
+        CODE_128 = 2,
+
+    }
+
+    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "13.18.2.0 (NJsonSchema v10.8.0.0 (Newtonsoft.Json v10.0.0.0))")]
+    public partial class Barcode
+    {
+        [Newtonsoft.Json.JsonProperty("format", Required = Newtonsoft.Json.Required.AllowNull)]
+        [Newtonsoft.Json.JsonConverter(typeof(Newtonsoft.Json.Converters.StringEnumConverter))]
+        public BarcodeFormatEnum? Format { get; set; }
+
+        [Newtonsoft.Json.JsonProperty("data", Required = Newtonsoft.Json.Required.AllowNull)]
+        public string Data { get; set; }
+
+        private System.Collections.Generic.IDictionary<string, object> _additionalProperties;
+
+        [Newtonsoft.Json.JsonExtensionData]
+        public System.Collections.Generic.IDictionary<string, object> AdditionalProperties
+        {
+            get { return _additionalProperties ?? (_additionalProperties = new System.Collections.Generic.Dictionary<string, object>()); }
+            set { _additionalProperties = value; }
+        }
+
+    }
+
+    /// <summary>
+    /// Summary of the order. Total amount and total. Amounts are specified in minor units. For Norwegian kroner (NOK) that means 1 kr = 100 øre. Example: 20 kr = 2000 øre.
+    /// </summary>
+    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "13.18.2.0 (NJsonSchema v10.8.0.0 (Newtonsoft.Json v10.0.0.0))")]
+    public partial class BottomLine
+    {
+        [Newtonsoft.Json.JsonProperty("currency", Required = Newtonsoft.Json.Required.AllowNull)]
+        [Newtonsoft.Json.JsonConverter(typeof(Newtonsoft.Json.Converters.StringEnumConverter))]
+        public CurrencyEnum? Currency { get; set; }
+
+        /// <summary>
+        /// Tip amount for the order. Amounts are specified in minor units. For Norwegian kroner (NOK) that means 1 kr = 100 øre. Example: 20 kr = 2000 øre.
+        /// </summary>
+        [Newtonsoft.Json.JsonProperty("tipAmount", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        [System.ComponentModel.DataAnnotations.Range(0D, double.MaxValue)]
+        public long? TipAmount { get; set; }
+
+        /// <summary>
+        /// Amount paid by gift card or coupon.
+        /// </summary>
+        [Newtonsoft.Json.JsonProperty("giftCardAmount", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        [System.ComponentModel.DataAnnotations.Range(0D, double.MaxValue)]
+        [System.Obsolete]
+        public long? GiftCardAmount { get; set; }
+
+        /// <summary>
+        /// POS ID is the device number of the POS terminal
+        /// </summary>
+        [Newtonsoft.Json.JsonProperty("posId", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public string PosId { get; set; }
+
+        /// <summary>
+        /// Deprecated, sum will be calculated based on the sum of the orderLines
+        /// </summary>
+        [Newtonsoft.Json.JsonProperty("totalAmount", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        [System.Obsolete]
+        public long? TotalAmount { get; set; }
+
+        /// <summary>
+        /// Deprecated, tax will be calculated based on the sum of the totalTaxAmount field on each orderLine
+        /// </summary>
+        [Newtonsoft.Json.JsonProperty("totalTax", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        [System.ComponentModel.DataAnnotations.Range(0D, double.MaxValue)]
+        [System.Obsolete]
+        public long? TotalTax { get; set; }
+
+        /// <summary>
+        /// Deprecated, discount will be calculated based on the sum of the discount field on each orderLine
+        /// </summary>
+        [Newtonsoft.Json.JsonProperty("totalDiscount", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        [System.ComponentModel.DataAnnotations.Range(0D, double.MaxValue)]
+        [System.Obsolete]
+        public long? TotalDiscount { get; set; }
+
+        /// <summary>
+        /// Deprecated, use a regular orderLine with "isShipping" flag. Using this will result in faulty calculation of sum and tax.
+        /// </summary>
+        [Newtonsoft.Json.JsonProperty("shippingAmount", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        [System.ComponentModel.DataAnnotations.Range(0D, double.MaxValue)]
+        [System.Obsolete]
+        public long? ShippingAmount { get; set; }
+
+        [Newtonsoft.Json.JsonProperty("shippingInfo", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+#pragma warning disable CS0612 // Type or member is obsolete // Autogenerated
+        public ShippingInfo ShippingInfo { get; set; }
+#pragma warning restore CS0612 // Type or member is obsolete
+
+        [Newtonsoft.Json.JsonProperty("paymentSources", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public PaymentSources PaymentSources { get; set; }
+
+        [Newtonsoft.Json.JsonProperty("barcode", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public Barcode Barcode { get; set; }
+
+        [Newtonsoft.Json.JsonProperty("receiptNumber", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public string ReceiptNumber { get; set; }
+
+        private System.Collections.Generic.IDictionary<string, object> _additionalProperties;
+
+        [Newtonsoft.Json.JsonExtensionData]
+        public System.Collections.Generic.IDictionary<string, object> AdditionalProperties
+        {
+            get { return _additionalProperties ?? (_additionalProperties = new System.Collections.Generic.Dictionary<string, object>()); }
+            set { _additionalProperties = value; }
+        }
+
+    }
+
+    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "13.18.2.0 (NJsonSchema v10.8.0.0 (Newtonsoft.Json v10.0.0.0))")]
+    public partial class Receipt
+    {
+        /// <summary>
+        /// All numbers are interpreted as integers with two trailing zeros. ex: 10.00 = 1000. Amounts are specified in minor units. For Norwegian kroner (NOK) that means 1 kr = 100 øre. Example: 10 kr = 1000 øre.
+        /// </summary>
+        [Newtonsoft.Json.JsonProperty("orderLines", Required = Newtonsoft.Json.Required.Always)]
+        [System.ComponentModel.DataAnnotations.Required]
+        [System.ComponentModel.DataAnnotations.MinLength(1)]
+        public System.Collections.Generic.ICollection<OrderLine> OrderLines { get; set; } = new System.Collections.ObjectModel.Collection<OrderLine>();
+
+        [Newtonsoft.Json.JsonProperty("bottomLine", Required = Newtonsoft.Json.Required.Always)]
+        [System.ComponentModel.DataAnnotations.Required]
+        public BottomLine BottomLine { get; set; } = new BottomLine();
 
         private System.Collections.Generic.IDictionary<string, object> _additionalProperties;
 
@@ -830,66 +1352,6 @@ namespace Vipps.net.Models.Epayment
             get { return _additionalProperties ?? (_additionalProperties = new System.Collections.Generic.Dictionary<string, object>()); }
             set { _additionalProperties = value; }
         }
-
-    }
-
-    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "13.18.2.0 (NJsonSchema v10.8.0.0 (Newtonsoft.Json v10.0.0.0))")]
-    public enum PaymentEventName
-    {
-
-        [System.Runtime.Serialization.EnumMember(Value = @"CREATED")]
-        CREATED = 0,
-
-        [System.Runtime.Serialization.EnumMember(Value = @"ABORTED")]
-        ABORTED = 1,
-
-        [System.Runtime.Serialization.EnumMember(Value = @"EXPIRED")]
-        EXPIRED = 2,
-
-        [System.Runtime.Serialization.EnumMember(Value = @"CANCELLED")]
-        CANCELLED = 3,
-
-        [System.Runtime.Serialization.EnumMember(Value = @"CAPTURED")]
-        CAPTURED = 4,
-
-        [System.Runtime.Serialization.EnumMember(Value = @"REFUNDED")]
-        REFUNDED = 5,
-
-        [System.Runtime.Serialization.EnumMember(Value = @"AUTHORIZED")]
-        AUTHORIZED = 6,
-
-        [System.Runtime.Serialization.EnumMember(Value = @"TERMINATED")]
-        TERMINATED = 7,
-
-    }
-
-    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "13.18.2.0 (NJsonSchema v10.8.0.0 (Newtonsoft.Json v10.0.0.0))")]
-    public enum PaymentEventPaymentAction
-    {
-
-        [System.Runtime.Serialization.EnumMember(Value = @"CREATE")]
-        CREATE = 0,
-
-        [System.Runtime.Serialization.EnumMember(Value = @"ABORT")]
-        ABORT = 1,
-
-        [System.Runtime.Serialization.EnumMember(Value = @"EXPIRE")]
-        EXPIRE = 2,
-
-        [System.Runtime.Serialization.EnumMember(Value = @"CANCEL")]
-        CANCEL = 3,
-
-        [System.Runtime.Serialization.EnumMember(Value = @"CAPTURE")]
-        CAPTURE = 4,
-
-        [System.Runtime.Serialization.EnumMember(Value = @"REFUND")]
-        REFUND = 5,
-
-        [System.Runtime.Serialization.EnumMember(Value = @"AUTHORISE")]
-        AUTHORISE = 6,
-
-        [System.Runtime.Serialization.EnumMember(Value = @"TERMINATE")]
-        TERMINATE = 7,
 
     }
 

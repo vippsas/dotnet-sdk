@@ -7,22 +7,24 @@ using Vipps.net.Models.AccessToken;
 
 namespace Vipps.net.Services
 {
-    public static class AccessTokenCacheService
+    internal sealed class AccessTokenCacheService
     {
-#pragma warning disable IDE0090 // Use 'new(...)'
-        private static readonly AccessTokenLifetimeService _lifetimeService =
-            new AccessTokenLifetimeService();
-
-        private static readonly TimeSpan _backoffTimespan = TimeSpan.FromMinutes(2);
-        private static readonly ConcurrentDictionary<
+        private readonly AccessTokenLifetimeService _lifetimeService;
+        private readonly TimeSpan _backoffTimespan = TimeSpan.FromMinutes(2);
+        private readonly ConcurrentDictionary<
             string,
             (AccessToken token, DateTimeOffset validTo)
-        > _dictionary =
-            new ConcurrentDictionary<string, (AccessToken token, DateTimeOffset validTo)>();
-#pragma warning restore IDE0090 // Use 'new(...)'
+        > _dictionary;
         private const string KeyPrefix = "access-token-";
 
-        public static void Add(string key, AccessToken token)
+        internal AccessTokenCacheService()
+        {
+            _lifetimeService = new AccessTokenLifetimeService();
+            _dictionary =
+                new ConcurrentDictionary<string, (AccessToken token, DateTimeOffset validTo)>();
+        }
+
+        internal void Add(string key, AccessToken token)
         {
             var tokenValidTo = _lifetimeService.GetValidTo(token.Token);
             var tokenValidToWithBackoff = tokenValidTo.HasValue
@@ -41,7 +43,7 @@ namespace Vipps.net.Services
             }
         }
 
-        public static AccessToken Get(string key)
+        internal AccessToken Get(string key)
         {
             if (_dictionary.TryGetValue(GetPrefixedHashedKey(key), out var values))
             {
@@ -50,6 +52,7 @@ namespace Vipps.net.Services
                     _dictionary.TryRemove(key, out _);
                     return null;
                 }
+
                 return values.token;
             }
 
@@ -63,6 +66,7 @@ namespace Vipps.net.Services
 
         private static string GetHashedKey(string key)
         {
+#pragma warning disable IDE0079 // Remove unnecessary suppression. This is caused by us building multiple targets. In some versions (.net 6, 7), the static method is preferred. In others, it does not exist.
 #pragma warning disable CA1850 // Prefer static 'System.Security.Cryptography.SHA256.HashData' method over 'ComputeHash'
             byte[] hash = null;
             using (var sha256 = SHA256.Create())
@@ -70,6 +74,7 @@ namespace Vipps.net.Services
                 hash = sha256.ComputeHash(Encoding.UTF8.GetBytes(key));
             }
 #pragma warning restore CA1850 // Prefer static 'System.Security.Cryptography.SHA256.HashData' method over 'ComputeHash'
+#pragma warning restore IDE0079 // Remove unnecessary suppression
 
             return string.Join(string.Empty, hash.Select(x => x.ToString("X2")));
         }
