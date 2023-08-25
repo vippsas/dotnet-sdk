@@ -39,7 +39,7 @@ var vippsConfigurationOptions = new VippsConfigurationOptions
     UseTestMode = true
 };
 
-var vippsApi = VippsApi.Create(vippsConfigurationOptions)
+var vippsApi = new VippsApi(vippsConfigurationOptions)
 
 var request = new InitiateSessionRequest
 {
