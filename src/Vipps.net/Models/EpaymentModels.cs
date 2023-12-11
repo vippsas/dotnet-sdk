@@ -576,7 +576,7 @@ namespace Vipps.net.Models.Epayment
         /// <summary>
         /// A space-separated string list of requested user information in
         /// <br/>accordance with the OpenID Connect specification.
-        /// <br/>See https://vippsas.github.io/vipps-developer-docs/docs/APIs/userinfo-api#scope
+        /// <br/>See https://developer.vippsmobilepay.com/docs/APIs/userinfo-api/userinfo-api-guide/#scope
         /// </summary>
         [Newtonsoft.Json.JsonProperty("scope", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
         public string Scope { get; set; }
@@ -811,7 +811,7 @@ namespace Vipps.net.Models.Epayment
 
     /// <summary>
     /// The standard error object, based on RFC 7808.
-    /// <br/>See https://vippsas.github.io/vipps-developer-docs/docs/vipps-developers/common-topics/errors
+    /// <br/>See https://developer.vippsmobilepay.com/docs/knowledge-base/errors/
     /// </summary>
     [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "13.18.2.0 (NJsonSchema v10.8.0.0 (Newtonsoft.Json v10.0.0.0))")]
     public partial class Problem

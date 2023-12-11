@@ -10,7 +10,7 @@ internal sealed class Program
     {
         var httpClient = new HttpClient();
         var epaymentOptions = new CodegenSettings(
-            "https://vippsas.github.io/vipps-developer-docs/redocusaurus/epayment-swagger-id.yaml",
+            "https://developer.vippsmobilepay.com/redocusaurus/epayment-swagger-id.yaml",
             "VippsEpayment",
             "Vipps.net.Models.Epayment",
             "../../../../Vipps.net/Models/EpaymentModels.cs"
@@ -18,7 +18,7 @@ internal sealed class Program
         await GenerateCode(httpClient, epaymentOptions);
 
         var checkoutOptions = new CodegenSettings(
-            "https://vippsas.github.io/vipps-developer-docs/redocusaurus/checkout-swagger-id.yaml",
+            "https://developer.vippsmobilepay.com/redocusaurus/checkout-swagger-id.yaml",
             "VippsCheckout",
             "Vipps.net.Models.Checkout",
             "../../../../Vipps.net/Models/CheckoutModels.cs"
