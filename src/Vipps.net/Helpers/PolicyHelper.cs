@@ -38,7 +38,9 @@ namespace Vipps.net.Helpers
                     new HttpResponseMessage(HttpStatusCode.InternalServerError),
                     async (result, context) =>
                     {
-                        var responseString = await result.Result.Content
+                        var responseString = await result
+                            .Result
+                            .Content
                             .ReadAsStringAsync()
                             .ConfigureAwait(false);
                         logger?.LogError(

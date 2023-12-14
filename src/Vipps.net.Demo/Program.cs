@@ -12,18 +12,20 @@ internal sealed class Program
         // The following line fetches the name of the key vault to be used for fetching secretes.
         var host = builder.Configuration.GetValue<string>("keyvaultHost");
         // The following lines adds secrets from the key vault to the configuration.
-        builder.Configuration.AddAzureKeyVault(
-            new Uri($"https://{host}.vault.azure.net/"),
-            new DefaultAzureCredential()
-        );
+        builder
+            .Configuration
+            .AddAzureKeyVault(
+                new Uri($"https://{host}.vault.azure.net/"),
+                new DefaultAzureCredential()
+            );
 
         var vippsConfigurationOptions = new VippsConfigurationOptions
         {
             ClientId = builder.Configuration.GetValue<string>("CLIENT-ID")!,
             ClientSecret = builder.Configuration.GetValue<string>("CLIENT-SECRET")!,
-            MerchantSerialNumber = builder.Configuration.GetValue<string>(
-                "MERCHANT-SERIAL-NUMBER"
-            )!,
+            MerchantSerialNumber = builder
+                .Configuration
+                .GetValue<string>("MERCHANT-SERIAL-NUMBER")!,
             SubscriptionKey = builder.Configuration.GetValue<string>("SUBSCRIPTION-KEY")!,
             UseTestMode = true,
             PluginName = Assembly.GetExecutingAssembly().GetName().Name,
@@ -31,9 +33,12 @@ internal sealed class Program
         };
 
         builder.Services.AddTransient(_ => vippsConfigurationOptions);
-        builder.Services.AddTransient<IVippsApi, VippsApi>(
-            (sp) => new VippsApi(vippsConfigurationOptions, null, sp.GetService<ILoggerFactory>())
-        );
+        builder
+            .Services
+            .AddTransient<IVippsApi, VippsApi>(
+                (sp) =>
+                    new VippsApi(vippsConfigurationOptions, null, sp.GetService<ILoggerFactory>())
+            );
 
         builder.Services.AddControllers();
         builder.Services.AddEndpointsApiExplorer();

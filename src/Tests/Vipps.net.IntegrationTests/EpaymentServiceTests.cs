@@ -14,9 +14,9 @@ namespace Vipps.net.IntegrationTests
             var reference = Guid.NewGuid().ToString();
             var createPaymentRequest = GetCreatePaymentRequest(reference);
 
-            var createPaymentResponse = await vippsApi.EpaymentService.CreatePayment(
-                createPaymentRequest
-            );
+            var createPaymentResponse = await vippsApi
+                .EpaymentService
+                .CreatePayment(createPaymentRequest);
             Assert.IsNotNull(createPaymentResponse);
             Assert.AreEqual(reference, createPaymentResponse.Reference);
 
@@ -37,29 +37,44 @@ namespace Vipps.net.IntegrationTests
             var reference = Guid.NewGuid().ToString();
             var createPaymentRequest = GetCreatePaymentRequest(reference);
 
-            var createPaymentResponse = await vippsApi.EpaymentService.CreatePayment(
-                createPaymentRequest
-            );
+            var createPaymentResponse = await vippsApi
+                .EpaymentService
+                .CreatePayment(createPaymentRequest);
             Assert.IsNotNull(createPaymentResponse);
             Assert.AreEqual(reference, createPaymentResponse.Reference);
 
-            await vippsApi.EpaymentService.ForceApprovePayment(
-                reference,
-                new ForceApprove { Customer = new Customer { PhoneNumber = CustomerPhoneNumber } }
-            );
+            await vippsApi
+                .EpaymentService
+                .ForceApprovePayment(
+                    reference,
+                    new ForceApprove
+                    {
+                        Customer = new Customer { PhoneNumber = CustomerPhoneNumber }
+                    }
+                );
 
-            var captureResponse = await vippsApi.EpaymentService.CapturePayment(
-                reference,
-                new CaptureModificationRequest { ModificationAmount = createPaymentRequest.Amount }
-            );
+            var captureResponse = await vippsApi
+                .EpaymentService
+                .CapturePayment(
+                    reference,
+                    new CaptureModificationRequest
+                    {
+                        ModificationAmount = createPaymentRequest.Amount
+                    }
+                );
             Assert.IsNotNull(captureResponse);
             Assert.AreEqual(reference, captureResponse.Reference);
             Assert.AreEqual(State.AUTHORIZED, captureResponse.State);
 
-            var refundResponse = await vippsApi.EpaymentService.RefundPayment(
-                reference,
-                new RefundModificationRequest { ModificationAmount = createPaymentRequest.Amount }
-            );
+            var refundResponse = await vippsApi
+                .EpaymentService
+                .RefundPayment(
+                    reference,
+                    new RefundModificationRequest
+                    {
+                        ModificationAmount = createPaymentRequest.Amount
+                    }
+                );
             Assert.IsNotNull(refundResponse);
             Assert.AreEqual(reference, refundResponse.Reference);
             Assert.AreEqual(State.AUTHORIZED, refundResponse.State);
