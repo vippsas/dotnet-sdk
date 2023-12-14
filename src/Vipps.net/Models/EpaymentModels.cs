@@ -124,9 +124,11 @@ namespace Vipps.net.Models.Epayment
     {
 
         [System.Runtime.Serialization.EnumMember(Value = @"NOK")]
-        NOK,
-        DKK,
-        EUR
+        [System.Runtime.Serialization.EnumMember(Value = @"DKK")]
+        [System.Runtime.Serialization.EnumMember(Value = @"EUR")]
+        NOK = 0,
+        DKK = 1,
+        EUR = 2
 
     }
 
@@ -1072,9 +1074,11 @@ namespace Vipps.net.Models.Epayment
     {
 
         [System.Runtime.Serialization.EnumMember(Value = @"NOK")]
-        NOK,
-        DKK,
-        EUR
+        [System.Runtime.Serialization.EnumMember(Value = @"DKK")]
+        [System.Runtime.Serialization.EnumMember(Value = @"EUR")]
+        NOK = 0,
+        DKK = 1,
+        EUR = 2
 
     }
 
