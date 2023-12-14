@@ -14,8 +14,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Vipps.net.Demo", "Vipps.net
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Vipps.net.AspCoreDemo", "Vipps.net.AspCoreDemo\Vipps.net.AspCoreDemo.csproj", "{09540EAC-72F5-4562-910E-56299A663C0A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Vipps.net.AspDemo", "Vipps.net.AspDemo\Vipps.net.AspDemo.csproj", "{4276E5A2-E884-48E8-B446-715FB1BCB23B}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Vipps.net.Codegen", "Vipps.net.Codegen\Vipps.net.Codegen.csproj", "{52AD8849-DDB6-4542-9E18-2219AF993CAF}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Vipps.net.IntegrationTests", "Tests\Vipps.net.IntegrationTests\Vipps.net.IntegrationTests.csproj", "{42DD89A8-0AE4-4CCD-9CAC-39B8F217805D}"
