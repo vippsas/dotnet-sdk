@@ -78,7 +78,7 @@ namespace Vipps.net.Infrastructure
             var assemblyVersion = assemblyName.Version?.ToString();
             return new Dictionary<string, string>
             {
-                { "User-Agent", $"DotNet SDK/{assemblyVersion}" },
+                { "User-Agent", $"Vipps/DotNet SDK/{assemblyVersion}" },
                 { "Vipps-System-Name", assemblyName.Name },
                 { "Vipps-System-Version", assemblyVersion },
                 { "Merchant-Serial-Number", _options.MerchantSerialNumber },
