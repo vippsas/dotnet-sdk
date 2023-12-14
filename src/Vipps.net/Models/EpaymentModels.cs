@@ -122,10 +122,12 @@ namespace Vipps.net.Models.Epayment
     [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "13.18.2.0 (NJsonSchema v10.8.0.0 (Newtonsoft.Json v10.0.0.0))")]
     public enum Currency
     {
-
         [System.Runtime.Serialization.EnumMember(Value = @"NOK")]
         NOK = 0,
-
+        [System.Runtime.Serialization.EnumMember(Value = @"DKK")]
+        DKK = 1,
+         [System.Runtime.Serialization.EnumMember(Value = @"EUR")]
+        EUR = 2
     }
 
     /// <summary>
@@ -1068,10 +1070,12 @@ namespace Vipps.net.Models.Epayment
     [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "13.18.2.0 (NJsonSchema v10.8.0.0 (Newtonsoft.Json v10.0.0.0))")]
     public enum CurrencyEnum
     {
-
         [System.Runtime.Serialization.EnumMember(Value = @"NOK")]
         NOK = 0,
-
+        [System.Runtime.Serialization.EnumMember(Value = @"DKK")]
+        DKK = 1,
+         [System.Runtime.Serialization.EnumMember(Value = @"EUR")]
+        EUR = 2
     }
 
     /// <summary>
