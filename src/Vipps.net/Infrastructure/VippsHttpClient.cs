@@ -75,10 +75,12 @@ namespace Vipps.net.Infrastructure
         private Dictionary<string, string> GetHeaders()
         {
             var assemblyName = typeof(VippsApi).Assembly.GetName();
+            var assemblyVersion = assemblyName.Version?.ToString();
             return new Dictionary<string, string>
             {
+                { "User-Agent", $"Vipps/DotNet SDK/{assemblyVersion}" },
                 { "Vipps-System-Name", assemblyName.Name },
-                { "Vipps-System-Version", assemblyName.Version.ToString() },
+                { "Vipps-System-Version", assemblyVersion },
                 { "Merchant-Serial-Number", _options.MerchantSerialNumber },
                 { "Vipps-System-Plugin-Name", _options.PluginName },
                 { "Vipps-System-Plugin-Version", _options.PluginVersion }
