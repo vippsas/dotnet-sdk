@@ -84,11 +84,15 @@ namespace Vipps.net.Infrastructure
                 { "Merchant-Serial-Number", _options.MerchantSerialNumber },
                 {
                     "Vipps-System-Plugin-Name",
-                    string.IsNullOrWhiteSpace(_options.PluginName) ? "acme-plugin" : _options.PluginName
+                    string.IsNullOrWhiteSpace(_options.PluginName)
+                        ? "acme-plugin"
+                        : _options.PluginName
                 },
                 {
                     "Vipps-System-Plugin-Version",
-                    string.IsNullOrWhiteSpace(_options.PluginVersion) ? "0.0.1" : _options.PluginVersion
+                    string.IsNullOrWhiteSpace(_options.PluginVersion)
+                        ? "0.0.1"
+                        : _options.PluginVersion
                 }
             };
         }
