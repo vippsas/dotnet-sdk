@@ -82,8 +82,8 @@ namespace Vipps.net.Infrastructure
                 { "Vipps-System-Name", assemblyName.Name },
                 { "Vipps-System-Version", assemblyVersion },
                 { "Merchant-Serial-Number", _options.MerchantSerialNumber },
-                { "Vipps-System-Plugin-Name", _options.PluginName },
-                { "Vipps-System-Plugin-Version", _options.PluginVersion }
+                { "Vipps-System-Plugin-Name", string.IsNullOrWhiteSpace(_options.PluginName) ? "acme-plugin" : _options.PluginName },
+                { "Vipps-System-Plugin-Version", string.IsNullOrWhiteSpace(_options.PluginVersion) ? "0.0.1" : _options.PluginVersion }
             };
         }
     }
