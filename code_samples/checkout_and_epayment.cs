@@ -40,7 +40,7 @@ var checkoutResult = await vippsApi.CheckoutService.InitiateSession(checkoutRequ
 Console.WriteLine("Here is the response from the checkout service:");
 Console.WriteLine("Token:" + checkoutResult.Token);
 Console.WriteLine("AdditionalProperties:" + checkoutResult.AdditionalProperties);
-Console.WriteLine"PollingUrl:" + (checkoutResult.PollingUrl);
+Console.WriteLine("PollingUrl:" + checkoutResult.PollingUrl);
 Console.WriteLine("CheckoutFrontendUrl:" + checkoutResult.CheckoutFrontendUrl);
 
 
