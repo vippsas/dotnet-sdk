@@ -25,7 +25,7 @@ var checkoutRequest = new Checkout.InitiateSessionRequest
     {
         CallbackAuthorizationToken = Guid.NewGuid().ToString(),
         CallbackUrl = "https://example.com/callbacks-for-checkout",
-        ReturnUrl = "https://example.com/fallback-result-page-for-both-success-and-failure/acme-shop-123-order123abc",
+        ReturnUrl = "https://example.com/fallback-result-page-for-both-success-and-failure",
     },
     Transaction = new Checkout.PaymentTransaction
     {
@@ -56,8 +56,8 @@ var epaymentRequest = new Epayment.CreatePaymentRequest
     PaymentMethod = new Epayment.PaymentMethod { Type = Epayment.PaymentMethodType.WALLET },
     UserFlow = Epayment.CreatePaymentRequestUserFlow.WEB_REDIRECT,
     Reference = ePaymentReference,
-    PaymentDescription = "Pair of socls",
-    ReturnUrl = "https://example.com/fallback-result-page-for-both-success-and-failure/acme-shop-123-order123abc",
+    PaymentDescription = "Pair of socks",
+    ReturnUrl = "https://example.com/fallback-result-page-for-both-success-and-failure",
     Customer = new Epayment.Customer { PhoneNumber = CustomerPhoneNumber }
 };
 
