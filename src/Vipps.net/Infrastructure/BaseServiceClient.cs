@@ -186,7 +186,7 @@ namespace Vipps.net.Infrastructure
             return response;
         }
 
-        private static HttpContent CreateRequestContent<TRequest>(TRequest vippsRequest)
+        private static StringContent CreateRequestContent<TRequest>(TRequest vippsRequest)
             where TRequest : class
         {
             if (vippsRequest is null)

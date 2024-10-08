@@ -1,4 +1,7 @@
-﻿namespace Vipps.net.IntegrationTests
+﻿using Vipps.net.Models.Checkout;
+using Vipps.net.Models.Checkout.Model;
+
+namespace Vipps.net.IntegrationTests
 {
     [TestClass]
     public class CheckoutServiceTests
@@ -8,15 +11,15 @@
         {
             var vippsApi = TestSetup.CreateVippsAPI();
             var reference = Guid.NewGuid().ToString();
-            var sessionInitiationRequest = new Models.Checkout.InitiateSessionRequest
+            var sessionInitiationRequest = new InitiatePaymentSessionRequest
             {
-                Transaction = new Models.Checkout.PaymentTransaction
+                Transaction = new PaymentTransaction
                 {
-                    Amount = new Models.Checkout.Amount { Currency = "NOK", Value = 1000 },
+                    Amount = new Amount { Currency = "NOK", Value = 1000 },
                     Reference = reference,
-                    PaymentDescription = nameof(CheckoutServiceTests.Can_Create_And_Get_Session),
+                    PaymentDescription = nameof(Can_Create_And_Get_Session),
                 },
-                MerchantInfo = new Models.Checkout.PaymentMerchantInfo
+                MerchantInfo = new MerchantInfo
                 {
                     CallbackAuthorizationToken = Guid.NewGuid().ToString(),
                     CallbackUrl = "https://no.where.com/callback",
@@ -31,7 +34,7 @@
             Assert.IsNotNull(sessionResponse);
             var sessionPolledResponse = await vippsApi.CheckoutService.GetSessionInfo(reference);
             Assert.AreEqual(
-                Models.Checkout.ExternalSessionState.SessionCreated,
+                ExternalSessionState.SessionCreated,
                 sessionPolledResponse.SessionState
             );
         }
