@@ -26,12 +26,12 @@ namespace Vipps.net.AspCoreDemo.Controllers
             {
                 Amount = new Amount { Value = 1000, Currency = Currency.NOK },
                 PaymentMethod = new PaymentMethod { Type = PaymentMethodType.WALLET },
-                Customer = new Customer (new CustomerPhoneNumber{ PhoneNumber = "4747375750"}),
+                Customer = new Customer(new CustomerPhoneNumber { PhoneNumber = "4747375750" }),
                 Reference = Guid.NewGuid().ToString(),
                 UserFlow = CreatePaymentRequest.UserFlowEnum.WEB_REDIRECT,
                 ReturnUrl = $"http://localhost:3000",
                 PaymentDescription = "paymentDescription",
-                Profile = new ProfileRequest { Scope = "name phoneNumber address birthDate email" },
+                Profile = new ProfileRequest { Scope = "name phoneNumber address birthDate email" }
             };
 
             var result = await _epaymentService.CreatePayment(request);

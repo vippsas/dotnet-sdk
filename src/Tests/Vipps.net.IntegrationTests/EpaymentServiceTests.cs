@@ -1,5 +1,4 @@
-﻿using Vipps.net.Models.Epayment;
-using Vipps.net.Models.Epayment.Model;
+﻿using Vipps.net.Models.Epayment.Model;
 
 namespace Vipps.net.IntegrationTests
 {
@@ -46,7 +45,12 @@ namespace Vipps.net.IntegrationTests
 
             await vippsApi.EpaymentService.ForceApprovePayment(
                 reference,
-                new ForceApprove { Customer = new Customer(new CustomerPhoneNumber { PhoneNumber = CustomerPhoneNumber }) }
+                new ForceApprove
+                {
+                    Customer = new Customer(
+                        new CustomerPhoneNumber { PhoneNumber = CustomerPhoneNumber }
+                    )
+                }
             );
 
             var captureResponse = await vippsApi.EpaymentService.CapturePayment(
@@ -86,7 +90,8 @@ namespace Vipps.net.IntegrationTests
             return new CreatePaymentRequest(
                 new Amount
                 {
-                    Currency = Currency.NOK, Value = 100 // 100 øre = 1 KR
+                    Currency = Currency.NOK,
+                    Value = 100 // 100 øre = 1 KR
                 },
                 new Customer(new CustomerPhoneNumber { PhoneNumber = CustomerPhoneNumber }),
                 null,
