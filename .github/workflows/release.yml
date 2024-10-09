@@ -28,11 +28,16 @@ jobs:
        # Create Nuget package.
       - name: Build project
         run: dotnet build "./src/" --configuration Release
-      - name: Change to src directory
-        run: cd src
-      - name: Pack Nuget
-        run: paket pack ./Vipps.net
-      # Setup necessary info to create tag 
+        
+      - name: Install Paket
+        run: dotnet tool install Paket --tool-path .paket
+
+      - name: Pack NuGet Package with Paket
+        run: |
+          .paket/paket pack Vipps.net
+        working-directory: ./src      
+        
+        # Setup necessary info to create tag 
       - name: Set tag variable with v, for use in tag and release based on packed Nuget
         run: "echo \"RELEASE_TAG=v$(find ./out -maxdepth 1 -name Vipps.net.*.nupkg | grep -oP '((\\d+)\\.(\\d+)\\.(\\d+)(.*?))')\" >> $GITHUB_ENV"
       - name: Configure git username
