@@ -1,4 +1,4 @@
-﻿using Vipps.net.Models.Epayment;
+﻿using Vipps.net.Models.Epayment.Model;
 
 namespace Vipps.net.IntegrationTests
 {
@@ -45,12 +45,17 @@ namespace Vipps.net.IntegrationTests
 
             await vippsApi.EpaymentService.ForceApprovePayment(
                 reference,
-                new ForceApprove { Customer = new Customer { PhoneNumber = CustomerPhoneNumber } }
+                new ForceApprove
+                {
+                    Customer = new Customer(
+                        new CustomerPhoneNumber { PhoneNumber = CustomerPhoneNumber }
+                    )
+                }
             );
 
             var captureResponse = await vippsApi.EpaymentService.CapturePayment(
                 reference,
-                new CaptureModificationRequest { ModificationAmount = createPaymentRequest.Amount }
+                new CaptureModificationRequest(createPaymentRequest.Amount)
             );
             Assert.IsNotNull(captureResponse);
             Assert.AreEqual(reference, captureResponse.Reference);
@@ -58,7 +63,7 @@ namespace Vipps.net.IntegrationTests
 
             var refundResponse = await vippsApi.EpaymentService.RefundPayment(
                 reference,
-                new RefundModificationRequest { ModificationAmount = createPaymentRequest.Amount }
+                new RefundModificationRequest(createPaymentRequest.Amount)
             );
             Assert.IsNotNull(refundResponse);
             Assert.AreEqual(reference, refundResponse.Reference);
@@ -82,20 +87,25 @@ namespace Vipps.net.IntegrationTests
 
         private static CreatePaymentRequest GetCreatePaymentRequest(string reference)
         {
-            return new CreatePaymentRequest
-            {
-                Amount = new Amount
+            return new CreatePaymentRequest(
+                new Amount
                 {
                     Currency = Currency.NOK,
                     Value = 100 // 100 øre = 1 KR
                 },
-                PaymentMethod = new PaymentMethod { Type = PaymentMethodType.WALLET },
-                UserFlow = CreatePaymentRequestUserFlow.WEB_REDIRECT,
-                Reference = reference,
-                PaymentDescription = nameof(CheckoutServiceTests.Can_Create_And_Get_Session),
-                ReturnUrl = $"https://no.where.com/{reference}",
-                Customer = new Customer { }
-            };
+                new Customer(new CustomerPhoneNumber { PhoneNumber = CustomerPhoneNumber }),
+                null,
+                null,
+                null,
+                new PaymentMethod { Type = PaymentMethodType.WALLET },
+                null,
+                reference,
+                $"https://no.where.com/{reference}",
+                CreatePaymentRequest.UserFlowEnum.WEB_REDIRECT,
+                null,
+                null,
+                nameof(CheckoutServiceTests.Can_Create_And_Get_Session)
+            );
         }
     }
 }

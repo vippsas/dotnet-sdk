@@ -3,6 +3,7 @@ using Azure.Identity;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
+using Vipps.net.AspCoreDemo;
 
 namespace Vipps.net.AspCore31Demo
 {
