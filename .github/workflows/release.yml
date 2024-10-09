@@ -13,7 +13,7 @@ jobs:
         contents: write # needed to push tag
     strategy:
       matrix:
-        dotnet-version: [ '7.0.x' ]
+        dotnet-version: [ '8.0.x' ]
     steps:
       - name: Get repo with depth
         uses: actions/checkout@v3
