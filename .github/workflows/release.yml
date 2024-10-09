@@ -26,9 +26,18 @@ jobs:
       - name: Restore dependencies
         run: dotnet restore "./src/Vipps.net/Vipps.net.csproj"
        # Create Nuget package.
-      - name: Pack Nuget
-        run: dotnet pack "./src/Vipps.net/Vipps.net.csproj" --include-source --include-referenced-projects --output out --configuration Release --no-restore
-      # Setup necessary info to create tag 
+      - name: Build project
+        run: dotnet build "./src/" --configuration Release
+        
+      - name: Install Paket
+        run: dotnet tool install Paket --tool-path .paket
+
+      - name: Pack NuGet Package with Paket
+        run: |
+          .paket/paket pack Vipps.net
+        working-directory: ./src      
+        
+        # Setup necessary info to create tag 
       - name: Set tag variable with v, for use in tag and release based on packed Nuget
         run: "echo \"RELEASE_TAG=v$(find ./out -maxdepth 1 -name Vipps.net.*.nupkg | grep -oP '((\\d+)\\.(\\d+)\\.(\\d+)(.*?))')\" >> $GITHUB_ENV"
       - name: Configure git username
