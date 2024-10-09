@@ -358,5 +358,12 @@ MigrationBackup/
 # Ionide (cross platform F# VS Code tools) working folder
 .ionide/
 
+# Husky should only be enabled manually per developer for now
+/.husky/pre-commit
+
+# Do not include secrets from windows forms demo
+/src/Vipps.net.WindowsFormsDemo/secrets.xml
+/src/Vipps.net.AspDemo/secrets.xml
+
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
