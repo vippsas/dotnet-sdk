@@ -15,7 +15,8 @@
           "useNewtonsoft": "false",
           "generateApiTests": "false",
           "generateApiDocs": "false",
-          "generateModelDocs": "false"
+          "generateModelDocs": "false",
+          "optionalProjectFile": "false"
         }
       },
       "vipps-epayment": {
@@ -29,7 +30,8 @@
           "useNewtonsoft": "false",
           "generateApiTests": "false",
           "generateApiDocs": "false",
-          "generateModelDocs": "false"
+          "generateModelDocs": "false",
+          "optionalProjectFile": "false"
         }
       }
     }
