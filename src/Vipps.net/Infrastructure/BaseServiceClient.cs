@@ -121,7 +121,8 @@ namespace Vipps.net.Infrastructure
             CancellationToken cancellationToken
         )
         {
-            var absolutePath = $"{_vippsHttpClient.BaseAddress}{path}";
+            var uri = new Uri(_vippsHttpClient.BaseAddress, path);
+            var absolutePath = uri.ToString();
             var retryPolicy = PolicyHelper.GetRetryPolicyWithFallback(
                 _logger,
                 $"Request to {httpMethod.Method} {absolutePath} failed even after retries"

@@ -55,7 +55,7 @@ namespace Vipps.net.IntegrationTests
 
             var captureResponse = await vippsApi.EpaymentService.CapturePayment(
                 reference,
-                new CaptureModificationRequest { ModificationAmount = createPaymentRequest.Amount }
+                new CaptureModificationRequest(createPaymentRequest.Amount)
             );
             Assert.IsNotNull(captureResponse);
             Assert.AreEqual(reference, captureResponse.Reference);
@@ -63,7 +63,7 @@ namespace Vipps.net.IntegrationTests
 
             var refundResponse = await vippsApi.EpaymentService.RefundPayment(
                 reference,
-                new RefundModificationRequest { ModificationAmount = createPaymentRequest.Amount }
+                new RefundModificationRequest(createPaymentRequest.Amount)
             );
             Assert.IsNotNull(refundResponse);
             Assert.AreEqual(reference, refundResponse.Reference);
