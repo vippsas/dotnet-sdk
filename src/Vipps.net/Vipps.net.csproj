@@ -1,4 +1,5 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <TargetFrameworks>net6.0;netstandard2.0;net48</TargetFrameworks>
     <ImplicitUsings>disable</ImplicitUsings>
@@ -51,4 +52,5 @@
     <Exec Command="dotnet tool restore" StandardOutputImportance="Low" StandardErrorImportance="High" />
     <Exec Command="dotnet husky install" StandardOutputImportance="Low" StandardErrorImportance="High" WorkingDirectory="../.." />
   </Target>
+  <Import Project="..\.paket\Paket.Restore.targets" />
 </Project>

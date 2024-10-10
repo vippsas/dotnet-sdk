@@ -26,8 +26,10 @@ jobs:
         uses: actions/setup-dotnet@v3
         with:
           dotnet-version: ${{ matrix.dotnet-version }}
-      - name: Install dependencies Vipps.net
-        run: dotnet restore src/Vipps.net/Vipps.net.csproj
+      - name: Install Paket
+        run: dotnet tool install Paket --tool-path .paket
+      - name: Install dependnecies
+        run: .paket/paket install
       - name: Build Vipps.net.models.Epayment
         run: dotnet build src/Vipps.net.Models.Epayment/Vipps.net.Models.Epayment.csproj --no-restore --configuration Release
       - name: Build Vipps.net.models.Checkout
@@ -50,13 +52,12 @@ jobs:
       - name: Install dependencies for IntegrationTests
         run: dotnet restore src/Tests/Vipps.net.IntegrationTests/Vipps.net.IntegrationTests.csproj
         
-      - name: Install Paket
-        run: dotnet tool install Paket --tool-path .paket
-
       - name: Pack NuGet Package with Paket
         run: |
-          .paket/paket pack Vipps.net --version integration-test
+          .paket/paket pack Vipps.net --version 0.0.0
         working-directory: ./src
         
+      - name: Run Tests
+        run: dotnet test src/Tests/Vipps.net.IntegrationTests/Vipps.net.IntegrationTests.csproj --no-restore --verbosity normal --environment vmp_net_sdk_CLIENT_ID=${{ secrets.CLIENT_ID }} --environment vmp_net_sdk_CLIENT_SECRET=${{ secrets.CLIENT_SECRET }} --environment vmp_net_sdk_SUBSCRIPTION_KEY=${{ secrets.SUBSCRIPTION_KEY }} --environment vmp_net_sdk_MERCHANT_SERIAL_NUMBER=${{ secrets.MERCHANT_SERIAL_NUMBER }}
       - name: Run Integration Tests
         run: dotnet test src/Tests/Vipps.net.IntegrationTests/Vipps.net.IntegrationTests.csproj --no-restore --verbosity normal --environment vmp_net_sdk_CLIENT_ID=${{ secrets.CLIENT_ID }} --environment vmp_net_sdk_CLIENT_SECRET=${{ secrets.CLIENT_SECRET }} --environment vmp_net_sdk_SUBSCRIPTION_KEY=${{ secrets.SUBSCRIPTION_KEY }} --environment vmp_net_sdk_MERCHANT_SERIAL_NUMBER=${{ secrets.MERCHANT_SERIAL_NUMBER }}
