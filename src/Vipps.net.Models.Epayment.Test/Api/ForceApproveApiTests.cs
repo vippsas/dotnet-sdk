@@ -64,7 +64,7 @@ namespace Vipps.net.Models.Epayment.Test.Api
             //string reference = null;
             //string merchantSerialNumber = null;
             //string ocpApimSubscriptionKey = null;
-            //ForceApprove? forceApprove = null;
+            //ForceApprove forceApprove = null;
             //instance.ForceApprove(reference, merchantSerialNumber, ocpApimSubscriptionKey, forceApprove);
         }
     }

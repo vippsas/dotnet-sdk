@@ -65,11 +65,11 @@ namespace Vipps.net.Models.Epayment.Test.Api
             //string merchantSerialNumber = null;
             //string ocpApimSubscriptionKey = null;
             //string idempotencyKey = null;
-            //string? vippsSystemName = null;
-            //string? vippsSystemVersion = null;
-            //string? vippsSystemPluginName = null;
-            //string? vippsSystemPluginVersion = null;
-            //CancelModificationRequest? cancelModificationRequest = null;
+            //string vippsSystemName = null;
+            //string vippsSystemVersion = null;
+            //string vippsSystemPluginName = null;
+            //string vippsSystemPluginVersion = null;
+            //CancelModificationRequest cancelModificationRequest = null;
             //var response = instance.CancelPayment(reference, merchantSerialNumber, ocpApimSubscriptionKey, idempotencyKey, vippsSystemName, vippsSystemVersion, vippsSystemPluginName, vippsSystemPluginVersion, cancelModificationRequest);
             //Assert.IsType<ModificationResponse>(response);
         }
@@ -85,11 +85,11 @@ namespace Vipps.net.Models.Epayment.Test.Api
             //string merchantSerialNumber = null;
             //string ocpApimSubscriptionKey = null;
             //string idempotencyKey = null;
-            //string? vippsSystemName = null;
-            //string? vippsSystemVersion = null;
-            //string? vippsSystemPluginName = null;
-            //string? vippsSystemPluginVersion = null;
-            //CaptureModificationRequest? captureModificationRequest = null;
+            //string vippsSystemName = null;
+            //string vippsSystemVersion = null;
+            //string vippsSystemPluginName = null;
+            //string vippsSystemPluginVersion = null;
+            //CaptureModificationRequest captureModificationRequest = null;
             //var response = instance.CapturePayment(reference, merchantSerialNumber, ocpApimSubscriptionKey, idempotencyKey, vippsSystemName, vippsSystemVersion, vippsSystemPluginName, vippsSystemPluginVersion, captureModificationRequest);
             //Assert.IsType<ModificationResponse>(response);
         }
@@ -105,11 +105,11 @@ namespace Vipps.net.Models.Epayment.Test.Api
             //string merchantSerialNumber = null;
             //string ocpApimSubscriptionKey = null;
             //string idempotencyKey = null;
-            //string? vippsSystemName = null;
-            //string? vippsSystemVersion = null;
-            //string? vippsSystemPluginName = null;
-            //string? vippsSystemPluginVersion = null;
-            //RefundModificationRequest? refundModificationRequest = null;
+            //string vippsSystemName = null;
+            //string vippsSystemVersion = null;
+            //string vippsSystemPluginName = null;
+            //string vippsSystemPluginVersion = null;
+            //RefundModificationRequest refundModificationRequest = null;
             //var response = instance.RefundPayment(reference, merchantSerialNumber, ocpApimSubscriptionKey, idempotencyKey, vippsSystemName, vippsSystemVersion, vippsSystemPluginName, vippsSystemPluginVersion, refundModificationRequest);
             //Assert.IsType<ModificationResponse>(response);
         }

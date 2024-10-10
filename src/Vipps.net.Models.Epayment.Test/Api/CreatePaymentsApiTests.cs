@@ -65,10 +65,10 @@ namespace Vipps.net.Models.Epayment.Test.Api
             //string ocpApimSubscriptionKey = null;
             //string merchantSerialNumber = null;
             //CreatePaymentRequest createPaymentRequest = null;
-            //string? vippsSystemName = null;
-            //string? vippsSystemVersion = null;
-            //string? vippsSystemPluginName = null;
-            //string? vippsSystemPluginVersion = null;
+            //string vippsSystemName = null;
+            //string vippsSystemVersion = null;
+            //string vippsSystemPluginName = null;
+            //string vippsSystemPluginVersion = null;
             //var response = instance.CreatePayment(idempotencyKey, ocpApimSubscriptionKey, merchantSerialNumber, createPaymentRequest, vippsSystemName, vippsSystemVersion, vippsSystemPluginName, vippsSystemPluginVersion);
             //Assert.IsType<CreatePaymentResponse>(response);
         }

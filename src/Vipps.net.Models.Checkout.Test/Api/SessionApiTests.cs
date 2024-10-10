@@ -61,16 +61,16 @@ namespace Vipps.net.Models.Checkout.Test.Api
         public void CheckoutV3SessionPostTest()
         {
             // TODO uncomment below to test the method and replace null with proper value
-            //string? vippsSystemName = null;
-            //string? vippsSystemVersion = null;
-            //string? vippsSystemPluginName = null;
-            //string? vippsSystemPluginVersion = null;
-            //string? clientId = null;
-            //string? clientSecret = null;
-            //string? ocpApimSubscriptionKey = null;
-            //string? merchantSerialNumber = null;
-            //string? idempotencyKey = null;
-            //CheckoutV3SessionPostRequest? checkoutV3SessionPostRequest = null;
+            //string vippsSystemName = null;
+            //string vippsSystemVersion = null;
+            //string vippsSystemPluginName = null;
+            //string vippsSystemPluginVersion = null;
+            //string clientId = null;
+            //string clientSecret = null;
+            //string ocpApimSubscriptionKey = null;
+            //string merchantSerialNumber = null;
+            //string idempotencyKey = null;
+            //CheckoutV3SessionPostRequest checkoutV3SessionPostRequest = null;
             //var response = instance.CheckoutV3SessionPost(vippsSystemName, vippsSystemVersion, vippsSystemPluginName, vippsSystemPluginVersion, clientId, clientSecret, ocpApimSubscriptionKey, merchantSerialNumber, idempotencyKey, checkoutV3SessionPostRequest);
             //Assert.IsType<InitiateSessionResponse>(response);
         }
@@ -83,15 +83,15 @@ namespace Vipps.net.Models.Checkout.Test.Api
         {
             // TODO uncomment below to test the method and replace null with proper value
             //string reference = null;
-            //string? vippsSystemName = null;
-            //string? vippsSystemVersion = null;
-            //string? vippsSystemPluginName = null;
-            //string? vippsSystemPluginVersion = null;
-            //string? clientId = null;
-            //string? clientSecret = null;
-            //string? ocpApimSubscriptionKey = null;
-            //string? merchantSerialNumber = null;
-            //string? idempotencyKey = null;
+            //string vippsSystemName = null;
+            //string vippsSystemVersion = null;
+            //string vippsSystemPluginName = null;
+            //string vippsSystemPluginVersion = null;
+            //string clientId = null;
+            //string clientSecret = null;
+            //string ocpApimSubscriptionKey = null;
+            //string merchantSerialNumber = null;
+            //string idempotencyKey = null;
             //var response = instance.CheckoutV3SessionReferenceGet(reference, vippsSystemName, vippsSystemVersion, vippsSystemPluginName, vippsSystemPluginVersion, clientId, clientSecret, ocpApimSubscriptionKey, merchantSerialNumber, idempotencyKey);
             //Assert.IsType<SessionResponse>(response);
         }
