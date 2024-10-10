@@ -26,6 +26,7 @@ jobs:
       
       - name: Install Paket
         run: dotnet tool install Paket --tool-path .paket
+        working-directory: ./src
         
       - name: Install dependencies
         run: |
