@@ -23,15 +23,7 @@ jobs:
         uses: actions/setup-dotnet@v3
         with:
           dotnet-version: ${{ matrix.dotnet-version }}
-      - name: Restore dependencies
-        run: dotnet restore "./src/Vipps.net/Vipps.net.csproj"
-       # Create Nuget package.
-      - name: Build project
-        run: |
-          dotnet build "./src/Vipps.net.Models.Checkout" --configuration Release
-          dotnet build "./src/Vipps.net.Models.Epayment" --configuration Release
-          dotnet build "./src/Vipps.net" --configuration Release
-        
+      
       - name: Install Paket
         run: dotnet tool install Paket --tool-path .paket
         
@@ -39,6 +31,12 @@ jobs:
         run: |
           .paket/paket install
         working-directory: ./src
+        
+      - name: Build project
+        run: |
+          dotnet build "./src/Vipps.net.Models.Checkout" --configuration Release
+          dotnet build "./src/Vipps.net.Models.Epayment" --configuration Release
+          dotnet build "./src/Vipps.net" --configuration Release
       
       - name: Pack NuGet Package with Paket
         run: |
