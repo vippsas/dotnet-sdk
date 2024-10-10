@@ -28,8 +28,12 @@ jobs:
           dotnet-version: ${{ matrix.dotnet-version }}
       - name: Install dependencies Vipps.net
         run: dotnet restore src/Vipps.net/Vipps.net.csproj
+      - name: Build Vipps.net.models.Epayment
+        run: dotnet build src/Vipps.net.AspCoreDemo/Vipps.net.Models.Epayment.csproj --no-restore --configuration Release
+      - name: Build Vipps.net.models.Checkout
+        run: dotnet build src/Vipps.net.AspCoreDemo/Vipps.net.Models.Checkout.csproj --no-restore --configuration Release
       - name: Build vipps.net
-        run: dotnet build src/Vipps.net/Vipps.net.csproj --no-restore
+        run: dotnet build src/Vipps.net/Vipps.net.csproj --no-restore --configuration Release
       - name: Install dependencies Vipps.net.Demo
         run: dotnet restore src/Vipps.net.Demo/Vipps.net.Demo.csproj
       - name: Build Vipps.net.Demo
