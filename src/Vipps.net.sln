@@ -20,10 +20,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Vipps.net.Models.Epayment",
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Vipps.net.Models.Checkout", "Vipps.net.Models.Checkout\Vipps.net.Models.Checkout.csproj", "{CC6D63A1-CA73-47AC-98E8-F008042FADDD}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Vipps.net.Models.Epayment.Test", "Vipps.net.Models.Epayment.Test\Vipps.net.Models.Epayment.Test.csproj", "{FDAB5625-8BA1-4FE2-BA73-EB3D496CFF85}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Vipps.net.Models.Checkout.Test", "Vipps.net.Models.Checkout.Test\Vipps.net.Models.Checkout.Test.csproj", "{F8C3E3EF-F7CC-476C-803E-E4C44BEC3A46}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
