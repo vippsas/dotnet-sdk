@@ -19,6 +19,9 @@ jobs:
     strategy:
       matrix:
         dotnet-version: [ '8.0.x' ]
+    defaults:
+      run:
+        working-directory: ./src
     steps:
       - name: Get repo
         uses: actions/checkout@v3
@@ -32,36 +35,33 @@ jobs:
       - name: Install dependencies
         run: |
           .paket/paket install
-        working-directory: ./src
         
       - name: Build Vipps.net.models.Epayment
-        run: dotnet build src/Vipps.net.Models.Epayment/Vipps.net.Models.Epayment.csproj --no-restore --configuration Release
+        run: dotnet build Vipps.net.Models.Epayment/Vipps.net.Models.Epayment.csproj --no-restore --configuration Release
       - name: Build Vipps.net.models.Checkout
-        run: dotnet build src/Vipps.net.Models.Checkout/Vipps.net.Models.Checkout.csproj --no-restore --configuration Release
+        run: dotnet build Vipps.net.Models.Checkout/Vipps.net.Models.Checkout.csproj --no-restore --configuration Release
       - name: Build vipps.net
-        run: dotnet build src/Vipps.net/Vipps.net.csproj --no-restore --configuration Release
+        run: dotnet build Vipps.net/Vipps.net.csproj --no-restore --configuration Release
       - name: Install dependencies Vipps.net.Demo
-        run: dotnet restore src/Vipps.net.Demo/Vipps.net.Demo.csproj
+        run: dotnet restore Vipps.net.Demo/Vipps.net.Demo.csproj
       - name: Build Vipps.net.Demo
-        run: dotnet build src/Vipps.net.Demo/Vipps.net.Demo.csproj --no-restore
+        run: dotnet build Vipps.net.Demo/Vipps.net.Demo.csproj --no-restore
       - name: Install dependencies Vipps.net.AspCoreDemo
-        run: dotnet restore src/Vipps.net.AspCoreDemo/Vipps.net.AspCoreDemo.csproj
+        run: dotnet restore Vipps.net.AspCoreDemo/Vipps.net.AspCoreDemo.csproj
       - name: Build Vipps.net.AspCoreDemo
-        run: dotnet build src/Vipps.net.AspCoreDemo/Vipps.net.AspCoreDemo.csproj --no-restore
+        run: dotnet build Vipps.net.AspCoreDemo/Vipps.net.AspCoreDemo.csproj --no-restore
       - name: CSharpier check
         run: |
-          dotnet tool restore --tool-manifest src/.config/dotnet-tools.json
-          cd src
+          dotnet tool restore --tool-manifest .config/dotnet-tools.json
           dotnet csharpier . --check
       - name: Install dependencies for IntegrationTests
-        run: dotnet restore src/Tests/Vipps.net.IntegrationTests/Vipps.net.IntegrationTests.csproj
+        run: dotnet restore Tests/Vipps.net.IntegrationTests/Vipps.net.IntegrationTests.csproj
         
       - name: Pack NuGet Package with Paket
         run: |
           .paket/paket pack Vipps.net --version 0.0.0
-        working-directory: ./src
         
       - name: Run Tests
-        run: dotnet test src/Tests/Vipps.net.IntegrationTests/Vipps.net.IntegrationTests.csproj --no-restore --verbosity normal --environment vmp_net_sdk_CLIENT_ID=${{ secrets.CLIENT_ID }} --environment vmp_net_sdk_CLIENT_SECRET=${{ secrets.CLIENT_SECRET }} --environment vmp_net_sdk_SUBSCRIPTION_KEY=${{ secrets.SUBSCRIPTION_KEY }} --environment vmp_net_sdk_MERCHANT_SERIAL_NUMBER=${{ secrets.MERCHANT_SERIAL_NUMBER }}
+        run: dotnet test Tests/Vipps.net.IntegrationTests/Vipps.net.IntegrationTests.csproj --no-restore --verbosity normal --environment vmp_net_sdk_CLIENT_ID=${{ secrets.CLIENT_ID }} --environment vmp_net_sdk_CLIENT_SECRET=${{ secrets.CLIENT_SECRET }} --environment vmp_net_sdk_SUBSCRIPTION_KEY=${{ secrets.SUBSCRIPTION_KEY }} --environment vmp_net_sdk_MERCHANT_SERIAL_NUMBER=${{ secrets.MERCHANT_SERIAL_NUMBER }}
       - name: Run Integration Tests
-        run: dotnet test src/Tests/Vipps.net.IntegrationTests/Vipps.net.IntegrationTests.csproj --no-restore --verbosity normal --environment vmp_net_sdk_CLIENT_ID=${{ secrets.CLIENT_ID }} --environment vmp_net_sdk_CLIENT_SECRET=${{ secrets.CLIENT_SECRET }} --environment vmp_net_sdk_SUBSCRIPTION_KEY=${{ secrets.SUBSCRIPTION_KEY }} --environment vmp_net_sdk_MERCHANT_SERIAL_NUMBER=${{ secrets.MERCHANT_SERIAL_NUMBER }}
+        run: dotnet test Tests/Vipps.net.IntegrationTests/Vipps.net.IntegrationTests.csproj --no-restore --verbosity normal --environment vmp_net_sdk_CLIENT_ID=${{ secrets.CLIENT_ID }} --environment vmp_net_sdk_CLIENT_SECRET=${{ secrets.CLIENT_SECRET }} --environment vmp_net_sdk_SUBSCRIPTION_KEY=${{ secrets.SUBSCRIPTION_KEY }} --environment vmp_net_sdk_MERCHANT_SERIAL_NUMBER=${{ secrets.MERCHANT_SERIAL_NUMBER }}
