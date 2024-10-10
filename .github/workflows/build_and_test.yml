@@ -55,7 +55,7 @@ jobs:
 
       - name: Pack NuGet Package with Paket
         run: |
-          .paket/paket pack Vipps.net
+          .paket/paket pack Vipps.net --version integration-test
         working-directory: ./src
         
       - name: Run Integration Tests

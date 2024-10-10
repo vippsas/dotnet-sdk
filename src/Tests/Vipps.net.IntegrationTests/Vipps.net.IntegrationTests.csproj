@@ -38,7 +38,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\Vipps.net\Vipps.net.csproj" />
+    <PackageReference Include="Vipps.net" Version="integration-test" />
   </ItemGroup>
 
 </Project>

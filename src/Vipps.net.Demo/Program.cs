@@ -27,7 +27,8 @@ internal sealed class Program
             SubscriptionKey = builder.Configuration.GetValue<string>("SUBSCRIPTION-KEY")!,
             UseTestMode = true,
             PluginName = Assembly.GetExecutingAssembly().GetName().Name,
-            PluginVersion = Assembly.GetExecutingAssembly().GetName().Version?.ToString() ?? "1.0.0"
+            PluginVersion =
+                Assembly.GetExecutingAssembly().GetName().Version?.ToString() ?? "1.0.0",
         };
 
         builder.Services.AddTransient(_ => vippsConfigurationOptions);
