@@ -1,0 +1,6 @@
+api/**
+docs/**
+src/Vipps.net.Models.Checkout.Test/
+src/Vipps.net.Models.Epayment.Test/
+
+README.md

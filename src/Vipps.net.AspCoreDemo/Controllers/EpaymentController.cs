@@ -31,7 +31,7 @@ namespace Vipps.net.AspCoreDemo.Controllers
                 UserFlow = CreatePaymentRequest.UserFlowEnum.WEB_REDIRECT,
                 ReturnUrl = $"http://localhost:3000",
                 PaymentDescription = "paymentDescription",
-                Profile = new ProfileRequest { Scope = "name phoneNumber address birthDate email" }
+                Profile = new ProfileRequest { Scope = "name phoneNumber address birthDate email" },
             };
 
             var result = await _epaymentService.CreatePayment(request);

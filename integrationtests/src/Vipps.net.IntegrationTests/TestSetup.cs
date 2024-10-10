@@ -33,7 +33,7 @@ namespace Vipps.net.IntegrationTests
                 UseTestMode = true,
                 PluginName = Assembly.GetExecutingAssembly().GetName().Name,
                 PluginVersion =
-                    Assembly.GetExecutingAssembly().GetName().Version?.ToString() ?? "1.0.0"
+                    Assembly.GetExecutingAssembly().GetName().Version?.ToString() ?? "1.0.0",
             };
 
             // The following line configures vipps with custom settings

@@ -35,8 +35,8 @@ namespace Vipps.net.AspCoreDemo.Controllers
                 {
                     Amount = new Amount { Currency = "NOK", Value = 10000 },
                     PaymentDescription = "test",
-                    Reference = Guid.NewGuid().ToString()
-                }
+                    Reference = Guid.NewGuid().ToString(),
+                },
             };
 
             _logger.LogInformation(

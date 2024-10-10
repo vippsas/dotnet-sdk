@@ -37,7 +37,7 @@ namespace Vipps.net.Infrastructure
                     $"{Constants.AuthorizationSchemeNameBearer} {authToken.Token}"
                 },
                 { "Idempotency-Key", Guid.NewGuid().ToString() },
-                { Constants.SubscriptionKey, _vippsConfigurationOptions.SubscriptionKey }
+                { Constants.SubscriptionKey, _vippsConfigurationOptions.SubscriptionKey },
             };
             return headers;
         }
