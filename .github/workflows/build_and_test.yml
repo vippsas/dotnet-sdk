@@ -54,12 +54,13 @@ jobs:
         run: |
           dotnet tool restore --tool-manifest .config/dotnet-tools.json
           dotnet csharpier . --check
-      - name: Install dependencies for IntegrationTests
-        run: dotnet restore Tests/Vipps.net.IntegrationTests/Vipps.net.IntegrationTests.csproj
-        
+          
       - name: Pack NuGet Package with Paket
         run: |
           .paket/paket pack Vipps.net --version 0.0.0
+      
+      - name: Install dependencies for IntegrationTests
+        run: dotnet restore Tests/Vipps.net.IntegrationTests/Vipps.net.IntegrationTests.csproj
         
       - name: Run Tests
         run: dotnet test Tests/Vipps.net.IntegrationTests/Vipps.net.IntegrationTests.csproj --no-restore --verbosity normal --environment vmp_net_sdk_CLIENT_ID=${{ secrets.CLIENT_ID }} --environment vmp_net_sdk_CLIENT_SECRET=${{ secrets.CLIENT_SECRET }} --environment vmp_net_sdk_SUBSCRIPTION_KEY=${{ secrets.SUBSCRIPTION_KEY }} --environment vmp_net_sdk_MERCHANT_SERIAL_NUMBER=${{ secrets.MERCHANT_SERIAL_NUMBER }}
