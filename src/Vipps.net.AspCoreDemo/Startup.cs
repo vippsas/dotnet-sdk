@@ -8,7 +8,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
 using Vipps.net.Infrastructure;
 
-namespace Vipps.net.AspCoreDemo
+namespace Vipps.net.AspCore31Demo
 {
     public class Startup
     {

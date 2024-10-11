@@ -1,12 +1,10 @@
 ﻿using System;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using Vipps.net.Models.Epayment.Model;
+using Vipps.net.Models.Epayment;
 using Vipps.net.Services;
-using Amount = Vipps.net.Models.Epayment.Model.Amount;
-using PaymentMethod = Vipps.net.Models.Epayment.Model.PaymentMethod;
 
-namespace Vipps.net.AspCoreDemo.Controllers
+namespace Vipps.net.AspCore31Demo.Controllers
 {
     [ApiController]
     [Route("[controller]")]
@@ -26,12 +24,12 @@ namespace Vipps.net.AspCoreDemo.Controllers
             {
                 Amount = new Amount { Value = 1000, Currency = Currency.NOK },
                 PaymentMethod = new PaymentMethod { Type = PaymentMethodType.WALLET },
-                Customer = new Customer(new CustomerPhoneNumber { PhoneNumber = "4747375750" }),
+                Customer = new Customer { PhoneNumber = "4747375750" },
                 Reference = Guid.NewGuid().ToString(),
-                UserFlow = CreatePaymentRequest.UserFlowEnum.WEB_REDIRECT,
+                UserFlow = CreatePaymentRequestUserFlow.WEB_REDIRECT,
                 ReturnUrl = $"http://localhost:3000",
                 PaymentDescription = "paymentDescription",
-                Profile = new ProfileRequest { Scope = "name phoneNumber address birthDate email" }
+                Profile = new ProfileRequest { Scope = "name phoneNumber address birthDate email" },
             };
 
             var result = await _epaymentService.CreatePayment(request);

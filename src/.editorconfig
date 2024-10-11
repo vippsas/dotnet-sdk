@@ -18,12 +18,6 @@ dotnet_diagnostic.CS8618.severity = silent
 # Core EditorConfig Options   #
 ###############################
 
-[Vipps.net.Models.Epayment/**/*.{cs,csproj}]
-generated_code = true
-
-[Vipps.net.Models.Checkout/**/*.{cs,csproj}]
-generated_code = true
-
 # All files
 [*]
 indent_style = space

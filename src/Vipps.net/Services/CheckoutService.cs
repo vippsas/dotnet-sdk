@@ -3,14 +3,13 @@ using System.Threading;
 using System.Threading.Tasks;
 using Vipps.net.Infrastructure;
 using Vipps.net.Models.Checkout;
-using Vipps.net.Models.Checkout.Model;
 
 namespace Vipps.net.Services
 {
     public interface IVippsCheckoutService
     {
         Task<InitiateSessionResponse> InitiateSession(
-            InitiatePaymentSessionRequest initiateSessionRequest,
+            InitiateSessionRequest initiateSessionRequest,
             CancellationToken cancellationToken = default
         );
 
@@ -30,13 +29,13 @@ namespace Vipps.net.Services
         }
 
         public async Task<InitiateSessionResponse> InitiateSession(
-            InitiatePaymentSessionRequest initiateSessionRequest,
+            InitiateSessionRequest initiateSessionRequest,
             CancellationToken cancellationToken = default
         )
         {
             var requestPath = $"/checkout/v3/session";
             var sessionInitiationResult = await _checkoutServiceClient.ExecuteRequest<
-                InitiatePaymentSessionRequest,
+                InitiateSessionRequest,
                 InitiateSessionResponse
             >(requestPath, HttpMethod.Post, initiateSessionRequest, cancellationToken);
 
