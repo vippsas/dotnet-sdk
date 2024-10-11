@@ -46,7 +46,7 @@ jobs:
         
         # Setup necessary info to create tag 
       - name: Set tag variable with v, for use in tag and release based on packed Nuget
-        run: "echo \"RELEASE_TAG=v$(find ./src/Vipps.net -maxdepth 1 -name Vipps.net.*.nupkg | grep -oP '((\\d+)\\.(\\d+)\\.(\\d+)(.*?))')\" >> $GITHUB_ENV"
+        run: "echo \"RELEASE_TAG=v$(find ./out -maxdepth 1 -name Vipps.net.*.nupkg | grep -oP '((\\d+)\\.(\\d+)\\.(\\d+)(.*?))')\" >> $GITHUB_ENV"
       - name: Configure git username
         run: git config user.name github-actions-bot
       - name: Configure git user email
@@ -83,7 +83,7 @@ jobs:
             GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
             TAG: ${{ env.RELEASE_TAG }}
         run: |
-             gh release upload ${{ env.RELEASE_TAG }} src/Vipps.net/Vipps.net.${{ env.RELEASE_TAG }}.nupkg --clobber
+             gh release upload ${{ env.RELEASE_TAG }} out/* --clobber
         # Publish Nuget package
       - name: Publish Nuget package
         run: dotnet nuget push out/*.nupkg --api-key ${{ secrets.NUGET_API_KEY }} --source https://api.nuget.org/v3/index.json 
