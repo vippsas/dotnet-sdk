@@ -29,7 +29,7 @@ namespace Vipps.net.Infrastructure
                 {
                     { Constants.HeaderNameClientId, _vippsConfigurationOptions.ClientId },
                     { Constants.HeaderNameClientSecret, _vippsConfigurationOptions.ClientSecret },
-                    { Constants.SubscriptionKey, _vippsConfigurationOptions.SubscriptionKey },
+                    { Constants.SubscriptionKey, _vippsConfigurationOptions.SubscriptionKey }
                 }
             );
         }

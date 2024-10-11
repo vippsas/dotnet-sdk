@@ -5,15 +5,3 @@ authors "Vipps Mobilepay AS"
 description "Vipps.net SDK"
 
 include-referenced-projects true
-
-dependencies
- JsonSubTypes ~> LOCKEDVERSION
- Newtonsoft.Json ~> LOCKEDVERSION
- RestSharp ~> LOCKEDVERSION
- Polly ~> LOCKEDVERSION
- System.ComponentModel.Annotations ~> LOCKEDVERSION
- System.IdentityModel.Tokens.Jwt ~> LOCKEDVERSION
- Polly.Extensions.Http ~> LOCKEDVERSION
- Polly.Contrib.WaitAndRetry ~> LOCKEDVERSION
- Microsoft.Extensions.Logging.Abstractions ~> LOCKEDVERSION
- Microsoft.SourceLink.GitHub ~> LOCKEDVERSION

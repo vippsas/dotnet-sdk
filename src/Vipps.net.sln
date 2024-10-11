@@ -16,9 +16,15 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Vipps.net.AspCoreDemo", "Vi
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Vipps.net.AspDemo", "Vipps.net.AspDemo\Vipps.net.AspDemo.csproj", "{4276E5A2-E884-48E8-B446-715FB1BCB23B}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Vipps.net.IntegrationTests", "Tests\Vipps.net.IntegrationTests\Vipps.net.IntegrationTests.csproj", "{42DD89A8-0AE4-4CCD-9CAC-39B8F217805D}"
+EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Vipps.net.Models.Epayment", "Vipps.net.Models.Epayment\Vipps.net.Models.Epayment.csproj", "{275DEAA9-4BD8-4B75-B1A2-3436F21B7111}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Vipps.net.Models.Checkout", "Vipps.net.Models.Checkout\Vipps.net.Models.Checkout.csproj", "{CC6D63A1-CA73-47AC-98E8-F008042FADDD}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Vipps.net.Models.Epayment.Test", "Vipps.net.Models.Epayment.Test\Vipps.net.Models.Epayment.Test.csproj", "{FDAB5625-8BA1-4FE2-BA73-EB3D496CFF85}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Vipps.net.Models.Checkout.Test", "Vipps.net.Models.Checkout.Test\Vipps.net.Models.Checkout.Test.csproj", "{F8C3E3EF-F7CC-476C-803E-E4C44BEC3A46}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

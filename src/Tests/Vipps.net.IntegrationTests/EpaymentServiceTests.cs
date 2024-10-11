@@ -49,7 +49,7 @@ namespace Vipps.net.IntegrationTests
                 {
                     Customer = new Customer(
                         new CustomerPhoneNumber { PhoneNumber = CustomerPhoneNumber }
-                    ),
+                    )
                 }
             );
 
@@ -91,9 +91,7 @@ namespace Vipps.net.IntegrationTests
                 new Amount
                 {
                     Currency = Currency.NOK,
-                    Value =
-                        100 // 100 øre = 1 KR
-                    ,
+                    Value = 100 // 100 øre = 1 KR
                 },
                 new Customer(new CustomerPhoneNumber { PhoneNumber = CustomerPhoneNumber }),
                 null,

@@ -1,7 +1,0 @@
-Microsoft.Extensions.Logging.Abstractions
-Newtonsoft.Json
-Polly.Extensions.Http
-Polly.Contrib.WaitAndRetry
-System.ComponentModel.Annotations
-System.IdentityModel.Tokens.Jwt
-Microsoft.SourceLink.GitHub

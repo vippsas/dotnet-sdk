@@ -34,10 +34,6 @@ jobs:
         
       - name: Install Paket
         run: dotnet tool install Paket --tool-path .paket
-        
-      - name: Install dependencies
-        run: |
-          .paket/paket install
 
       - name: Pack NuGet Package with Paket
         run: |

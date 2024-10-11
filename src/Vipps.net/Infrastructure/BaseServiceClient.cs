@@ -164,8 +164,8 @@ namespace Vipps.net.Infrastructure
             {
 #pragma warning disable IDE0079 // Remove unnecessary suppression. This is caused by us building multiple targets. In some (net 6, 7), the overload with the cancellationToken is preferred. In the others, it does not exist.
 #pragma warning disable CA2016 // Forward the 'CancellationToken' parameter to methods
-                var responseContent = await response
-                    .Content.ReadAsStringAsync()
+                var responseContent = await response.Content
+                    .ReadAsStringAsync()
                     .ConfigureAwait(false);
 #pragma warning restore CA2016 // Forward the 'CancellationToken' parameter to methods
 #pragma warning restore IDE0079 // Remove unnecessary suppression
