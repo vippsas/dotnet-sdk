@@ -45,21 +45,15 @@ jobs:
         working-directory: ./src      
         
         # Setup necessary info to create tag 
-      - name: Set tag variable with v, for use in tag and release based on packed NuGet
-        run: |
-          RELEASE_VERSION=$(find ./src/Vipps.net -maxdepth 1 -name 'Vipps.net.*.nupkg' \
-            | head -n 1 \
-            | xargs -n 1 basename \
-            | grep -oP '(\d+\.\d+\.\d+(.*?))')
-          echo "RELEASE_VERSION=${RELEASE_VERSION}" >> $GITHUB_ENV
-          echo "RELEASE_TAG=v${RELEASE_VERSION}" >> $GITHUB_ENV
+      - name: Set tag variable with v, for use in tag and release based on packed Nuget
+        run: "echo \"RELEASE_TAG=v$(find ./src/Vipps.net -maxdepth 1 -name Vipps.net.*.nupkg | grep -oP '((\\d+)\\.(\\d+)\\.(\\d+)(.*?))')\" >> $GITHUB_ENV"
       - name: Configure git username
         run: git config user.name github-actions-bot
       - name: Configure git user email
         run: git config user.email noreply@vipps.no
       # Create git tag
       - name: Create Tag
-        run: git tag v${{ env.RELEASE_TAG }} -m ${{ env.RELEASE_TAG }}
+        run: git tag ${{ env.RELEASE_TAG }} -m ${{ env.RELEASE_TAG }}
       - name: Publish Tag
         run: git push --tags 
       # Create git release
@@ -89,7 +83,7 @@ jobs:
             GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
             TAG: ${{ env.RELEASE_TAG }}
         run: |
-             gh release upload ${{ env.RELEASE_TAG }} src/Vipps.net/Vipps.net.${{ env.RELEASE_VERSION }}.nupkg --clobber
+             gh release upload ${{ env.RELEASE_TAG }} src/Vipps.net/Vipps.net.${{ env.RELEASE_TAG }}.nupkg --clobber
         # Publish Nuget package
       - name: Publish Nuget package
         run: dotnet nuget push out/*.nupkg --api-key ${{ secrets.NUGET_API_KEY }} --source https://api.nuget.org/v3/index.json 
