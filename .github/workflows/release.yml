@@ -38,8 +38,7 @@ jobs:
       - name: Install dependencies
         run: |
           .paket/paket install
-        working-directory: ./src
-      
+
       - name: Pack NuGet Package with Paket
         run: |
           .paket/paket pack Vipps.net
