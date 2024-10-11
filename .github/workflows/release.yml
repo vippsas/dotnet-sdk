@@ -92,4 +92,4 @@ jobs:
              gh release upload ${{ env.RELEASE_TAG }} src/Vipps.net/Vipps.net.${{ env.RELEASE_VERSION }}.nupkg --clobber
         # Publish Nuget package
       - name: Publish Nuget package
-        run: dotnet nuget push out/*.nupkg --api-key ${{ secrets.NUGET_API_KEY }} --source https://api.nuget.org/v3/index.json 
+        run: dotnet nuget push src/Vipps.net/Vipps.net.${{ env.RELEASE_VERSION }}.nupkg --api-key ${{ secrets.NUGET_API_KEY }} --source https://api.nuget.org/v3/index.json 
