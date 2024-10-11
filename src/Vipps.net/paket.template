@@ -1,7 +1,0 @@
-type project
-id Vipps.net
-version 1.0.2
-authors "Vipps Mobilepay AS"
-description "Vipps.net SDK"
-
-include-referenced-projects true
