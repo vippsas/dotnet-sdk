@@ -8,7 +8,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
 using Vipps.net.Infrastructure;
 
-namespace Vipps.net.AspCoreDemo
+namespace Vipps.net.AspCore31Demo
 {
     public class Startup
     {
@@ -31,7 +31,7 @@ namespace Vipps.net.AspCoreDemo
                 UseTestMode = true,
                 PluginName = Assembly.GetExecutingAssembly().GetName().Name,
                 PluginVersion =
-                    Assembly.GetExecutingAssembly().GetName().Version?.ToString() ?? "1.0.0",
+                    Assembly.GetExecutingAssembly().GetName().Version?.ToString() ?? "1.0.0"
             };
 
             services.AddTransient(_ => vippsConfigurationOptions);

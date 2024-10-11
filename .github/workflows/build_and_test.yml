@@ -18,10 +18,7 @@ jobs:
         id-token: write
     strategy:
       matrix:
-        dotnet-version: [ '8.0.x' ]
-    defaults:
-      run:
-        working-directory: ./src
+        dotnet-version: [ '7.0.x' ]
     steps:
       - name: Get repo
         uses: actions/checkout@v3
@@ -29,40 +26,24 @@ jobs:
         uses: actions/setup-dotnet@v3
         with:
           dotnet-version: ${{ matrix.dotnet-version }}
-      - name: Install Paket
-        run: dotnet tool install Paket --tool-path .paket
-        
-      - name: Install dependencies
-        run: |
-          .paket/paket install
-        
-      - name: Build Vipps.net.models.Epayment
-        run: dotnet build Vipps.net.Models.Epayment/Vipps.net.Models.Epayment.csproj --no-restore --configuration Release
-      - name: Build Vipps.net.models.Checkout
-        run: dotnet build Vipps.net.Models.Checkout/Vipps.net.Models.Checkout.csproj --no-restore --configuration Release
+      - name: Install dependencies Vipps.net
+        run: dotnet restore src/Vipps.net/Vipps.net.csproj
       - name: Build vipps.net
-        run: dotnet build Vipps.net/Vipps.net.csproj --no-restore --configuration Release
+        run: dotnet build src/Vipps.net/Vipps.net.csproj --no-restore
       - name: Install dependencies Vipps.net.Demo
-        run: dotnet restore Vipps.net.Demo/Vipps.net.Demo.csproj
+        run: dotnet restore src/Vipps.net.Demo/Vipps.net.Demo.csproj
       - name: Build Vipps.net.Demo
-        run: dotnet build Vipps.net.Demo/Vipps.net.Demo.csproj --no-restore
+        run: dotnet build src/Vipps.net.Demo/Vipps.net.Demo.csproj --no-restore
       - name: Install dependencies Vipps.net.AspCoreDemo
-        run: dotnet restore Vipps.net.AspCoreDemo/Vipps.net.AspCoreDemo.csproj
+        run: dotnet restore src/Vipps.net.AspCoreDemo/Vipps.net.AspCoreDemo.csproj
       - name: Build Vipps.net.AspCoreDemo
-        run: dotnet build Vipps.net.AspCoreDemo/Vipps.net.AspCoreDemo.csproj --no-restore
+        run: dotnet build src/Vipps.net.AspCoreDemo/Vipps.net.AspCoreDemo.csproj --no-restore
       - name: CSharpier check
         run: |
-          dotnet tool restore --tool-manifest .config/dotnet-tools.json
+          dotnet tool restore --tool-manifest src/.config/dotnet-tools.json
+          cd src
           dotnet csharpier . --check
-          
-      - name: Pack NuGet Package with Paket
-        run: |
-          .paket/paket pack Vipps.net --version 0.0.0
-      
-      - name: Install dependencies for IntegrationTests
-        run: dotnet restore Vipps.net.IntegrationTests/Vipps.net.IntegrationTests.csproj
-        working-directory: ./integrationtests/src
-        
-      - name: Run Integration Tests
-        run: dotnet test Vipps.net.IntegrationTests/Vipps.net.IntegrationTests.csproj --no-restore --verbosity normal --environment vmp_net_sdk_CLIENT_ID=${{ secrets.CLIENT_ID }} --environment vmp_net_sdk_CLIENT_SECRET=${{ secrets.CLIENT_SECRET }} --environment vmp_net_sdk_SUBSCRIPTION_KEY=${{ secrets.SUBSCRIPTION_KEY }} --environment vmp_net_sdk_MERCHANT_SERIAL_NUMBER=${{ secrets.MERCHANT_SERIAL_NUMBER }}
-        working-directory: ./integrationtests/src
+      # - name: Install dependencies for IntegrationTests
+      #   run: dotnet restore src/Tests/Vipps.net.IntegrationTests/Vipps.net.IntegrationTests.csproj
+      # - name: Run Integration Tests
+      #   run: dotnet test src/Tests/Vipps.net.IntegrationTests/Vipps.net.IntegrationTests.csproj --no-restore --verbosity normal --environment vmp_net_sdk_CLIENT_ID=${{ secrets.CLIENT_ID }} --environment vmp_net_sdk_CLIENT_SECRET=${{ secrets.CLIENT_SECRET }} --environment vmp_net_sdk_SUBSCRIPTION_KEY=${{ secrets.SUBSCRIPTION_KEY }} --environment vmp_net_sdk_MERCHANT_SERIAL_NUMBER=${{ secrets.MERCHANT_SERIAL_NUMBER }}

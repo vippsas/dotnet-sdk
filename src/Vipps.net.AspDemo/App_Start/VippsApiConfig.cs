@@ -23,7 +23,7 @@ namespace Vipps.net.AspDemo
                 UseTestMode = bool.Parse(ConfigurationManager.AppSettings["UseTestMode"]),
                 PluginName = Assembly.GetExecutingAssembly().GetName().Name,
                 PluginVersion =
-                    Assembly.GetExecutingAssembly().GetName().Version?.ToString() ?? "1.0.0",
+                    Assembly.GetExecutingAssembly().GetName().Version?.ToString() ?? "1.0.0"
             };
 
             _vippsApi = new VippsApi(configurationOptions);

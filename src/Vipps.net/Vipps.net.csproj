@@ -1,13 +1,12 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFrameworks>net6.0;netstandard2.0;net48</TargetFrameworks>
+    <TargetFrameworks>net6.0;net7.0;netcoreapp3.1;netstandard2.0;net48</TargetFrameworks>
     <ImplicitUsings>disable</ImplicitUsings>
     <Nullable>disable</Nullable>
     <Product>Vipps.net</Product>
     <Description>Vipps.net SDK</Description>
     <PackageId>Vipps.net</PackageId>
-    <Version>1.0.2</Version>
+    <Version>0.9.6</Version>
     <Authors>Vipps Mobilepay AS</Authors>
     <Company>Vipps Mobilepay AS</Company>
     <Title>Vipps SDK .Net</Title>
@@ -29,19 +28,22 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(GITHUB_ACTIONS)' == 'true'">
     <ContinuousIntegrationBuild>true</ContinuousIntegrationBuild>
-    <LangVersion>8.0</LangVersion>
   </PropertyGroup>
   <ItemGroup>
     <None Include="..\..\README.md" Link="README.md" Pack="true" PackagePath="\" />
     <None Include="..\.editorconfig" Link=".editorconfig" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Vipps.net.Models.Checkout\Vipps.net.Models.Checkout.csproj" />
-    <ProjectReference Include="..\Vipps.net.Models.Epayment\Vipps.net.Models.Epayment.csproj" />
+    <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="3.1.32" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.2" />
+    <PackageReference Include="Polly.Extensions.Http" Version="3.0.0" />
+    <PackageReference Include="Polly.Contrib.WaitAndRetry" Version="1.1.1" />
+    <PackageReference Include="System.ComponentModel.Annotations" Version="5.0.0" />
+    <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="6.27.0" />
+    <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.1.1" PrivateAssets="All" />
   </ItemGroup>
   <Target Name="Husky" BeforeTargets="Restore;CollectPackageReferences" Condition="'$(HUSKY)' != 0">
     <Exec Command="dotnet tool restore" StandardOutputImportance="Low" StandardErrorImportance="High" />
     <Exec Command="dotnet husky install" StandardOutputImportance="Low" StandardErrorImportance="High" WorkingDirectory="../.." />
   </Target>
-  <Import Project="..\.paket\Paket.Restore.targets" />
 </Project>

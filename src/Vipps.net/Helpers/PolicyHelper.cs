@@ -31,15 +31,15 @@ namespace Vipps.net.Helpers
         )
         {
             return Policy
-                .HandleResult<HttpResponseMessage>(r =>
-                    (int)r.StatusCode >= (int)HttpStatusCode.InternalServerError
+                .HandleResult<HttpResponseMessage>(
+                    r => (int)r.StatusCode >= (int)HttpStatusCode.InternalServerError
                 )
                 .FallbackAsync(
                     new HttpResponseMessage(HttpStatusCode.InternalServerError),
                     async (result, context) =>
                     {
-                        var responseString = await result
-                            .Result.Content.ReadAsStringAsync()
+                        var responseString = await result.Result.Content
+                            .ReadAsStringAsync()
                             .ConfigureAwait(false);
                         logger?.LogError(
                             $"{errorMessage}{CommonErrorMessagePart}",

@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Vipps.net.Models.Checkout;
-using Vipps.net.Models.Checkout.Model;
 using Vipps.net.Services;
 
 namespace Vipps.net.Demo.Controllers
@@ -21,9 +20,9 @@ namespace Vipps.net.Demo.Controllers
         [HttpPost]
         public async Task<ActionResult<InitiateSessionResponse>> CreateSession()
         {
-            var request = new InitiatePaymentSessionRequest
+            var request = new InitiateSessionRequest
             {
-                MerchantInfo = new MerchantInfo
+                MerchantInfo = new PaymentMerchantInfo
                 {
                     CallbackAuthorizationToken = Guid.NewGuid().ToString(),
                     CallbackUrl = "https://your-url-here.com:3000",
@@ -33,8 +32,8 @@ namespace Vipps.net.Demo.Controllers
                 {
                     Amount = new Amount { Currency = "NOK", Value = 10000 },
                     PaymentDescription = "test",
-                    Reference = Guid.NewGuid().ToString(),
-                },
+                    Reference = Guid.NewGuid().ToString()
+                }
             };
 
             _logger.LogInformation(

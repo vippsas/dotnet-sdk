@@ -16,7 +16,7 @@ namespace Vipps.net.AspDemo
                 {
                     controller = "Home",
                     action = "Index",
-                    id = UrlParameter.Optional,
+                    id = UrlParameter.Optional
                 }
             );
         }

@@ -13,7 +13,7 @@ jobs:
         contents: write # needed to push tag
     strategy:
       matrix:
-        dotnet-version: [ '8.0.x' ]
+        dotnet-version: [ '7.0.x' ]
     steps:
       - name: Get repo with depth
         uses: actions/checkout@v3
@@ -23,43 +23,21 @@ jobs:
         uses: actions/setup-dotnet@v3
         with:
           dotnet-version: ${{ matrix.dotnet-version }}
-      
-      - name: Install Paket
-        run: dotnet tool install Paket --tool-path .paket
-        working-directory: ./src
-        
-      - name: Install dependencies
-        run: |
-          .paket/paket install
-        working-directory: ./src
-        
-      - name: Build project
-        run: |
-          dotnet build "./src/Vipps.net.Models.Checkout" --configuration Release
-          dotnet build "./src/Vipps.net.Models.Epayment" --configuration Release
-          dotnet build "./src/Vipps.net" --configuration Release
-      
-      - name: Pack NuGet Package with Paket
-        run: |
-          .paket/paket pack Vipps.net
-        working-directory: ./src      
-        
-        # Setup necessary info to create tag 
-      - name: Set tag variable with v, for use in tag and release based on packed NuGet
-        run: |
-          RELEASE_VERSION=$(find ./src/Vipps.net -maxdepth 1 -name 'Vipps.net.*.nupkg' \
-            | head -n 1 \
-            | xargs -n 1 basename \
-            | grep -oP '(\d+\.\d+\.\d+(.*?))')
-          echo "RELEASE_VERSION=${RELEASE_VERSION}" >> $GITHUB_ENV
-          echo "RELEASE_TAG=v${RELEASE_VERSION}" >> $GITHUB_ENV
+      - name: Restore dependencies
+        run: dotnet restore "./src/Vipps.net/Vipps.net.csproj"
+       # Create Nuget package.
+      - name: Pack Nuget
+        run: dotnet pack "./src/Vipps.net/Vipps.net.csproj" --include-source --output out --configuration Release --no-restore
+      # Setup necessary info to create tag 
+      - name: Set tag variable with v, for use in tag and release based on packed Nuget
+        run: "echo \"RELEASE_TAG=v$(find ./out -maxdepth 1 -name Vipps.net.*.nupkg | grep -oP '((\\d+)\\.(\\d+)\\.(\\d+)(.*?))')\" >> $GITHUB_ENV"
       - name: Configure git username
         run: git config user.name github-actions-bot
       - name: Configure git user email
         run: git config user.email noreply@vipps.no
       # Create git tag
       - name: Create Tag
-        run: git tag v${{ env.RELEASE_TAG }} -m ${{ env.RELEASE_TAG }}
+        run: git tag ${{ env.RELEASE_TAG }} -m ${{ env.RELEASE_TAG }}
       - name: Publish Tag
         run: git push --tags 
       # Create git release
@@ -89,7 +67,7 @@ jobs:
             GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
             TAG: ${{ env.RELEASE_TAG }}
         run: |
-             gh release upload ${{ env.RELEASE_TAG }} src/Vipps.net/Vipps.net.${{ env.RELEASE_VERSION }}.nupkg --clobber
+             gh release upload ${{ env.RELEASE_TAG }} out/* --clobber
         # Publish Nuget package
       - name: Publish Nuget package
-        run: dotnet nuget push src/Vipps.net/Vipps.net.${{ env.RELEASE_VERSION }}.nupkg --api-key ${{ secrets.NUGET_API_KEY }} --source https://api.nuget.org/v3/index.json 
+        run: dotnet nuget push out/*.nupkg --api-key ${{ secrets.NUGET_API_KEY }} --source https://api.nuget.org/v3/index.json 
