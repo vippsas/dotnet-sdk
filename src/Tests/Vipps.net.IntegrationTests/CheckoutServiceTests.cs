@@ -19,9 +19,9 @@
                 MerchantInfo = new Models.Checkout.PaymentMerchantInfo
                 {
                     CallbackAuthorizationToken = Guid.NewGuid().ToString(),
-                    CallbackUrl = "https://no.where.com/callback",
-                    ReturnUrl = "https://no.where.com/return",
-                    TermsAndConditionsUrl = "https://no.where.com/terms",
+                    CallbackUrl = "https://apitest.vipps.no/does-not-exist-callback",
+                    ReturnUrl = "https://apitest.vipps.no/does-not-exist-return",
+                    TermsAndConditionsUrl = "https://apitest.vipps.no/does-not-exist-terms",
                 },
             };
 
