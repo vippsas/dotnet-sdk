@@ -21,8 +21,8 @@
                     CallbackAuthorizationToken = Guid.NewGuid().ToString(),
                     CallbackUrl = "https://no.where.com/callback",
                     ReturnUrl = "https://no.where.com/return",
-                    TermsAndConditionsUrl = "https://no.where.com/terms"
-                }
+                    TermsAndConditionsUrl = "https://no.where.com/terms",
+                },
             };
 
             var sessionResponse = await vippsApi.CheckoutService.InitiateSession(
