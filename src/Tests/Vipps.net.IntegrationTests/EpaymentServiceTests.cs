@@ -87,14 +87,16 @@ namespace Vipps.net.IntegrationTests
                 Amount = new Amount
                 {
                     Currency = Currency.NOK,
-                    Value = 100 // 100 øre = 1 KR
+                    Value =
+                        100 // 100 øre = 1 KR
+                    ,
                 },
                 PaymentMethod = new PaymentMethod { Type = PaymentMethodType.WALLET },
                 UserFlow = CreatePaymentRequestUserFlow.WEB_REDIRECT,
                 Reference = reference,
                 PaymentDescription = nameof(CheckoutServiceTests.Can_Create_And_Get_Session),
                 ReturnUrl = $"https://no.where.com/{reference}",
-                Customer = new Customer { }
+                Customer = new Customer { },
             };
         }
     }

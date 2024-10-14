@@ -66,7 +66,7 @@ namespace Vipps.net.Infrastructure
             var httpClient = new HttpClient()
             {
                 Timeout = DefaultTimeOut,
-                BaseAddress = new Uri(UrlHelper.GetBaseUrl(_options.UseTestMode))
+                BaseAddress = new Uri(UrlHelper.GetBaseUrl(_options.UseTestMode)),
             };
 
             return httpClient;
@@ -93,7 +93,7 @@ namespace Vipps.net.Infrastructure
                     string.IsNullOrWhiteSpace(_options.PluginVersion)
                         ? "0.0.1"
                         : _options.PluginVersion
-                }
+                },
             };
         }
     }

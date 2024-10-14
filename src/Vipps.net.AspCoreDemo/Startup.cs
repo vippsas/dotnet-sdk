@@ -24,14 +24,14 @@ namespace Vipps.net.AspCore31Demo
         {
             var vippsConfigurationOptions = new VippsConfigurationOptions
             {
-                ClientId = Configuration.GetValue<string>("CLIENT-ID")!,
-                ClientSecret = Configuration.GetValue<string>("CLIENT-SECRET")!,
-                MerchantSerialNumber = Configuration.GetValue<string>("MERCHANT-SERIAL-NUMBER")!,
-                SubscriptionKey = Configuration.GetValue<string>("SUBSCRIPTION-KEY")!,
+                ClientId = Configuration["CLIENT-ID"],
+                ClientSecret = Configuration["CLIENT-SECRET"],
+                MerchantSerialNumber = Configuration["MERCHANT-SERIAL-NUMBER"],
+                SubscriptionKey = Configuration["SUBSCRIPTION-KEY"],
                 UseTestMode = true,
                 PluginName = Assembly.GetExecutingAssembly().GetName().Name,
                 PluginVersion =
-                    Assembly.GetExecutingAssembly().GetName().Version?.ToString() ?? "1.0.0"
+                    Assembly.GetExecutingAssembly().GetName().Version?.ToString() ?? "1.0.0",
             };
 
             services.AddTransient(_ => vippsConfigurationOptions);

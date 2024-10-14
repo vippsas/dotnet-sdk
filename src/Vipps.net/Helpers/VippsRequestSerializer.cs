@@ -9,7 +9,7 @@ namespace Vipps.net.Helpers
             {
                 NullValueHandling = NullValueHandling.Ignore,
                 DefaultValueHandling = DefaultValueHandling.Include,
-                Converters = new[] { new Newtonsoft.Json.Converters.StringEnumConverter() }
+                Converters = new[] { new Newtonsoft.Json.Converters.StringEnumConverter() },
             };
 
         internal static string SerializeVippsRequest<T>(T vippsRequest)
