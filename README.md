@@ -1,2 +1,1 @@
-ℹ️ Documentation is available at:
-[Vipps MobilePay SDK Documentation](https://developer.vippsmobilepay.com/docs/SDKs/).
+ℹ️ This SDK is deprecated and no longer maintained.
